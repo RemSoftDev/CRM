@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crmStart", "crmStart\crmStart.csproj", "{BF74EA9B-E70A-4CB1-B05C-2A738C84B159}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crmStart.Tests", "crmStart.Tests\crmStart.Tests.csproj", "{87E9FB23-DB75-4CFA-AD03-17B653BA0F11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF74EA9B-E70A-4CB1-B05C-2A738C84B159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF74EA9B-E70A-4CB1-B05C-2A738C84B159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF74EA9B-E70A-4CB1-B05C-2A738C84B159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF74EA9B-E70A-4CB1-B05C-2A738C84B159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87E9FB23-DB75-4CFA-AD03-17B653BA0F11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E9FB23-DB75-4CFA-AD03-17B653BA0F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E9FB23-DB75-4CFA-AD03-17B653BA0F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E9FB23-DB75-4CFA-AD03-17B653BA0F11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {831F8593-EDEF-499C-8824-A19D4525DA9A}
+	EndGlobalSection
+EndGlobal
