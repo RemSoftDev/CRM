@@ -1,4 +1,5 @@
-﻿using CRM.Models;
+﻿using CRM.Enums;
+using CRM.Models;
 using CRM.Services;
 using CRMData.Contexts;
 using CRMData.Entities;
@@ -13,6 +14,8 @@ namespace CRM.Controllers
 {
     public class AccountController : Controller
     {
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -22,14 +25,15 @@ namespace CRM.Controllers
             User user;
             using (BaseContext context = new BaseContext())
             {
-                user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+                string encryptedPassword = EncryptionService.Encrypt(model.Password);
+                user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
             }
                 
             if (user != null)
             {
                 FormsAuthentication.SetAuthCookie(model.Email, false);
 
-                var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(20), false, user.Role);
+                var authTicket = new FormsAuthenticationTicket(1, user.FirstName, DateTime.Now, DateTime.Now.AddMinutes(20), false, ((UserRole)user.Role).ToString());
                 string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                 var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 HttpContext.Response.Cookies.Add(authCookie);
@@ -42,12 +46,19 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpGet]
@@ -57,15 +68,22 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public JsonResult Register(RegisterViewModel model)
+        public ActionResult Register(RegisterViewModel model)
         {
             bool isNewUser = false;
             using (BaseContext context = new BaseContext())
             {
-                User user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+                string encryptedPassword = EncryptionService.Encrypt(model.Password);
+                User user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
                 if (user == null)
                 {
-                    context.Users.Add(new User { Email = model.Email, Password = EncryptionService.Encrypt(model.Password) });
+                    context.Users.Add(new User {
+                        Email = model.Email,
+                        Password = encryptedPassword,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Role = (int)UserRole.AdminStaff });
+
                     context.SaveChanges();
                     isNewUser = true;
                 }
@@ -73,9 +91,9 @@ namespace CRM.Controllers
 
             if (isNewUser)
             {
-                return Json(new { success = true, url = "/Account/Login" }, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Login", "Account");
             }
-            return Json(new { success = false, model }, JsonRequestBehavior.AllowGet);
+            return View(model);
         }
     }
 }

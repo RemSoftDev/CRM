@@ -1,5 +1,4 @@
-﻿using CRM.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,9 +6,8 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-    public class HomeController : Controller
+    public class LeadController : Controller
     {
-        [Authenticate]
         public ActionResult Index()
         {
             return View();
