@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "CreateLead";
+}
+
+<h2>Create Lead</h2>
+
+<html>
+<body>
+    <div>
+        <form>
+            <hr />
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="name">Name</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="name" name="name" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="name" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="email">Email</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="email" name="email" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="email" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="phone">Phone</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="phone" name="phone" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="phone" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="message">Message</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="message" name="message" type="text" value="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="button" id="create_button" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
+@Scripts.Render("~/scripts/Lead/createLead.js")
+

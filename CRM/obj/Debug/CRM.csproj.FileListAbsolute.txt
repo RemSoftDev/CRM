@@ -52,6 +52,7 @@ C:\CRM\CRM\bin\CRM.dll.config
 C:\CRM\CRM\bin\CRM.dll
 C:\CRM\CRM\bin\CRM.pdb
 C:\CRM\CRM\bin\Antlr3.Runtime.dll
+C:\CRM\CRM\bin\AutoMapper.dll
 C:\CRM\CRM\bin\CRMData.dll
 C:\CRM\CRM\bin\EntityFramework.dll
 C:\CRM\CRM\bin\EntityFramework.SqlServer.dll
@@ -65,7 +66,10 @@ C:\CRM\CRM\bin\Microsoft.ApplicationInsights.dll
 C:\CRM\CRM\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\CRM\CRM\bin\Microsoft.Web.Infrastructure.dll
 C:\CRM\CRM\bin\Newtonsoft.Json.dll
+C:\CRM\CRM\bin\System.Net.Http.Formatting.dll
 C:\CRM\CRM\bin\System.Web.Helpers.dll
+C:\CRM\CRM\bin\System.Web.Http.dll
+C:\CRM\CRM\bin\System.Web.Http.WebHost.dll
 C:\CRM\CRM\bin\System.Web.Mvc.dll
 C:\CRM\CRM\bin\System.Web.Optimization.dll
 C:\CRM\CRM\bin\System.Web.Razor.dll
@@ -75,9 +79,13 @@ C:\CRM\CRM\bin\System.Web.WebPages.Razor.dll
 C:\CRM\CRM\bin\WebGrease.dll
 C:\CRM\CRM\bin\CRMData.pdb
 C:\CRM\CRM\bin\CRMData.dll.config
+C:\CRM\CRM\bin\AutoMapper.xml
 C:\CRM\CRM\bin\EntityFramework.xml
 C:\CRM\CRM\bin\EntityFramework.SqlServer.xml
 C:\CRM\CRM\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\CRM\CRM\bin\System.Net.Http.Formatting.xml
+C:\CRM\CRM\bin\System.Web.Http.xml
+C:\CRM\CRM\bin\System.Web.Http.WebHost.xml
 C:\CRM\CRM\bin\System.Web.Helpers.xml
 C:\CRM\CRM\bin\System.Web.Mvc.xml
 C:\CRM\CRM\bin\System.Web.Optimization.xml

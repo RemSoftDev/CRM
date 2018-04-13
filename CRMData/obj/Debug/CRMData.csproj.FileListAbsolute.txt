@@ -11,3 +11,15 @@ C:\Users\ asus\Desktop\CRM\CRM\CRMData\obj\Debug\CRMData.csprojResolveAssemblyRe
 C:\Users\ asus\Desktop\CRM\CRM\CRMData\obj\Debug\CRMData.csproj.CoreCompileInputs.cache
 C:\Users\ asus\Desktop\CRM\CRM\CRMData\obj\Debug\CRMData.dll
 C:\Users\ asus\Desktop\CRM\CRM\CRMData\obj\Debug\CRMData.pdb
+C:\CRM\CRMData\bin\CRMData.dll.config
+C:\CRM\CRMData\bin\CRMData.dll
+C:\CRM\CRMData\bin\CRMData.pdb
+C:\CRM\CRMData\bin\EntityFramework.dll
+C:\CRM\CRMData\bin\EntityFramework.SqlServer.dll
+C:\CRM\CRMData\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\CRM\CRMData\bin\EntityFramework.xml
+C:\CRM\CRMData\bin\EntityFramework.SqlServer.xml
+C:\CRM\CRMData\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\CRM\CRMData\obj\Debug\CRMData.csproj.CoreCompileInputs.cache
+C:\CRM\CRMData\obj\Debug\CRMData.dll
+C:\CRM\CRMData\obj\Debug\CRMData.pdb
