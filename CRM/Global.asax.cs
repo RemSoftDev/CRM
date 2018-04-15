@@ -22,7 +22,7 @@ namespace CRM
             RouteConfig.RegisterRoutes(RouteTable.Routes);          
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            ModelsMapper.CreateRules();
+            AutoMapperConfiguration.Configure();
         }
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {

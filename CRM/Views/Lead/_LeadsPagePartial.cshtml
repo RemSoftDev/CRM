@@ -1,4 +1,25 @@
-﻿<div>
-    <h2>Created Leads</h2>
-    <a href="/Lead/CreateLead">Create Lead</a>
-</div>
+﻿@using CRM.Models
+@model List<LeadViewModel>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Phone</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lead in Model)
+        {
+            <tr>
+                <td>@lead.Name</td>
+                <td>@lead.Email</td>
+                <td>@lead.Phone</td>
+                <td><a href="/Lead/Edit?phone=@lead.Phone">Edit</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

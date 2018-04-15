@@ -12,6 +12,7 @@ namespace CRMData.Entities
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Message { get; set; }
+        public int LeadOwner { get; set; }
         //public string Discipline { get; set; }
         //public string AgeGroup { get; set; }
         //public string Status { get; set; }

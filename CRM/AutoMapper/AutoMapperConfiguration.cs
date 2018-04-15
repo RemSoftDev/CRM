@@ -5,9 +5,9 @@ using CRMData.Entities;
 
 namespace CRM.AutoMapper
 {
-    public static class ModelsMapper
+    public static class AutoMapperConfiguration
     {
-        public static void CreateRules()
+        public static void Configure()
         {
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<User, UserViewModel>()

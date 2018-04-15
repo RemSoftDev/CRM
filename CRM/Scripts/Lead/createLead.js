@@ -11,7 +11,9 @@
             type: 'POST',
             data: leadModel,
             success: function (response) {
-                //window.location.reload();
+                if (response.status != "error") {
+                    window.location = '/';
+                }               
                 alert(response.message);
             },
             error: function (error) {

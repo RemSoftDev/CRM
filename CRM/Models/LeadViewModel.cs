@@ -15,7 +15,11 @@ namespace CRM.Models
         public string Email { get; set; }
         [Required]
         public string Phone { get; set; }
-        [Required]
+        public List<string> Notes { get; set; }
         public string Message { get; set; }
+        public LeadViewModel()
+        {
+            this.Notes = new List<string>();
+        }
     }
 }

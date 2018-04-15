@@ -86,10 +86,20 @@
   <ItemGroup>
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="Entities\Lead.cs" />
+    <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Migrations\201804131744089_InitialCreate.cs" />
+    <Compile Include="Migrations\201804131744089_InitialCreate.Designer.cs">
+      <DependentUpon>201804131744089_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201804131744089_InitialCreate.resx">
+      <DependentUpon>201804131744089_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

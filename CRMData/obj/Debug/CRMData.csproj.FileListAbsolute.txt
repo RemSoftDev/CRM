@@ -23,3 +23,6 @@ C:\CRM\CRMData\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\CRM\CRMData\obj\Debug\CRMData.csproj.CoreCompileInputs.cache
 C:\CRM\CRMData\obj\Debug\CRMData.dll
 C:\CRM\CRMData\obj\Debug\CRMData.pdb
+C:\CRM\CRMData\obj\Debug\CRMData.Migrations.InitialCreate.resources
+C:\CRM\CRMData\obj\Debug\CRMData.csproj.GenerateResource.Cache
+C:\CRM\CRMData\obj\Debug\CRMData.csprojResolveAssemblyReference.cache
