@@ -113,7 +113,7 @@ namespace CRM.Controllers
             {
                 return Json(new { status = "error" });
             }
-            EmailService.SendEmail(leadEmail, "Test Message!", currentUserEmail);
+            EmailService.SendEmail(leadEmail, "Test Message!", message);
             return Json(new { status = "success" });
         }
     }

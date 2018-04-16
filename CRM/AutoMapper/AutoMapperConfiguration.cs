@@ -15,7 +15,8 @@ namespace CRM.AutoMapper
 
                 cfg.CreateMap<Lead, LeadViewModel>();
                 cfg.CreateMap<LeadViewModel, Lead>()
-                    .ForMember(l => l.LeadId, opt => opt.Ignore());
+                    .ForMember(l => l.LeadId, opt => opt.Ignore())
+                    .ForMember(l => l.LeadOwner, opt => opt.Ignore());
             });
         }
     }
