@@ -173,21 +173,29 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\AuthenticateAttribute.cs" />
+    <Compile Include="Attributes\LogHistoryAttribute.cs" />
     <Compile Include="AutoMapper\AutoMapperConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddressViewModel.cs" />
+    <Compile Include="Models\CustomerViewModel.cs" />
+    <Compile Include="Models\EmailViewModel.cs" />
     <Compile Include="Models\LeadViewModel.cs" />
+    <Compile Include="Models\LogHistoryModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\PhoneViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
-    <Compile Include="Models\SearchModel.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EncryptionService.cs" />
+    <Compile Include="Services\LogHistoryService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SearchService.cs" />
     <Compile Include="WebApiControllers\WebFormController.cs" />
@@ -207,6 +215,8 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Customer\editCustomer.js" />
+    <Content Include="Scripts\Customer\searchCustomer.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -234,10 +244,13 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Lead\Create.cshtml" />
+    <Content Include="Views\Customer\_CustomersPagePartial.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\Edit.cshtml" />
     <Content Include="Views\Lead\_LeadsPagePartial.cshtml" />
-    <Content Include="Views\Lead\Index.cshtml" />
+    <Content Include="Views\Lead\Create.cshtml" />
     <Content Include="Views\Lead\Edit.cshtml" />
+    <Content Include="Views\Lead\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -257,7 +270,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CRMData\CRMData.csproj">
-      <Project>{F56B6D67-572A-4A46-923D-4F0F5377DC7D}</Project>
+      <Project>{B28269B4-88BC-4330-8336-CC63F5312E89}</Project>
       <Name>CRMData</Name>
     </ProjectReference>
   </ItemGroup>

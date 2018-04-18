@@ -1,8 +1,10 @@
-﻿using MailKit;
+﻿using CRM.Models;
+using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -39,8 +41,11 @@ namespace CRM.Services
             }
         }
 
-        public static void GetMailings()
+        public static List<EmailViewModel> GetMailings(string sentFrom)
         {
+            List<EmailViewModel> emailsList = new List<EmailViewModel>();
+            string searchDate = "01.04.2018 8:34:56";
+
             using (var client = new ImapClient())
             {
                 using (var cancel = new CancellationTokenSource())
@@ -50,37 +55,29 @@ namespace CRM.Services
 
                     client.Authenticate(Email, Password, cancel.Token);
 
-                    // The Inbox folder is always available...
                     var inbox = client.Inbox;
                     inbox.Open(FolderAccess.ReadOnly, cancel.Token);
 
-                    Console.WriteLine("Total messages: {0}", inbox.Count);
-                    Console.WriteLine("Recent messages: {0}", inbox.Recent);
-                    // download each message based on the message index
-                    for (int i = 0; i < inbox.Count; i++)
+                    var query = SearchQuery.NotSeen
+                        .And(SearchQuery.DeliveredAfter(DateTime.Parse(searchDate)));
+
+                    if (!string.IsNullOrEmpty(sentFrom))
                     {
-                        var message = inbox.GetMessage(i, cancel.Token);
-                        var body = message.GetTextBody(MimeKit.Text.TextFormat.Text);
-                        Console.WriteLine("Subject: {0}", message.Subject);
+                        query = query.And(SearchQuery.FromContains(sentFrom));
                     }
+                        
+                    var result = inbox.Search(query, cancel.Token);
 
-                    // let try searching for some messages...
-                    //var query = SearchQuery.DeliveredAfter(DateTime.Parse("2013-01-12"))
-                    //	.And(SearchQuery.SubjectContains("MailKit"))
-                    //	.And(SearchQuery.Seen);
-                    var query = SearchQuery.NotSeen;
-
-                    foreach (var uid in inbox.Search(query, cancel.Token))
+                    foreach (var uid in result)
                     {
                         var message = inbox.GetMessage(uid, cancel.Token);
-                        Console.WriteLine("[match] {0}: {1}", uid, message.Subject);
+                        emailsList.Add(new EmailViewModel(message));
                     }
 
                     client.Disconnect(true, cancel.Token);
                 }
             }
-
-
+            return emailsList;
         }
     }
 }

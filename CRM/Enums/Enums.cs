@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace CRM.Enums
 {
     public enum UserRole
@@ -11,5 +7,22 @@ namespace CRM.Enums
         Manager,
         Customer,
         Practitioner
+    }
+
+    public enum AddressType
+    {
+        BillingAddress,
+        ContactAddress,
+        EmergencyContactAddress
+
+    }
+
+    public enum PhoneType
+    {
+        HomePhone,
+        WorkPhone,
+        MobilePhone,
+        EmergencyContactPhone,
+        Fax
     }
 }

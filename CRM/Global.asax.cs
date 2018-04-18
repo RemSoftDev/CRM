@@ -1,4 +1,5 @@
 ﻿using CRM.App_Start;
+using CRM.Attributes;
 using CRM.AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace CRM
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);          
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //GlobalFilters.Filters.Add(new LogHistoryAttribute());
 
             AutoMapperConfiguration.Configure();
         }

@@ -7,13 +7,13 @@
             notes: getNotes()
             //message: $('#message').val()
         };
-        var oldEmail = $('#oldEmail').val();
+        var oldPhone = $('#oldPhone').val();
         $.ajax({
-            url: "/Lead/Edit",
+            url: "/Customer/Edit",
             type: 'POST',
             data: {
                 lead: leadModel,
-                oldEmail: oldEmail
+                oldPhone: oldPhone
             },
             success: function (response) {
                 window.location = '/';
@@ -39,16 +39,16 @@
 
     $('#send_message').on('click', function () {
         var message = $('#message').val();
-        var oldEmail = $('#oldEmail').val();
+        var oldPhone = $('#oldPhone').val();
         if (!message) {
             alert("Message can't be empty!");
         }
         else {
             $.ajax({
-                url: "/Lead/SendMessage",
+                url: "/Customer/SendMessage",
                 type: 'POST',
                 data: {
-                    oldEmail: oldEmail,
+                    oldPhone : oldPhone,
                     message: message
                 },
                 success: function (response) {

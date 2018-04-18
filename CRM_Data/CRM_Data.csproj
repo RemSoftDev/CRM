@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B28269B4-88BC-4330-8336-CC63F5312E89}</ProjectGuid>
+    <ProjectGuid>{86EA6D3D-8BAD-4A8C-B2E1-D3FAC00FF03B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CRMData</RootNamespace>
-    <AssemblyName>CRMData</AssemblyName>
+    <RootNamespace>CRM_Data</RootNamespace>
+    <AssemblyName>CRM_Data</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,12 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
-    <Compile Include="Entities\Address.cs" />
-    <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Lead.cs" />
     <Compile Include="Entities\Note.cs" />
-    <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -19,7 +19,7 @@ namespace CRM.WebApiControllers
                 Lead lead = Mapper.Map<LeadViewModel, Lead>(model);
                 using (BaseContext context = new BaseContext())
                 {
-                    if (context.Leads.FirstOrDefault(l => l.Phone == lead.Phone) == null)
+                    if (context.Leads.FirstOrDefault(l => l.Email == lead.Email) == null)
                     {
                         context.Leads.Add(lead);
                         context.SaveChanges();
