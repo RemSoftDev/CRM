@@ -7,8 +7,12 @@ namespace CRMData.Entities
 {
     public class Note
     {
-        public int NoteId { get; set; }
-        public int LeadId { get; set; }
-        public string NoteValue { get; set; }
+        public int Id { get; set; }       
+        public string Text { get; set; }
+        public int? LeadId { get; set; }
+        public Lead Lead { get; set; }
+
+        public int? CustomerId { get; set; }
+        public Customer Customer { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace CRM.Services
 {
     public static class SearchService<T>
     {
-        public static List<T> Search(SearchModel model)
+        public static List<T> Search(SearchViewModel model)
         {
             string orderClause = "";
             string whereClause = "";

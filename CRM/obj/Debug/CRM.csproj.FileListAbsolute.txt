@@ -53,7 +53,6 @@ C:\CRM\CRM\bin\CRM.dll
 C:\CRM\CRM\bin\CRM.pdb
 C:\CRM\CRM\bin\Antlr3.Runtime.dll
 C:\CRM\CRM\bin\AutoMapper.dll
-C:\CRM\CRM\bin\CRMData.dll
 C:\CRM\CRM\bin\EntityFramework.dll
 C:\CRM\CRM\bin\EntityFramework.SqlServer.dll
 C:\CRM\CRM\bin\Microsoft.AI.Agent.Intercept.dll
@@ -77,8 +76,6 @@ C:\CRM\CRM\bin\System.Web.WebPages.Deployment.dll
 C:\CRM\CRM\bin\System.Web.WebPages.dll
 C:\CRM\CRM\bin\System.Web.WebPages.Razor.dll
 C:\CRM\CRM\bin\WebGrease.dll
-C:\CRM\CRM\bin\CRMData.pdb
-C:\CRM\CRM\bin\CRMData.dll.config
 C:\CRM\CRM\bin\AutoMapper.xml
 C:\CRM\CRM\bin\EntityFramework.xml
 C:\CRM\CRM\bin\EntityFramework.SqlServer.xml
@@ -158,3 +155,6 @@ C:\CRM\CRM\bin\MailKit.dll
 C:\CRM\CRM\bin\MimeKit.dll
 C:\CRM\CRM\bin\MailKit.xml
 C:\CRM\CRM\bin\MimeKit.xml
+C:\CRM\CRM\bin\CRMData.dll
+C:\CRM\CRM\bin\CRMData.pdb
+C:\CRM\CRM\bin\CRMData.dll.config
