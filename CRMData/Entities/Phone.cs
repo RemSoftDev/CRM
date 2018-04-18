@@ -10,7 +10,7 @@ namespace CRMData.Entities
     {
         public int Id { get; set; }
         public string PhoneNumber { get; set; }
-        public int Type { get; set; }
+        public DPhoneType Type { get; set; }
 
         public int? CustomerId { get; set; }
         public Customer Customer { get; set; }

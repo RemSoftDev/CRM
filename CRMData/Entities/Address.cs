@@ -15,7 +15,8 @@ namespace CRMData.Entities
         public string County { get; set; }
         public int PostCode { get; set; }
         public string Country { get; set; }
-        public int Type { get; set; }
+        //public int Type { get; set; }
+        public DAddressType Type { get; set; }
 
         public int? CustomerId { get; set; }
         public Customer Customer { get; set; }

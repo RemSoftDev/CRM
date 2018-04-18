@@ -12,16 +12,20 @@ namespace CRM.AutoMapper
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Phone, PhoneViewModel>()
-                    .ForMember(p => p.Type, opt => opt.MapFrom(t => (PhoneType)t.Type));
+                    .ForMember(p => p.Type, opt => opt.MapFrom(t => (PhoneType)t.Type.Id));
 
                 cfg.CreateMap<PhoneViewModel, Phone>()
                     .ForMember(p => p.Id, opt => opt.Ignore());
 
                 cfg.CreateMap<Address, AddressViewModel>()
-                    .ForMember(p => p.Type, opt => opt.MapFrom(a => (AddressType)a.Type));
+                    .ForMember(p => p.Type, opt => opt.MapFrom(a => (AddressType)a.Type.Id));
 
                 cfg.CreateMap<AddressViewModel, Address>()
-                    .ForMember(p => p.Id, opt => opt.Ignore());                  
+                    .ForMember(p => p.Id, opt => opt.Ignore())
+                    .ForMember(p => p.Type, opt => opt.MapFrom(e => new DAddressType
+                    {
+                        Id = (int)e.Type
+                    }));
 
                 cfg.CreateMap<User, UserViewModel>()
                     .ForMember(i => i.Role, opt => opt.MapFrom(u => (UserRole)u.Role));

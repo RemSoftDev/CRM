@@ -15,5 +15,8 @@ namespace CRMData.Contexts
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Phone> Phones { get; set; }
         public DbSet<Note> Notes { get; set; }
+
+        public DbSet<DAddressType> DAddressTypes { get; set; }
+        public DbSet<DPhoneType> DPhoneTypes { get; set; }
     }
 }
