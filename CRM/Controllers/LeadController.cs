@@ -7,7 +7,7 @@ using CRMData.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace CRM.Controllers
@@ -18,7 +18,7 @@ namespace CRM.Controllers
         public ActionResult Index()
         {
             List<LeadViewModel> leads;
-            using (BaseContext context = new BaseContext())
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 leads = Mapper.Map<List<Lead>, List<LeadViewModel>>(context.Leads.Where(l => l.Id > 0 && l.Customer == null).ToList());
             }
@@ -34,8 +34,14 @@ namespace CRM.Controllers
             {
                 return Json(new { status = "error", message = "Model is not valid!" });
             }
-            
-            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(SearchService<Lead>.Search(model));
+
+            Expression<Func<Lead, string>> orderClouse = e => e.Email;
+            Expression<Func<Lead, bool>> whereClouse = null;
+            if (model.SearchValue != null)
+            {
+                whereClouse = e => e.Name.Contains(model.SearchValue);
+            }
+            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(SearchService<Lead>.Search(model, whereClouse, orderClouse, model.OrderDirection.Equals("ASC")));
             return PartialView("_LeadsPagePartial", items);
         }
 
