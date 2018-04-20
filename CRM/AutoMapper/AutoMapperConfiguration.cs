@@ -2,6 +2,7 @@
 using CRM.Enums;
 using CRM.Models;
 using CRMData.Entities;
+using System.Linq;
 
 namespace CRM.AutoMapper
 {
@@ -30,9 +31,12 @@ namespace CRM.AutoMapper
                 cfg.CreateMap<User, UserViewModel>()
                     .ForMember(i => i.Role, opt => opt.MapFrom(u => (UserRole)u.Role));
 
-                cfg.CreateMap<Lead, LeadViewModel>();
+                cfg.CreateMap<Lead, LeadViewModel>()
+                    .AfterMap((l, lvm) => lvm.Phone = l.Phones.FirstOrDefault()?.PhoneNumber);
+
                 cfg.CreateMap<LeadViewModel, Lead>()
-                    .ForMember(l => l.Id, opt => opt.Ignore());
+                    .ForMember(l => l.Id, opt => opt.Ignore())
+                    .AfterMap((l, opt) => opt.Phones.Add(new Phone { PhoneNumber = l.Phone }));
 
                 cfg.CreateMap<Customer, CustomerViewModel>();
                 cfg.CreateMap<CustomerViewModel, Customer>()

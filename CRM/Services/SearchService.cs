@@ -30,9 +30,12 @@ namespace CRM.Services
             return items;
         }
 
-        public static List<TEntity> Search(SearchViewModel model, Expression<Func<TEntity, bool>> where = null, Expression<Func<TEntity, string>> order = null, bool orderAsc = true)
+        public static List<TEntity> Search<TOrder>(SearchViewModel model, 
+            Expression<Func<TEntity, bool>> where = null, 
+            Expression<Func<TEntity, TOrder>> order = null, 
+            bool orderAsc = true)
         {
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+            using (BaseContext context = new BaseContext())
             {
                 var query = context.Set<TEntity>().AsQueryable();
 

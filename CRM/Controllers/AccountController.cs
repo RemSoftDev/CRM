@@ -23,7 +23,7 @@ namespace CRM.Controllers
                 return View(model);
             }
             User user;
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+            using (BaseContext context = new BaseContext())
             {
                 string encryptedPassword = EncryptionService.Encrypt(model.Password);
                 user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
@@ -71,7 +71,7 @@ namespace CRM.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
             bool isNewUser = false;
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+            using (BaseContext context = new BaseContext())
             {
                 string encryptedPassword = EncryptionService.Encrypt(model.Password);
                 User user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);

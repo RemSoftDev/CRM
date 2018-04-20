@@ -2,12 +2,11 @@
 using CRM.Attributes;
 using CRM.Models;
 using CRM.Services;
+using CRMData.Adapters;
 using CRMData.Contexts;
 using CRMData.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace CRM.Controllers
@@ -18,7 +17,7 @@ namespace CRM.Controllers
         public ActionResult Index()
         {
             List<LeadViewModel> leads;
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+            using (BaseContext context = new BaseContext())
             {
                 leads = Mapper.Map<List<Lead>, List<LeadViewModel>>(context.Leads.Where(l => l.Id > 0 && l.Customer == null).ToList());
             }
@@ -35,20 +34,49 @@ namespace CRM.Controllers
                 return Json(new { status = "error", message = "Model is not valid!" });
             }
 
-            Expression<Func<Lead, string>> orderClouse = e => e.Email;
-            Expression<Func<Lead, bool>> whereClouse = null;
-            if (model.SearchValue != null)
+            var leadAdapter = new LeadAdapter();
+
+            bool? byName = null;
+            bool? byEmail = null;
+            bool? byPhone = null;
+
+            switch (model.OrderField)
             {
-                whereClouse = e => e.Name.Contains(model.SearchValue);
+                case "Name":
+                    byName = true;
+                    break;
+                case "Phone":
+                    byPhone = true;
+                    break;
+                case "Email":
+                    byEmail = true;
+                    break;
+                default:
+                    byName = true;
+                    break;
             }
-            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(SearchService<Lead>.Search(model, whereClouse, orderClouse, model.OrderDirection.Equals("ASC")));
+
+            var result = leadAdapter.GetLeadsByFilter(
+                model.Field, 
+                model.SearchValue, 
+                byName, 
+                byEmail, 
+                byPhone,
+                model.OrderDirection.Equals("ASC"));
+
+            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
             return PartialView("_LeadsPagePartial", items);
+        }
+
+        public void CreateExpression()
+        {
+
         }
 
         public ActionResult Create()
         {
             return View();
-        }    
+        }
 
         [HttpGet]
         public ActionResult Edit(string email)
@@ -62,22 +90,22 @@ namespace CRM.Controllers
                 notes = context.Notes.Where(n => n.LeadId == leadDb.Id).Select(i => i.Text).ToList();
                 lead.Notes = notes;
             }
-            if(lead != null)
+            if (lead != null)
             {
                 return View(lead);
             }
-            return RedirectToAction("Index"); 
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult Edit(LeadViewModel lead,  string oldEmail)
+        public ActionResult Edit(LeadViewModel lead, string oldEmail)
         {
             if (ModelState.IsValid)
             {
                 using (BaseContext context = new BaseContext())
                 {
                     Lead leadToEdit = context.Leads.FirstOrDefault(l => l.Email == oldEmail);
-                    if(leadToEdit != null)
+                    if (leadToEdit != null)
                     {
                         leadToEdit.Email = lead.Email;
                         leadToEdit.Name = lead.Name;
@@ -85,10 +113,10 @@ namespace CRM.Controllers
                     }
                     if (lead.Notes.Any())
                     {
-                        foreach(string note in lead.Notes)
+                        foreach (string note in lead.Notes)
                         {
-                            context.Notes.Add(new Note {LeadId = leadToEdit.Id, Text =  note});
-                        }                      
+                            context.Notes.Add(new Note { LeadId = leadToEdit.Id, Text = note });
+                        }
                     }
                     context.SaveChanges();
                 }
@@ -104,16 +132,16 @@ namespace CRM.Controllers
             using (BaseContext context = new BaseContext())
             {
                 Lead lead = context.Leads.FirstOrDefault(l => l.Email == email);
-                if(lead != null)
+                if (lead != null)
                 {
                     leadEmail = lead?.Email;
-                    if(lead.LeadOwner == 0)
+                    if (lead.LeadOwner == 0)
                     {
                         var currentUser = context.Users.FirstOrDefault(u => u.Email == currentUserEmail);
                         lead.LeadOwner = currentUser.Id;
                         context.SaveChanges();
-                    }                   
-                }               
+                    }
+                }
             }
             if (string.IsNullOrEmpty(leadEmail))
             {
