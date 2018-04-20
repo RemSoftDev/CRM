@@ -3,17 +3,17 @@
         var leadModel = {
             name: $('#Name').val(),
             email: $('#Email').val(),
-            phone: $('#Phone').val(),
+            phones: [{ phoneNumber: $('#PhoneNumber').val() }],
             notes: getNotes()
             //message: $('#message').val()
         };
-        var oldEmail = $('#oldEmail').val();
+        var leadId = $('#leadId').val();
         $.ajax({
             url: "/Lead/Edit",
             type: 'POST',
             data: {
                 lead: leadModel,
-                oldEmail: oldEmail
+                id: leadId
             },
             success: function (response) {
                 window.location = '/';
@@ -25,7 +25,7 @@
     });
 
     $('#add_note').on('click', function () {
-        var notes = $('#notes textarea');
+        var notes = $('#notes > textarea');
         if (notes.length == 0) {
             $('#notes button').before('<textarea class="form-control margin-bottom" name="note"></textarea>');
         }
@@ -39,7 +39,7 @@
 
     $('#send_message').on('click', function () {
         var message = $('#message').val();
-        var oldEmail = $('#oldEmail').val();
+        var leadId = $('#leadId').val();
         if (!message) {
             alert("Message can't be empty!");
         }
@@ -48,7 +48,7 @@
                 url: "/Lead/SendMessage",
                 type: 'POST',
                 data: {
-                    oldEmail: oldEmail,
+                    id: leadId,
                     message: message
                 },
                 success: function (response) {

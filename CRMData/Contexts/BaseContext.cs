@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 
@@ -56,7 +57,9 @@ namespace CRMData.Contexts
 
         public TDbContext Get<TDbContext>() where TDbContext : DbContext, new()
         {
-            if (_dbContext == null || _dbContextType != typeof(TDbContext))
+            bool useMoqDB = bool.Parse(ConfigurationManager.AppSettings["useMoqDB"]);
+
+            if ((_dbContext == null || _dbContextType != typeof(TDbContext)) || !useMoqDB)
             {
                 return new TDbContext();
             }
@@ -101,8 +104,9 @@ namespace CRMData.Contexts
         private DbSet<User> GetUserMock()
         {
             var users = new List<User>() {
-                new User() { Id = 1, Password = "taxcode1", FirstName = "firstname1", LastName = "surname1", Email = "qwery1" },
-                new User() { Id = 2, Password = "taxcode2", FirstName = "firstname2", LastName = "surname2", Email = "qwery2" }
+                //"taxcode1"
+                new User() { Id = 1, Password = "8Mhv+5D5Ji4qtx4Dv+RNpcjlLGOimaDmIkywKkNRjjE=", FirstName = "firstname1", LastName = "surname1", Email = "qwery1@test.com" },
+                new User() { Id = 2, Password = "taxcode2", FirstName = "firstname2", LastName = "surname2", Email = "qwery2@test.com" }
             };
 
             var mockUser = GetQueryableMockDbSet(users);

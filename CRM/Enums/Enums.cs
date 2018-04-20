@@ -3,7 +3,7 @@ namespace CRM.Enums
 {
     public enum UserRole
     {
-        AdminStaff,
+        AdminStaff = 0,
         Manager,
         Customer,
         Practitioner
@@ -11,7 +11,7 @@ namespace CRM.Enums
 
     public enum AddressType
     {
-        BillingAddress,
+        BillingAddress = 0,
         ContactAddress,
         EmergencyContactAddress
 
@@ -19,7 +19,7 @@ namespace CRM.Enums
 
     public enum PhoneType
     {
-        HomePhone,
+        HomePhone = 0,
         WorkPhone,
         MobilePhone,
         EmergencyContactPhone,

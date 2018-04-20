@@ -1,0 +1,53 @@
+﻿@model  int
+@{
+    ViewBag.Title = "Convert Lead";
+}
+
+<h2>Convert Lead</h2>
+
+<html>
+<body>
+    <div>
+        <form>
+            <input type="hidden" id="leadId" value="@Model" />
+            <hr />
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="name">Title</label>
+                <div class="col-md-10 margin-bottom">
+                    <input class="form-control" id="title" name="title" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="title" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="firstName">First Name</label>
+                <div class="col-md-10 margin-bottom">
+                    <input class="form-control" id="firstName" name="firstName" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="firstName" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="lastName">Last Name</label>
+                <div class="col-md-10 margin-bottom">
+                    <input class="form-control" id="lastName" name="lastName" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="lastName" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="address">Address</label>
+                <div class="col-md-10 margin-bottom">
+                    <input class="form-control" id="address" name="address" type="text" value="" />
+                    <span class="field-validation-valid text-danger" data-valmsg-for="address" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 margin-bottom">
+                    <input type="button" id="convert_button" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
+@Scripts.Render("~/scripts/Lead/convertLead.js")

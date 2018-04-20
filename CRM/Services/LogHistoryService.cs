@@ -25,7 +25,7 @@ namespace CRM.Services
 
         private static void SaveHistory()
         {
-            using (BaseContext context = new BaseContext())
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
 
             }

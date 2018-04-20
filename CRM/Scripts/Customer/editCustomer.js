@@ -1,19 +1,20 @@
 ﻿$(document).ready(function () {
     $('#edit_button').on('click', function () {
-        var leadModel = {
-            name: $('#Name').val(),
+        var customerModel = {
+            title: $('#Title').val(),
+            firstName: $('#FirstName').val(),
+            lastName: $('#LastName').val(),
             email: $('#Email').val(),
-            phone: $('#Phone').val(),
+            phones: [{ PhoneNumber: $('#PhoneNumber').val() }],
             notes: getNotes()
-            //message: $('#message').val()
         };
-        var oldPhone = $('#oldPhone').val();
+        var customerId = $('#customerId').val();
         $.ajax({
             url: "/Customer/Edit",
             type: 'POST',
             data: {
-                lead: leadModel,
-                oldPhone: oldPhone
+                customer: customerModel,
+                id: customerId
             },
             success: function (response) {
                 window.location = '/';
@@ -25,7 +26,7 @@
     });
 
     $('#add_note').on('click', function () {
-        var notes = $('#notes textarea');
+        var notes = $('#notes > textarea');
         if (notes.length == 0) {
             $('#notes button').before('<textarea class="form-control margin-bottom" name="note"></textarea>');
         }
@@ -39,7 +40,7 @@
 
     $('#send_message').on('click', function () {
         var message = $('#message').val();
-        var oldPhone = $('#oldPhone').val();
+        var customerId = $('#customerId').val();
         if (!message) {
             alert("Message can't be empty!");
         }
@@ -48,7 +49,7 @@
                 url: "/Customer/SendMessage",
                 type: 'POST',
                 data: {
-                    oldPhone : oldPhone,
+                    id: customerId,
                     message: message
                 },
                 success: function (response) {

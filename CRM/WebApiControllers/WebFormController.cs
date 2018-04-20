@@ -17,7 +17,7 @@ namespace CRM.WebApiControllers
             if (ModelState.IsValid)
             {
                 Lead lead = Mapper.Map<LeadViewModel, Lead>(model);
-                using (BaseContext context = new BaseContext())
+                using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
                 {
                     if (context.Leads.FirstOrDefault(l => l.Email == lead.Email) == null)
                     {

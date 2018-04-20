@@ -195,6 +195,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EncryptionService.cs" />
+    <Compile Include="Services\LeadConvertService.cs" />
     <Compile Include="Services\LogHistoryService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SearchService.cs" />
@@ -224,6 +225,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Lead\convertLead.js" />
     <Content Include="Scripts\Lead\createLead.js" />
     <Content Include="Scripts\Lead\editLead.js" />
     <Content Include="Scripts\Lead\searchLead.js" />
@@ -251,6 +253,7 @@
     <Content Include="Views\Lead\Create.cshtml" />
     <Content Include="Views\Lead\Edit.cshtml" />
     <Content Include="Views\Lead\Index.cshtml" />
+    <Content Include="Views\Lead\ConvertLead.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

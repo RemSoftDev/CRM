@@ -8,6 +8,7 @@
             <td>Email</td>
             <td>Phone</td>
             <td></td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
@@ -16,8 +17,9 @@
             <tr>
                 <td>@lead.Name</td>
                 <td>@lead.Email</td>
-                <td>@lead.Phone</td>
-                <td><a href="/Lead/Edit?email=@lead.Email">Edit</a></td>
+                <td>@lead.Phones.FirstOrDefault().PhoneNumber</td>
+                <td><a href="/Lead/Edit?id=@lead.Id">Edit</a></td>
+                <td style="text-align: center;"><a href="/Lead/ConvertLead?id=@lead.Id">Convert</a></td>
             </tr>
         }
     </tbody>

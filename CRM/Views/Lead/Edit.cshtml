@@ -7,7 +7,7 @@
 <h2>Edit</h2>
 
 <form>
-    <input type="hidden" id="oldEmail" value="@Model.Email" />
+    <input type="hidden" id="leadId" value="@Model.Id" />
     <div class="form-group">
         @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
         <div class="col-md-10 margin-bottom">
@@ -23,10 +23,10 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.Phones, new { @class = "col-md-2 control-label" })
         <div class="col-md-10 margin-bottom">
-            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.Phones.FirstOrDefault().PhoneNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Phones.FirstOrDefault().PhoneNumber, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
@@ -41,7 +41,7 @@
     </div>
     <div class="form-group">
         <label class="col-md-2">Message</label>
-        <div class="col-md-10 margin-bottom" id="notes">
+        <div class="col-md-10 margin-bottom">
             <textarea class="form-control margin-bottom" id="message"></textarea>
             <button type="button" id="send_message" class="btn btn-default">Send</button>
         </div>
