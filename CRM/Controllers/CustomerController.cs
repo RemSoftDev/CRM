@@ -17,9 +17,12 @@ namespace CRM.Controllers
         public ActionResult Index()
         {
             List<CustomerViewModel> customers;
-            using (BaseContext context = new BaseContext())
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                customers = Mapper.Map<List<Customer>, List<CustomerViewModel>>(context.Customers.Where(c => c.Id > 0).ToList());
+                customers = Mapper.Map<List<Customer>, List<CustomerViewModel>>(context
+                    .Customers
+                    .Include("Phones")
+                    .ToList());
             }
             return View(customers);
         }
@@ -39,15 +42,15 @@ namespace CRM.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(string email)
+        public ActionResult Edit(int id)
         {
             CustomerViewModel customer;
             List<string> notes;
-            using (BaseContext context = new BaseContext())
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                Customer customerDb = context.Customers.Include("Phones").FirstOrDefault(c => c.Email == email);
+;               Customer customerDb = context.Customers.Include("Phones").Include("Lead").FirstOrDefault(c => c.Id == id);
                 customer = Mapper.Map<Customer, CustomerViewModel>(customerDb);
-                notes = context.Notes.Where(n => n.LeadId == customerDb.Id).Select(i => i.Text).ToList();
+                notes = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).Select(i => i.Text).ToList();
                 customer.Notes = notes;
             }
             if (customer != null)
@@ -58,18 +61,22 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CustomerViewModel customer, string oldEmail)
+        public ActionResult Edit(CustomerViewModel customer, int id)
         {
             if (ModelState.IsValid)
             {
-                using (BaseContext context = new BaseContext())
+                using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
                 {
-                    Customer customerToEdit = context.Customers.FirstOrDefault(c => c.Email == oldEmail);
+                    Customer customerToEdit = context.Customers.Include("Phones").FirstOrDefault(c => c.Id == id);
                     if (customerToEdit != null)
                     {
+                        customerToEdit.Title = customer.Title;
                         customerToEdit.Email = customer.Email;
                         customerToEdit.FirstName = customer.FirstName;
-                        //customerToEdit.Phones = customer.Phone;
+                        customerToEdit.LastName = customer.LastName;
+                        customerToEdit.Phones
+                            .FirstOrDefault()
+                            .PhoneNumber = customer.Phones.FirstOrDefault().PhoneNumber;
                     }
                     if (customer.Notes.Any())
                     {
@@ -85,22 +92,16 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMessage(string oldEmail, string message)
+        public ActionResult SendMessage(int id, string message)
         {
             var leadEmail = "";
             var currentUserEmail = User.Identity.Name.Split('|')[1];
-            using (BaseContext context = new BaseContext())
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                Lead lead = context.Leads.FirstOrDefault(l => l.Email == oldEmail);
-                if (lead != null)
+                Customer customer = context.Customers.FirstOrDefault(c => c.Id == id);
+                if (customer != null)
                 {
-                    leadEmail = lead?.Email;
-                    if (lead.LeadOwner == 0)
-                    {
-                        var currentUser = context.Users.FirstOrDefault(u => u.Email == currentUserEmail);
-                        lead.LeadOwner = currentUser.Id;
-                        context.SaveChanges();
-                    }
+                    leadEmail = customer?.Email;
                 }
             }
             if (string.IsNullOrEmpty(leadEmail))
