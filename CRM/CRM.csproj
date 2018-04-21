@@ -179,6 +179,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Extentions\PrincipalExtention.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -188,6 +189,8 @@
     <Compile Include="Models\LeadViewModel.cs" />
     <Compile Include="Models\LogHistoryModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\Misc\UserCreads.cs" />
+    <Compile Include="Models\NoteViewModel.cs" />
     <Compile Include="Models\PhoneViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
@@ -291,7 +294,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50086</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

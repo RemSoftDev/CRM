@@ -8,12 +8,30 @@ using System.Linq;
 
 namespace CRMData.Contexts
 {
+    public class CRMDBInitializer : CreateDatabaseIfNotExists<BaseContext>
+    {
+        protected override void Seed(BaseContext context)
+        {
+            context.DPhoneTypes.Add(new DPhoneType() { TypeName = "HomePhone" });
+            context.DPhoneTypes.Add(new DPhoneType() { TypeName = "WorkPhone" });
+            context.DPhoneTypes.Add(new DPhoneType() { TypeName = "MobilePhone" });
+            context.DPhoneTypes.Add(new DPhoneType() { TypeName = "EmergencyContactPhone" });
+            context.DPhoneTypes.Add(new DPhoneType() { TypeName = "Fax" });
+
+            context.DAddressTypes.Add(new DAddressType() { TypeName = "BillingAddress" });
+            context.DAddressTypes.Add(new DAddressType() { TypeName = "ContactAddress" });
+            context.DAddressTypes.Add(new DAddressType() { TypeName = "EmergencyContactAddress" });
+
+            context.SaveChanges();
+        }
+    }
+
     public class BaseContext : DbContext
     {
         public BaseContext()
             : base("CRM_DB")
         {
-
+            Database.SetInitializer(new CRMDBInitializer());            
         }
 
         public virtual DbSet<User> Users { get; set; }
@@ -22,9 +40,17 @@ namespace CRMData.Contexts
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Phone> Phones { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
 
         public virtual DbSet<DAddressType> DAddressTypes { get; set; }
         public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
+
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 
     public class ContextFactory

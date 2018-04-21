@@ -7,11 +7,11 @@ using CRMData.Adapters.Extentions;
 
 namespace CRMData.Adapters
 {
-    public sealed class LeadAdapter
+    public sealed class CustomerAdapter
     {
-        public List<Lead> GetLeadsByFilter(
-            string whereField, 
-            string searchValue, 
+        public List<Customer> GetCustomersByFilter(
+            string whereField,
+            string searchValue,
             bool? byName = true,
             bool? byEmail = null,
             bool? byPhone = null,
@@ -19,7 +19,7 @@ namespace CRMData.Adapters
         {
             using (BaseContext context = new BaseContext())
             {
-                return context.Leads
+                return context.Customers
                     .Include(e => e.Phones)
                     .AddWhere(whereField, searchValue)
                     .AddOrder(byName, byEmail, byPhone, isAscending)

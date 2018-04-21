@@ -11,7 +11,7 @@ namespace CRM.Enums
 
     public enum AddressType
     {
-        BillingAddress = 0,
+        BillingAddress = 1,
         ContactAddress,
         EmergencyContactAddress
 
@@ -19,7 +19,7 @@ namespace CRM.Enums
 
     public enum PhoneType
     {
-        HomePhone = 0,
+        HomePhone = 1,
         WorkPhone,
         MobilePhone,
         EmergencyContactPhone,

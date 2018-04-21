@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace CRM.Services
 {
@@ -15,18 +16,28 @@ namespace CRM.Services
         {
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                var lead = context.Leads.Include("Phones").FirstOrDefault(l => l.Id == leadId && l.Customer == null);
+                var lead = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == leadId && l.Customer == null);
 
                 if(lead != null)
                 {
-                    lead.LeadOwner = context.Users.FirstOrDefault(u => u.Email == currentUserEmail).Id;
+                    lead.LeadOwner = context.Users?.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
                     var customer = Mapper.Map<CustomerViewModel, Customer>(model);
 
                     customer.Phones = lead.Phones;
                     customer.Email = lead.Email;
                     customer.Lead = lead;
 
-                    context.Customers.Add(customer);
+                    var newCustomer = context.Customers.Add(customer);
+
+                    // логирование процесса конвертации
+                    context.LeadConvertedLogs.Add(new LeadConvertedLog()
+                    {
+                        LeadId = model.Id,
+                        CustomerId = newCustomer.Id,
+                        ConvertDateTime = DateTime.Now,
+                        ConvertedByUserId = context.Users.FirstOrDefault(e => e.Email.Equals(currentUserEmail)).Id
+                    });
+
                     context.SaveChanges();
                 }                
             }

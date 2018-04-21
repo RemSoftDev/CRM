@@ -9,6 +9,8 @@ using CRMData.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
+using CRM.Extentions;
 
 namespace CRM.Controllers
 {
@@ -20,11 +22,14 @@ namespace CRM.Controllers
             List<LeadViewModel> leads;
             using (BaseContext context = new BaseContext())
             {
-                leads = Mapper.Map<List<Lead>, List<LeadViewModel>>(context
+                var leads1 = context
                     .Leads
-                    .Include("Phones")
+                    .Include(e => e.Phones)
                     .Where(l => l.Customer == null)
-                    .ToList());
+                    .ToList();
+
+
+                leads = Mapper.Map<List<Lead>, List<LeadViewModel>>(leads1);
             }
             return View(leads);
         }
@@ -62,10 +67,10 @@ namespace CRM.Controllers
             }
 
             var result = leadAdapter.GetLeadsByFilter(
-                model.Field, 
-                model.SearchValue, 
-                byName, 
-                byEmail, 
+                model.Field,
+                model.SearchValue,
+                byName,
+                byEmail,
                 byPhone,
                 model.OrderDirection.Equals("ASC"));
 
@@ -90,7 +95,7 @@ namespace CRM.Controllers
             List<string> notes;
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                Lead leadDb = context.Leads.Include("Phones").FirstOrDefault(l => l.Id == id);
+                Lead leadDb = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == id);
                 lead = Mapper.Map<Lead, LeadViewModel>(leadDb);
                 notes = context.Notes.Where(n => n.LeadId == leadDb.Id).Select(i => i.Text).ToList();
                 lead.Notes = notes;
@@ -103,7 +108,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(LeadViewModel lead,  int id)
+        public ActionResult Edit(LeadViewModel lead, int id)
         {
             if (ModelState.IsValid)
             {
@@ -111,17 +116,33 @@ namespace CRM.Controllers
                 {
                     Lead leadToEdit = context
                         .Leads
-                        .Include("Phones")
+                        .Include(e => e.Phones)
                         .FirstOrDefault(l => l.Id == id);
 
                     if (leadToEdit != null)
                     {
                         leadToEdit.Email = lead.Email;
                         leadToEdit.Name = lead.Name;
-                        leadToEdit
+
+                        var some = leadToEdit
                             .Phones
-                            .FirstOrDefault()
-                            .PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber;
+                            .FirstOrDefault();
+
+                        if(some == null)
+                        {
+                            leadToEdit.Phones.Add(new Phone()
+                            {
+                                PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber,
+                                Type = new DPhoneType()
+                                {
+                                    TypeName = "HomePhone"
+                                }
+                            });
+                        }
+                        else
+                        {
+                            some.PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber;
+                        }
 
                     }
                     if (lead.Notes.Any())
@@ -145,7 +166,7 @@ namespace CRM.Controllers
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 Lead lead = context.Leads.FirstOrDefault(l => l.Id == id);
-                if(lead != null)
+                if (lead != null)
                 {
                     leadEmail = lead?.Email;
                     if (lead.LeadOwner == 0)
@@ -173,8 +194,9 @@ namespace CRM.Controllers
         [HttpPost]
         public JsonResult ConvertLead(CustomerViewModel model, int id)
         {
-            var currentUserEmail = User.Identity.Name.Split('|')[1];
-            LeadConvertService.Convert(model, id, currentUserEmail);
+            var userCreads = User.GetCurrentUserCreads();
+
+            LeadConvertService.Convert(model, id, userCreads.Email);
 
             return Json(new { status = "success" });
         }

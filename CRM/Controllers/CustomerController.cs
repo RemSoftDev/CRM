@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.Models;
 using CRM.Services;
+using CRMData.Adapters;
 using CRMData.Contexts;
 using CRMData.Entities;
 using System;
@@ -37,7 +38,37 @@ namespace CRM.Controllers
                 return Json(new { status = "error", message = "Model is not valid!" });
             }
 
-            var items = Mapper.Map<List<Customer>, List<CustomerViewModel>>(SearchService<Customer>.Search(model));
+            var customerAdapter = new CustomerAdapter();
+
+            bool? byName = null;
+            bool? byEmail = null;
+            bool? byPhone = null;
+
+            switch (model.OrderField)
+            {
+                case "Name":
+                    byName = true;
+                    break;
+                case "Phone":
+                    byPhone = true;
+                    break;
+                case "Email":
+                    byEmail = true;
+                    break;
+                default:
+                    byName = true;
+                    break;
+            }
+
+            var result = customerAdapter.GetCustomersByFilter(
+                model.Field,
+                model.SearchValue,
+                byName,
+                byEmail,
+                byPhone,
+                model.OrderDirection.Equals("ASC"));
+
+            var items = Mapper.Map<List<Customer>, List<CustomerViewModel>>(result);
             return PartialView("_CustomersPagePartial", items);
         }
 
@@ -45,13 +76,17 @@ namespace CRM.Controllers
         public ActionResult Edit(int id)
         {
             CustomerViewModel customer;
-            List<string> notes;
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-;               Customer customerDb = context.Customers.Include("Phones").Include("Lead").FirstOrDefault(c => c.Id == id);
+;               Customer customerDb = context.Customers
+                    .Include(e => e.Phones)
+                    .Include(e => e.Lead)
+                    .FirstOrDefault(c => c.Id == id);
+
                 customer = Mapper.Map<Customer, CustomerViewModel>(customerDb);
-                notes = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).Select(i => i.Text).ToList();
-                customer.Notes = notes;
+                List<Note> customerNote = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).ToList();
+
+                customer.Notes = Mapper.Map<List<Note>,List<NoteViewModel>>(customerNote);
             }
             if (customer != null)
             {
@@ -61,13 +96,16 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CustomerViewModel customer, int id)
+        public ActionResult Edit(CustomerViewModel customer, int id, List<string> note)
         {
             if (ModelState.IsValid)
             {
                 using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
                 {
-                    Customer customerToEdit = context.Customers.Include("Phones").FirstOrDefault(c => c.Id == id);
+                    Customer customerToEdit = context.Customers
+                        .Include(e => e.Phones)
+                        .FirstOrDefault(c => c.Id == id);
+
                     if (customerToEdit != null)
                     {
                         customerToEdit.Title = customer.Title;
@@ -78,13 +116,22 @@ namespace CRM.Controllers
                             .FirstOrDefault()
                             .PhoneNumber = customer.Phones.FirstOrDefault().PhoneNumber;
                     }
+
                     if (customer.Notes.Any())
                     {
-                        foreach (string note in customer.Notes)
+                        foreach (NoteViewModel reNewNote in customer.Notes)
                         {
-                            context.Notes.Add(new Note { LeadId = customerToEdit.Id, Text = note });
+                            Note oldNote = context.Notes.FirstOrDefault(e => e.Id == reNewNote.Id);
+                            if(oldNote != null)
+                                oldNote.Text = reNewNote.Text;
                         }
                     }
+
+                    if(note != null && note.Any())
+                    {
+                        context.Notes.AddRange(note.Select(e => new Note() { Text = e, CustomerId = customer.Id }));
+                    }
+
                     context.SaveChanges();
                 }
             }

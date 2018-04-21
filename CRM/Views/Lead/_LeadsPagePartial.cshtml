@@ -17,7 +17,7 @@
             <tr>
                 <td>@lead.Name</td>
                 <td>@lead.Email</td>
-                <td>@lead.Phones.FirstOrDefault().PhoneNumber</td>
+                <td>@(lead.Phones.FirstOrDefault()?.PhoneNumber)</td>
                 <td><a href="/Lead/Edit?id=@lead.Id">Edit</a></td>
                 <td style="text-align: center;"><a href="/Lead/ConvertLead?id=@lead.Id">Convert</a></td>
             </tr>

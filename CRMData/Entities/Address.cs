@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,8 @@ namespace CRMData.Entities
         public string County { get; set; }
         public int PostCode { get; set; }
         public string Country { get; set; }
-        //public int Type { get; set; }
+        
+        [ForeignKey("Id")]
         public DAddressType Type { get; set; }
 
         public int? CustomerId { get; set; }

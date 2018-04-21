@@ -19,7 +19,7 @@
             <td>@customer.LastName</td>
             <td>@customer.Email</td>
             <td>@customer.Phones.FirstOrDefault().PhoneNumber</td>
-            <td><a href="/Customer/Edit?id=@customer.Id">Edit</a></td>
+            <td>@Html.ActionLink("Edit", "Edit", new { id = customer.Id })</td>
         </tr>
         }
     </tbody>

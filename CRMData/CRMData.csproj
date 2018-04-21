@@ -60,6 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\CustomerAdapter.cs" />
+    <Compile Include="Adapters\Extentions\QueryCustomerExtentions.cs" />
+    <Compile Include="Adapters\Extentions\QueryLeadExtentions.cs" />
     <Compile Include="Adapters\LeadAdapter.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="Entities\Address.cs" />
@@ -67,9 +70,11 @@
     <Compile Include="Entities\DAddressType.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
     <Compile Include="Entities\Lead.cs" />
+    <Compile Include="Entities\LeadConvertedLog.cs" />
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
