@@ -15,13 +15,22 @@ namespace CRM.Models
         [EmailAddress]
         public string Email { get; set; }
         public List<PhoneViewModel> Phones { get; set; }
-        public List<string> Notes { get; set; }
+        public List<NoteViewModel> Notes { get; set; }
         public string Message { get; set; }
         public int? LeadOwner { get; set; }
 
+
+        public string Discipline { get; set; }
+        public string AgeGroup { get; set; }
+        public string Status { get; set; }
+        public string StatusNotes { get; set; }
+        public string IssueRaised { get; set; }
+
+
+
         public LeadViewModel()
         {
-            this.Notes = new List<string>();
+            this.Notes = new List<NoteViewModel>();
         }
     }
 }

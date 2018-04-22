@@ -12,17 +12,15 @@ namespace CRMData.Adapters
         public List<Customer> GetCustomersByFilter(
             string whereField,
             string searchValue,
-            bool? byName = true,
-            bool? byEmail = null,
-            bool? byPhone = null,
+            string ordered,
             bool isAscending = true)
         {
             using (BaseContext context = new BaseContext())
             {
                 return context.Customers
                     .Include(e => e.Phones)
-                    .AddWhere(whereField, searchValue)
-                    .AddOrder(byName, byEmail, byPhone, isAscending)
+                    .AddWhere(whereField.Trim(), searchValue)
+                    .AddOrder(ordered.Trim(), isAscending)
                     .ToList();
             }
         }

@@ -1,28 +1,28 @@
 ﻿$(document).ready(function () {
-    $('#edit_button').on('click', function () {
-        var leadModel = {
-            name: $('#Name').val(),
-            email: $('#Email').val(),
-            phones: [{ phoneNumber: $('#PhoneNumber').val() }],
-            notes: getNotes()
-            //message: $('#message').val()
-        };
-        var leadId = $('#leadId').val();
-        $.ajax({
-            url: "/Lead/Edit",
-            type: 'POST',
-            data: {
-                lead: leadModel,
-                id: leadId
-            },
-            success: function (response) {
-                window.location = '/';
-            },
-            error: function (error) {
-                alert(error);
-            }
-        });
-    });
+//    $('#edit_button').on('click', function () {
+//        var leadModel = {
+//            name: $('#Name').val(),
+//            email: $('#Email').val(),
+//            phones: [{ phoneNumber: $('#PhoneNumber').val() }],
+//            notes: getNotes()
+//            //message: $('#message').val()
+//        };
+//        var leadId = $('#leadId').val();
+//        $.ajax({
+//            url: "/Lead/Edit",
+//            type: 'POST',
+//            data: {
+//                lead: leadModel,
+//                id: leadId
+//            },
+//            success: function (response) {
+//                window.location = '/';
+//            },
+//            error: function (error) {
+//                alert(error);
+//            }
+//        });
+//    });
 
     $('#add_note').on('click', function () {
         var notes = $('#notes > textarea');
@@ -62,15 +62,15 @@
     });
 });
 
-function getNotes() {
-    var notes = $('[name="note"]');
-    var notesValue = [];
-    if (notes.length > 0) {
-        for (var i = 0; i < notes.length; i++) {
-            if (notes[i].value != '') {
-                notesValue.push(notes[i].value);
-            }
-        }
-    }
-    return notesValue;
-}
+//function getNotes() {
+//    var notes = $('[name="note"]');
+//    var notesValue = [];
+//    if (notes.length > 0) {
+//        for (var i = 0; i < notes.length; i++) {
+//            if (notes[i].value != '') {
+//                notesValue.push(notes[i].value);
+//            }
+//        }
+//    }
+//    return notesValue;
+//}

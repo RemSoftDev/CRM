@@ -6,8 +6,9 @@
 
 <h2>Edit</h2>
 
-<form>
-    <input type="hidden" id="leadId" value="@Model.Id" />
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(e => e.Id)
     <div class="form-group">
         @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
         <div class="col-md-10 margin-bottom">
@@ -23,18 +24,59 @@
         </div>
     </div>
     <div class="form-group">
+
         @Html.LabelFor(m => m.Phones, new { @class = "col-md-2 control-label" })
         <div class="col-md-10 margin-bottom">
-            @Html.TextBoxFor(m => m.Phones.FirstOrDefault().PhoneNumber, new { @class = "form-control" })
+            @for (int i = 0; i < Model.Phones.Count; i++)
+            {
+                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })
+                @Html.HiddenFor(m => m.Phones[i].Type)
+            }
             @Html.ValidationMessageFor(m => m.Phones.FirstOrDefault().PhoneNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Discipline, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 margin-bottom">
+            @Html.TextBoxFor(m => m.Discipline, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Discipline, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AgeGroup, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 margin-bottom">
+            @Html.TextBoxFor(m => m.AgeGroup, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.AgeGroup, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Status, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 margin-bottom">
+            @Html.TextBoxFor(m => m.Status, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.StatusNotes, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 margin-bottom">
+            @Html.TextBoxFor(m => m.StatusNotes, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.StatusNotes, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.IssueRaised, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 margin-bottom">
+            @Html.TextBoxFor(m => m.IssueRaised, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.IssueRaised, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2">Notes</label>
         <div class="col-md-10 margin-bottom" id="notes">
-            @foreach (string note in Model.Notes)
+            @for (int i = 0; i < Model.Notes.Count; i++)
             {
-                <textarea class="form-control margin-bottom">@note</textarea>
+                @Html.HiddenFor(m => m.Notes[i].Id)
+                @Html.TextAreaFor(m => m.Notes[i].Text, new { @class = "form-control margin-bottom" })
             }
             <button type="button" id="add_note" class="btn btn-default"><i class="glyphicon-plus"></i></button>
         </div>
@@ -48,10 +90,10 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="button" id="edit_button" value="Save" class="btn btn-default" />
+            <input type="submit" id="edit_button" value="Save" class="btn btn-default" />
         </div>
     </div>
-</form>
+}
 
 @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
 @Scripts.Render("~/scripts/Lead/editLead.js")

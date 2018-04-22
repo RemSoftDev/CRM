@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace CRMData.Contexts
             context.DAddressTypes.Add(new DAddressType() { TypeName = "ContactAddress" });
             context.DAddressTypes.Add(new DAddressType() { TypeName = "EmergencyContactAddress" });
 
-            context.SaveChanges();
+            base.Seed(context);
         }
     }
 
@@ -49,6 +50,15 @@ namespace CRMData.Contexts
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Address>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<Address>()
+                .HasOptional(e => e.AddressType)
+                .WithMany(e => e.Addresses)
+                .HasForeignKey(e => e.AddressTypeId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

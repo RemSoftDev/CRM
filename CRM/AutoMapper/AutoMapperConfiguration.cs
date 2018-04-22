@@ -24,14 +24,11 @@ namespace CRM.AutoMapper
                     }));
 
                 cfg.CreateMap<Address, AddressViewModel>()
-                    .ForMember(p => p.Type, opt => opt.MapFrom(a => (AddressType)a.Type.Id));
+                    .ForMember(p => p.Type, opt => opt.MapFrom(a => (AddressType?)a.AddressTypeId));
 
                 cfg.CreateMap<AddressViewModel, Address>()
-                    .ForMember(p => p.Id, opt => opt.Ignore())
-                    .ForMember(p => p.Type, opt => opt.MapFrom(e => new DAddressType
-                    {
-                        Id = (int)e.Type
-                    }));
+                    //.ForMember(p => p.Id, opt => opt.Ignore())
+                    .ForMember(p => p.AddressTypeId, opt => opt.MapFrom(e => (int?)e.Type));
 
                 cfg.CreateMap<User, UserViewModel>()
                     .ForMember(i => i.Role, opt => opt.MapFrom(u => (UserRole)u.Role));

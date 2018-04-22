@@ -1,4 +1,4 @@
-﻿@model  int
+﻿@model  int?
 @{
     ViewBag.Title = "Convert Lead";
 }
@@ -32,13 +32,13 @@
                     <span class="field-validation-valid text-danger" data-valmsg-for="lastName" data-valmsg-replace="true"></span>
                 </div>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label class="col-md-2 control-label" for="address">Address</label>
                 <div class="col-md-10 margin-bottom">
                     <input class="form-control" id="address" name="address" type="text" value="" />
                     <span class="field-validation-valid text-danger" data-valmsg-for="address" data-valmsg-replace="true"></span>
                 </div>
-            </div>
+            </div>*@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10 margin-bottom">
                     <input type="button" id="convert_button" value="Create" class="btn btn-default" />

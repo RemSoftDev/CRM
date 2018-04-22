@@ -14,16 +14,17 @@ namespace CRMData.Entities
         public string Line2 { get; set; }
         public string Town { get; set; }
         public string County { get; set; }
-        public int PostCode { get; set; }
+        public string PostCode { get; set; }
         public string Country { get; set; }
-        
-        [ForeignKey("Id")]
-        public DAddressType Type { get; set; }
+
+        [Column("DAddressTypeId")]
+        public int? AddressTypeId { get; set; }
+        public virtual DAddressType AddressType { get; set; }
 
         public int? CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; }
 
         public int? UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

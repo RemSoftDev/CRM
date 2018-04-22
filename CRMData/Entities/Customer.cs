@@ -17,9 +17,9 @@ namespace CRMData.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public ICollection<Address> Addresses { get; set; }
-        public ICollection<Phone> Phones { get; set; }
-        public ICollection<Note> Notes { get; set; }
+        public IList<Address> Addresses { get; set; }
+        public IList<Phone> Phones { get; set; }
+        public IList<Note> Notes { get; set; }
         public Lead Lead { get; set; }
 
         public Customer()

@@ -78,11 +78,6 @@ namespace CRM.Controllers
             return PartialView("_LeadsPagePartial", items);
         }
 
-        public void CreateExpression()
-        {
-
-        }
-
         public ActionResult Create()
         {
             return View();
@@ -92,13 +87,14 @@ namespace CRM.Controllers
         public ActionResult Edit(int id)
         {
             LeadViewModel lead;
-            List<string> notes;
+
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 Lead leadDb = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == id);
                 lead = Mapper.Map<Lead, LeadViewModel>(leadDb);
-                notes = context.Notes.Where(n => n.LeadId == leadDb.Id).Select(i => i.Text).ToList();
-                lead.Notes = notes;
+
+                List<Note> leadNotes = context.Notes.Where(n => n.LeadId == leadDb.Id).ToList();
+                lead.Notes = Mapper.Map<List<Note>, List<NoteViewModel>>(leadNotes);
             }
             if (lead != null)
             {
@@ -108,7 +104,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(LeadViewModel lead, int id)
+        public ActionResult Edit(LeadViewModel lead, List<string> note)
         {
             if (ModelState.IsValid)
             {
@@ -117,18 +113,23 @@ namespace CRM.Controllers
                     Lead leadToEdit = context
                         .Leads
                         .Include(e => e.Phones)
-                        .FirstOrDefault(l => l.Id == id);
+                        .FirstOrDefault(l => l.Id == lead.Id);
 
                     if (leadToEdit != null)
                     {
                         leadToEdit.Email = lead.Email;
                         leadToEdit.Name = lead.Name;
+                        leadToEdit.Discipline = lead.Discipline;
+                        leadToEdit.AgeGroup = lead.AgeGroup;
+                        leadToEdit.Status = lead.Status;
+                        leadToEdit.StatusNotes = lead.StatusNotes;
+                        leadToEdit.IssueRaised = lead.IssueRaised;
 
-                        var some = leadToEdit
+                        var firstPhone = leadToEdit
                             .Phones
                             .FirstOrDefault();
 
-                        if(some == null)
+                        if(firstPhone == null)
                         {
                             leadToEdit.Phones.Add(new Phone()
                             {
@@ -141,17 +142,26 @@ namespace CRM.Controllers
                         }
                         else
                         {
-                            some.PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber;
+                            firstPhone.PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber;
                         }
 
                     }
+
                     if (lead.Notes.Any())
                     {
-                        foreach (string note in lead.Notes)
+                        foreach (NoteViewModel reNewNote in lead.Notes)
                         {
-                            context.Notes.Add(new Note { LeadId = leadToEdit.Id, Text = note });
+                            Note oldNote = context.Notes.FirstOrDefault(e => e.Id == reNewNote.Id);
+                            if (oldNote != null)
+                                oldNote.Text = reNewNote.Text;
                         }
                     }
+
+                    if (note != null && note.Any())
+                    {
+                        context.Notes.AddRange(note.Select(e => new Note() { Text = e, LeadId = lead.Id }));
+                    }
+
                     context.SaveChanges();
                 }
             }

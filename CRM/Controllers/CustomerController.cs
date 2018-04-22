@@ -40,32 +40,10 @@ namespace CRM.Controllers
 
             var customerAdapter = new CustomerAdapter();
 
-            bool? byName = null;
-            bool? byEmail = null;
-            bool? byPhone = null;
-
-            switch (model.OrderField)
-            {
-                case "Name":
-                    byName = true;
-                    break;
-                case "Phone":
-                    byPhone = true;
-                    break;
-                case "Email":
-                    byEmail = true;
-                    break;
-                default:
-                    byName = true;
-                    break;
-            }
-
             var result = customerAdapter.GetCustomersByFilter(
                 model.Field,
                 model.SearchValue,
-                byName,
-                byEmail,
-                byPhone,
+                model.OrderField,
                 model.OrderDirection.Equals("ASC"));
 
             var items = Mapper.Map<List<Customer>, List<CustomerViewModel>>(result);
@@ -80,13 +58,22 @@ namespace CRM.Controllers
             {
 ;               Customer customerDb = context.Customers
                     .Include(e => e.Phones)
+                    .Include(e => e.Addresses)
                     .Include(e => e.Lead)
                     .FirstOrDefault(c => c.Id == id);
 
                 customer = Mapper.Map<Customer, CustomerViewModel>(customerDb);
-                List<Note> customerNote = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).ToList();
 
+                List<Note> customerNote = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).ToList();
+                customerNote.AddRange(context.Notes.Where(n => n.CustomerId == customerDb.Id).ToList());
                 customer.Notes = Mapper.Map<List<Note>,List<NoteViewModel>>(customerNote);
+
+                customer.Address = Mapper.Map<List<Address>, List<AddressViewModel>>((List<Address>)customerDb.Addresses);
+
+                if (customer.Address.Count == 0)
+                {
+                    customer.Address.Add(new AddressViewModel());
+                }
             }
             if (customer != null)
             {
@@ -96,7 +83,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CustomerViewModel customer, int id, List<string> note)
+        public ActionResult Edit(CustomerViewModel customer, List<string> note)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +91,7 @@ namespace CRM.Controllers
                 {
                     Customer customerToEdit = context.Customers
                         .Include(e => e.Phones)
-                        .FirstOrDefault(c => c.Id == id);
+                        .FirstOrDefault(c => c.Id == customer.Id);
 
                     if (customerToEdit != null)
                     {
@@ -115,6 +102,34 @@ namespace CRM.Controllers
                         customerToEdit.Phones
                             .FirstOrDefault()
                             .PhoneNumber = customer.Phones.FirstOrDefault().PhoneNumber;
+
+
+                        List<Address> addresses = Mapper.Map<List<Address>>(customer.Address);
+
+                        var ids = addresses.Select(a => a.Id).ToList();
+
+                        var currnetAddr = context.Addresses.Where(e => ids.Contains(e.Id)).ToList();
+
+                        if(currnetAddr.Count != 0)
+                        {
+                            currnetAddr.ForEach(e =>
+                            {
+                                var item = addresses.FirstOrDefault(a => a.Id == e.Id);
+
+                                e.Line1 = item.Line1;
+                                e.Line2 = item.Line2;
+                                e.PostCode = item.PostCode;
+                                e.Town = item.Town;
+                                e.Country = item.Country;
+                                e.County = item.County;
+                                e.AddressTypeId = item.AddressTypeId;
+                                e.AddressType = item.AddressType;
+                            });
+                        }
+                        else
+                        {
+                            addresses.ForEach(e => customerToEdit.Addresses.Add(e));
+                        }
                     }
 
                     if (customer.Notes.Any())

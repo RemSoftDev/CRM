@@ -21,7 +21,7 @@ namespace CRMData.Entities
         public int? LeadOwner { get; set; }
         public Customer Customer { get; set; }
 
-        public ICollection<Phone> Phones { get; set; }
+        public IList<Phone> Phones { get; set; }
 
         public Lead()
         {
