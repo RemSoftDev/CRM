@@ -12,16 +12,16 @@ namespace CRM.Services
 {
     public static class LeadConvertService
     {
-        public static void Convert(CustomerViewModel model, int leadId, string currentUserEmail)
+        public static void Convert(LeadConvertViewModel model, string currentUserEmail)
         {
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                var lead = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == leadId && l.Customer == null);
+                var lead = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == model.Id && l.Customer == null);
 
                 if(lead != null)
                 {
-                    lead.LeadOwner = context.Users?.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
-                    var customer = Mapper.Map<CustomerViewModel, Customer>(model);
+                    lead.LeadOwner = context.Users.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
+                    var customer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
 
                     customer.Phones = lead.Phones;
                     customer.Email = lead.Email;

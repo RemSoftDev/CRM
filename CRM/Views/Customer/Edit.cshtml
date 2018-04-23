@@ -42,8 +42,8 @@
         <div class="col-md-10 margin-bottom">
             @for (int i = 0; i < Model.Phones.Count; i++)
             {
-                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })
-                @Html.HiddenFor(m => m.Phones[i].Type)
+                @Html.HiddenFor(m => m.Phones[i].Id)
+                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })                
             }
             @Html.ValidationMessageFor(m => m.Phones.FirstOrDefault().PhoneNumber, "", new { @class = "text-danger" })
         </div>

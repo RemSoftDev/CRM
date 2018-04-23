@@ -1,4 +1,5 @@
-﻿@model  int?
+﻿@using CRM.Models;
+@model  LeadConvertViewModel
 @{
     ViewBag.Title = "Convert Lead";
 }
@@ -8,46 +9,125 @@
 <html>
 <body>
     <div>
-        <form>
-            <input type="hidden" id="leadId" value="@Model" />
-            <hr />
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(e => e.Id)
             <div class="form-group">
-                <label class="col-md-2 control-label" for="name">Title</label>
+                @Html.LabelFor(m => m.NewCustomer.FirstName, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="title" name="title" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="title" data-valmsg-replace="true"></span>
+                    @Html.TextBoxFor(m => m.NewCustomer.FirstName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NewCustomer.FirstName, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 control-label" for="firstName">First Name</label>
+                @Html.LabelFor(m => m.NewCustomer.LastName, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="firstName" name="firstName" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="firstName" data-valmsg-replace="true"></span>
+                    @Html.TextBoxFor(m => m.NewCustomer.LastName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NewCustomer.LastName, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 control-label" for="lastName">Last Name</label>
+                @Html.LabelFor(m => m.NewCustomer.Phones, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="lastName" name="lastName" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="lastName" data-valmsg-replace="true"></span>
+                    @for (int i = 0; i < Model.NewCustomer.Phones.Count; i++)
+                    {
+                        @Html.HiddenFor(e => e.Id)
+                        @Html.TextBoxFor(m => m.NewCustomer.Phones[i].PhoneNumber, new { @class = "form-control" })
+                        @Html.EnumDropDownListFor(m => m.NewCustomer.Phones[i].Type, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.NewCustomer.Phones[i].PhoneNumber, "", new { @class = "text-danger" })
+                    }
                 </div>
             </div>
-            @*<div class="form-group">
-                <label class="col-md-2 control-label" for="address">Address</label>
-                <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="address" name="address" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="address" data-valmsg-replace="true"></span>
-                </div>
-            </div>*@
+
+            <div class="col-md-10 margin-bottom">
+                <input type="hidden" value="0" />
+                <input type="text" name="newPhones[0].PhoneNumber" />
+                <select class="form-control" id="search_field" name="newPhones[0].Type">
+                    <option></option>
+                    <option value="1">Home Phone</option>
+                    <option value="2">Work Phone</option>
+                    <option value="3">Mobile Phone</option>
+                    <option value="4">Emergency Contact Phone</option>
+                    <option value="5">Fax</option>
+                </select>
+            </div>
+
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10 margin-bottom">
-                    <input type="button" id="convert_button" value="Create" class="btn btn-default" />
+                @Html.LabelFor(e => e.NewCustomer.Address, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10 margin-bottom">
+                    @for (int i = 0; i < Model.NewCustomer.Address.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.NewCustomer.Address[i].Id)
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].Line1)
+                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Line1, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].Line2)
+                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Line2, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].Town)
+                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Town, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].County)
+                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].County, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].PostCode)
+                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].PostCode, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].Country)
+                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Country, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-10 margin-bottom">
+                            @Html.LabelFor(m => m.NewCustomer.Address[i].Type)
+                            @Html.EnumDropDownListFor(m => m.NewCustomer.Address[i].Type, new { @class = "form-control" })
+                        </div>
+                    }
+
+                    <div class="col-md-10 margin-bottom">
+                        <input type="hidden" value="0" />
+                        <input type="text" name="newAddress[0].Line1" />
+                        <input type="text" name="newAddress[0].Line2" />
+                        <input type="text" name="newAddress[0].Town" />
+                        <input type="text" name="newAddress[0].County" />
+                        <input type="text" name="newAddress[0].PostCode" />
+                        <input type="text" name="newAddress[0].Country" />
+                        <select class="form-control" id="search_field" name="newAddress[0].Type">
+                            <option></option>
+                            <option value="1">Billing Address</option>
+                            <option value="2">Contact Address</option>
+                            <option value="3">Emergency Contact Address</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
-        </form>
+
+
+            <div class="form-group">
+                <label class="col-md-2">Notes</label>
+                <div class="col-md-10 margin-bottom" id="notes">
+                    @for (int i = 0; i < Model.NewCustomer.Notes.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.NewCustomer.Notes[i].Id)
+                        @Html.TextAreaFor(m => m.NewCustomer.Notes[i].Text, new { @class = "form-control margin-bottom" })
+                    }
+                    <button type="button" id="add_note" class="btn btn-default"><i class="glyphicon-plus"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" id="edit_button" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        }
     </div>
 </body>
 </html>
 
 @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
-@Scripts.Render("~/scripts/Lead/convertLead.js")
+@*@Scripts.Render("~/scripts/Lead/convertLead.js")*@

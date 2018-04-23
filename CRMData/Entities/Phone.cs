@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CRMData.Entities
+﻿namespace CRMData.Entities
 {
     public class Phone
     {
         public int Id { get; set; }
         public string PhoneNumber { get; set; }
 
-        public int TypeId { get; set; }
+        public int? TypeId { get; set; }
         public DPhoneType Type { get; set; }
 
         public int? CustomerId { get; set; }

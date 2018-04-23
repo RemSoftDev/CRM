@@ -186,6 +186,7 @@
     <Compile Include="Models\AddressViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\LeadConvertViewModel.cs" />
     <Compile Include="Models\LeadViewModel.cs" />
     <Compile Include="Models\LogHistoryModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
