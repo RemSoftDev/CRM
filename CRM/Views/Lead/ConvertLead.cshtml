@@ -37,54 +37,55 @@
                         @Html.ValidationMessageFor(m => m.NewCustomer.Phones[i].PhoneNumber, "", new { @class = "text-danger" })
                     }
                 </div>
-            </div>
 
-            <div class="col-md-10 margin-bottom">
-                <input type="hidden" value="0" />
-                <input type="text" name="newPhones[0].PhoneNumber" />
-                <select class="form-control" id="search_field" name="newPhones[0].Type">
-                    <option></option>
-                    <option value="1">Home Phone</option>
-                    <option value="2">Work Phone</option>
-                    <option value="3">Mobile Phone</option>
-                    <option value="4">Emergency Contact Phone</option>
-                    <option value="5">Fax</option>
-                </select>
+                <div class="col-md-10 margin-bottom">
+                    <input type="hidden" value="0" />
+                    <input type="text" name="newPhones[0].PhoneNumber" />
+                    <select class="form-control" id="search_field" name="newPhones[0].Type">
+                        <option></option>
+                        <option value="1">Home Phone</option>
+                        <option value="2">Work Phone</option>
+                        <option value="3">Mobile Phone</option>
+                        <option value="4">Emergency Contact Phone</option>
+                        <option value="5">Fax</option>
+                    </select>
+                </div>
+
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(e => e.NewCustomer.Address, new { @class = "col-md-2 control-label" })
+                @Html.LabelFor(e => e.NewCustomer.Addresses, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10 margin-bottom">
-                    @for (int i = 0; i < Model.NewCustomer.Address.Count; i++)
+                    @for (int i = 0; i < Model.NewCustomer.Addresses.Count; i++)
                     {
-                        @Html.HiddenFor(m => m.NewCustomer.Address[i].Id)
+                        @Html.HiddenFor(m => m.NewCustomer.Addresses[i].Id)
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].Line1)
-                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Line1, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].Line1)
+                            @Html.TextBoxFor(m => m.NewCustomer.Addresses[i].Line1, new { @class = "form-control" })
                         </div>
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].Line2)
-                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Line2, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].Line2)
+                            @Html.TextBoxFor(m => m.NewCustomer.Addresses[i].Line2, new { @class = "form-control" })
                         </div>
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].Town)
-                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Town, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].Town)
+                            @Html.TextBoxFor(m => m.NewCustomer.Addresses[i].Town, new { @class = "form-control" })
                         </div>
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].County)
-                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].County, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].County)
+                            @Html.TextBoxFor(m => m.NewCustomer.Addresses[i].County, new { @class = "form-control" })
                         </div>
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].PostCode)
-                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].PostCode, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].PostCode)
+                            @Html.TextBoxFor(m => m.NewCustomer.Addresses[i].PostCode, new { @class = "form-control" })
                         </div>
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].Country)
-                            @Html.TextBoxFor(m => m.NewCustomer.Address[i].Country, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].Country)
+                            @Html.TextBoxFor(m => m.NewCustomer.Addresses[i].Country, new { @class = "form-control" })
                         </div>
                         <div class="col-md-10 margin-bottom">
-                            @Html.LabelFor(m => m.NewCustomer.Address[i].Type)
-                            @Html.EnumDropDownListFor(m => m.NewCustomer.Address[i].Type, new { @class = "form-control" })
+                            @Html.LabelFor(m => m.NewCustomer.Addresses[i].Type)
+                            @Html.EnumDropDownListFor(m => m.NewCustomer.Addresses[i].Type, new { @class = "form-control" })
                         </div>
                     }
 

@@ -18,28 +18,34 @@ namespace CRM.Services
             {
                 var lead = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == model.Id && l.Customer == null);
 
-                if(lead != null)
+                //if(lead != null)
+                //{
+                //lead.LeadOwner = context.Users.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
+                var customer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
+
+                //customer.Phones = lead.Phones;
+                customer.Email = lead.Email;
+                customer.Lead = lead;
+
+                for (int i = 0; i < customer.Notes.Count; i++)
                 {
-                    lead.LeadOwner = context.Users.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
-                    var customer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
+                    if (string.IsNullOrEmpty(customer.Notes[i].Text))
+                        customer.Notes.RemoveAt(i);
+                }
 
-                    customer.Phones = lead.Phones;
-                    customer.Email = lead.Email;
-                    customer.Lead = lead;
+                var newCustomer = context.Customers.Add(customer);
 
-                    var newCustomer = context.Customers.Add(customer);
+                // логирование процесса конвертации
+                context.LeadConvertedLogs.Add(new LeadConvertedLog()
+                {
+                    LeadId = model.Id,
+                    CustomerId = newCustomer.Id,
+                    ConvertDateTime = DateTime.Now,
+                    ConvertedByUserId = context.Users.FirstOrDefault(e => e.Email.Equals(currentUserEmail)).Id
+                });
 
-                    // логирование процесса конвертации
-                    context.LeadConvertedLogs.Add(new LeadConvertedLog()
-                    {
-                        LeadId = model.Id,
-                        CustomerId = newCustomer.Id,
-                        ConvertDateTime = DateTime.Now,
-                        ConvertedByUserId = context.Users.FirstOrDefault(e => e.Email.Equals(currentUserEmail)).Id
-                    });
-
-                    context.SaveChanges();
-                }                
+                context.SaveChanges();
+                // }                
             }
         }
     }

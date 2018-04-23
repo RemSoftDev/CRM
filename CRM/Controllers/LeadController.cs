@@ -199,7 +199,7 @@ namespace CRM.Controllers
         public ActionResult ConvertLead(int id)
         {
             var customer = new CustomerViewModel();
-            customer.Address.Add(new AddressViewModel());
+            customer.Addresses.Add(new AddressViewModel());
             customer.Notes.Add(new NoteViewModel());
 
             using (var context = new BaseContext())
@@ -208,7 +208,6 @@ namespace CRM.Controllers
                     .Include(e => e.Phones)
                     .FirstOrDefault(e => e.Id == id);
  
-                customer.Email = currentLead.Email;
                 customer.Phones = Mapper.Map<List<PhoneViewModel>>(currentLead.Phones);
             }
 
@@ -222,7 +221,7 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult ConvertLead(LeadConvertViewModel model, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
         {
-            model.NewCustomer.Address.AddRange(newAddress);
+            model.NewCustomer.Addresses.AddRange(newAddress);
             model.NewCustomer.Phones.AddRange(newPhones);
 
             var userCreads = User.GetCurrentUserCreads();

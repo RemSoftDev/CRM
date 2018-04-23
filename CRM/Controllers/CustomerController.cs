@@ -68,11 +68,11 @@ namespace CRM.Controllers
                 customerNote.AddRange(context.Notes.Where(n => n.CustomerId == customerDb.Id).ToList());
                 customer.Notes = Mapper.Map<List<Note>,List<NoteViewModel>>(customerNote);
 
-                customer.Address = Mapper.Map<List<Address>, List<AddressViewModel>>((List<Address>)customerDb.Addresses);
+                customer.Addresses = Mapper.Map<List<Address>, List<AddressViewModel>>((List<Address>)customerDb.Addresses);
 
-                if (customer.Address.Count == 0)
+                if (customer.Addresses.Count == 0)
                 {
-                    customer.Address.Add(new AddressViewModel());
+                    customer.Addresses.Add(new AddressViewModel());
                 }
             }
             if (customer != null)
@@ -104,7 +104,7 @@ namespace CRM.Controllers
                             .PhoneNumber = customer.Phones.FirstOrDefault().PhoneNumber;
 
 
-                        List<Address> addresses = Mapper.Map<List<Address>>(customer.Address);
+                        List<Address> addresses = Mapper.Map<List<Address>>(customer.Addresses);
 
                         var ids = addresses.Select(a => a.Id).ToList();
 
