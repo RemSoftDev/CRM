@@ -39,7 +39,7 @@
 
     $('#send_message').on('click', function () {
         var message = $('#message').val();
-        var leadId = $('#leadId').val();
+        var id = $('#Id').val();
         if (!message) {
             alert("Message can't be empty!");
         }
@@ -48,7 +48,7 @@
                 url: "/Lead/SendMessage",
                 type: 'POST',
                 data: {
-                    id: leadId,
+                    id: id,
                     message: message
                 },
                 success: function (response) {
