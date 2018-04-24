@@ -258,6 +258,7 @@
     <Content Include="Views\Lead\Edit.cshtml" />
     <Content Include="Views\Lead\Index.cshtml" />
     <Content Include="Views\Lead\ConvertLead.cshtml" />
+    <Content Include="Views\Shared\Conversation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

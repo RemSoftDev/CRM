@@ -172,7 +172,7 @@ namespace CRM.Controllers
         public ActionResult SendMessage(int id, string message)
         {
             var leadEmail = "";
-            var currentUserEmail = User.Identity.Name.Split('|')[1];
+            var userCreads = User.GetCurrentUserCreads();
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 Lead lead = context.Leads.FirstOrDefault(l => l.Id == id);
@@ -181,7 +181,7 @@ namespace CRM.Controllers
                     leadEmail = lead?.Email;
                     if (lead.LeadOwner == 0)
                     {
-                        var currentUser = context.Users.FirstOrDefault(u => u.Email == currentUserEmail);
+                        var currentUser = context.Users.FirstOrDefault(u => u.Email == userCreads.Email);
                         lead.LeadOwner = currentUser.Id;
                         context.SaveChanges();
                     }
@@ -193,6 +193,24 @@ namespace CRM.Controllers
             }
             EmailService.SendEmail(leadEmail, "Test Message!", message);
             return Json(new { status = "success" });
+        }
+
+        [HttpGet]
+        public ActionResult Conversation(int id)
+        {
+            string leadEmail = "";
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+            {
+                Lead lead = context.Leads.FirstOrDefault(l => l.Id == id);
+                if (lead != null)
+                {
+                    leadEmail = lead?.Email;
+                }
+            }
+
+            var mailings = EmailService.GetMailings(leadEmail);
+
+            return View(mailings);
         }
 
         [HttpGet]

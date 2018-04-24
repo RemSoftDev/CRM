@@ -41,10 +41,14 @@ namespace CRM.Services
             }
         }
 
-        public static List<EmailViewModel> GetMailings(string sentFrom)
+        public static List<EmailViewModel> GetMailings(string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+
             List<EmailViewModel> emailsList = new List<EmailViewModel>();
-            string searchDate = "01.04.2018 8:34:56";
 
             using (var client = new ImapClient())
             {
@@ -52,31 +56,53 @@ namespace CRM.Services
                 {
                     client.Connect("imap.gmail.com", 993, true, cancel.Token);
                     client.AuthenticationMechanisms.Remove("XOAUTH");
-
                     client.Authenticate(Email, Password, cancel.Token);
 
-                    var inbox = client.Inbox;
-                    inbox.Open(FolderAccess.ReadOnly, cancel.Token);
+                    emailsList.AddRange(GetInboxMails(client, cancel, email));
+                    emailsList.AddRange(GetSentMails(client, cancel, email));
 
-                    var query = SearchQuery.NotSeen
-                        .And(SearchQuery.DeliveredAfter(DateTime.Parse(searchDate)));
-
-                    if (!string.IsNullOrEmpty(sentFrom))
-                    {
-                        query = query.And(SearchQuery.FromContains(sentFrom));
-                    }
-                        
-                    var result = inbox.Search(query, cancel.Token);
-
-                    foreach (var uid in result)
-                    {
-                        var message = inbox.GetMessage(uid, cancel.Token);
-                        emailsList.Add(new EmailViewModel(message));
-                    }
-
+                    emailsList = emailsList.OrderBy(l => l.SentDate).ToList();
                     client.Disconnect(true, cancel.Token);
                 }
             }
+            return emailsList;
+        }
+
+        private static List<EmailViewModel> GetInboxMails(ImapClient client, CancellationTokenSource cancel,  string email)
+        {
+            List<EmailViewModel> emailsList = new List<EmailViewModel>();
+            var inbox = client.Inbox;
+            inbox.Open(FolderAccess.ReadOnly, cancel.Token);
+
+            var query = SearchQuery.FromContains(email);
+
+            var result = inbox.Search(query, cancel.Token);
+
+            foreach (var uid in result)
+            {
+                var message = inbox.GetMessage(uid, cancel.Token);
+                emailsList.Add(new EmailViewModel(message));
+            }
+            return emailsList;
+        }
+
+        private static List<EmailViewModel> GetSentMails(ImapClient client, CancellationTokenSource cancel, string email)
+        {
+            List<EmailViewModel> emailsList = new List<EmailViewModel>();
+
+            var sent = client.GetFolder(SpecialFolder.Sent);
+            sent.Open(FolderAccess.ReadOnly, cancel.Token);
+
+            var query = SearchQuery.ToContains(email);
+
+            var result = sent.Search(query, cancel.Token);
+
+            foreach (var uid in result)
+            {
+                var message = sent.GetMessage(uid, cancel.Token);
+                emailsList.Add(new EmailViewModel(message));
+            }
+
             return emailsList;
         }
     }
