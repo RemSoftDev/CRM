@@ -23,6 +23,9 @@ namespace CRM.Services
                 //lead.LeadOwner = context.Users.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
                 var customer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
 
+
+                // ТЕЛЕФОН ИНСЕРТИТСЯ А НЕ АПДЕЙТИТСЯ
+
                 //customer.Phones = lead.Phones;
                 customer.Email = lead.Email;
                 customer.Lead = lead;
