@@ -239,18 +239,9 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult ConvertLead(LeadConvertViewModel model, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
         {
-            if(newAddress != null)
-            {
-                model.NewCustomer.Address.AddRange(newAddress);
-            }
-            if(newPhones != null)
-            {
-                model.NewCustomer.Phones.AddRange(newPhones);
-            }
-
             var userCreads = User.GetCurrentUserCreads();
 
-            LeadConvertService.Convert(model, userCreads.Email);
+            LeadConvertService.Convert(model, newAddress, newPhones, userCreads.Email);
 
             return RedirectToAction("Index", "Customer");
         }

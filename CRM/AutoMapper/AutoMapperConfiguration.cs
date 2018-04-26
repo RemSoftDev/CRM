@@ -17,7 +17,7 @@ namespace CRM.AutoMapper
                     .ForMember(p => p.Type, opt => opt.MapFrom(t => (PhoneType)t.TypeId));
 
                 cfg.CreateMap<PhoneViewModel, Phone>()
-                    .ForMember(p => p.Id, opt => opt.Ignore())
+                    //.ForMember(p => p.Id, opt => opt.Ignore())
                     .ForMember(p => p.Type, opt => opt.Ignore())
                     .ForMember(p => p.TypeId, opt => opt.MapFrom(i => i.Type));
               
@@ -26,6 +26,7 @@ namespace CRM.AutoMapper
 
                 cfg.CreateMap<AddressViewModel, Address>()
                     //.ForMember(p => p.Id, opt => opt.Ignore())
+                    .ForMember(p => p.AddressType, opt => opt.Ignore())
                     .ForMember(p => p.AddressTypeId, opt => opt.MapFrom(e => (int?)e.Type));
 
                 cfg.CreateMap<User, UserViewModel>()

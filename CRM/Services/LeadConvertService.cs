@@ -12,43 +12,56 @@ namespace CRM.Services
 {
     public static class LeadConvertService
     {
-        public static void Convert(LeadConvertViewModel model, string currentUserEmail)
+        public static void Convert(
+            LeadConvertViewModel model,
+            List<AddressViewModel> newAddress,
+            List<PhoneViewModel> newPhones,
+            string currentUserEmail)
         {
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 var lead = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == model.Id && l.Customer == null);
 
-                //if(lead != null)
-                //{
-                //lead.LeadOwner = context.Users.FirstOrDefault(u => u.Email == currentUserEmail)?.Id;
-                var customer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
+                var newCustomer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
+#warning после мапа и сохраниени изменений при пустом Notes сохраняет пустую запись. Также дублирует существующие телефоны лида в базе
 
+                newCustomer.Email = lead.Email;
+                newCustomer.Lead = lead;
 
-                // ТЕЛЕФОН ИНСЕРТИТСЯ А НЕ АПДЕЙТИТСЯ
-
-                //customer.Phones = lead.Phones;
-                customer.Email = lead.Email;
-                customer.Lead = lead;
-
-                for (int i = 0; i < customer.Notes.Count; i++)
+                if (newPhones != null && newPhones.Count != 0)
                 {
-                    if (string.IsNullOrEmpty(customer.Notes[i].Text))
-                        customer.Notes.RemoveAt(i);
+                    var newPhoneAfterMap = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
+
+                    for (int i = 0; i < newPhoneAfterMap.Count; i++)
+                    {
+                        newCustomer.Phones.Add(newPhoneAfterMap[i]);
+                    }
                 }
 
-                var newCustomer = context.Customers.Add(customer);
+                if (newAddress != null && newAddress.Count != 0)
+                {
+                    var newAddressAfterMap = Mapper.Map<List<AddressViewModel>, List<Address>>(newAddress);
+
+                    for (int i = 0; i < newAddressAfterMap.Count; i++)
+                    {
+                        newCustomer.Addresses.Add(newAddressAfterMap[i]);
+                    }
+                }
+
+#warning НУЖНО ДОПИСАТЬ РАБОТУ С НОВЫМИ Notes
+                var newCustomerInDB = context.Customers.Add(newCustomer);
 
                 // логирование процесса конвертации
                 context.LeadConvertedLogs.Add(new LeadConvertedLog()
                 {
                     LeadId = model.Id,
-                    CustomerId = newCustomer.Id,
+                    CustomerId = newCustomerInDB.Id,
                     ConvertDateTime = DateTime.Now,
                     ConvertedByUserId = context.Users.FirstOrDefault(e => e.Email.Equals(currentUserEmail)).Id
                 });
 
                 context.SaveChanges();
-                // }                
+                             
             }
         }
     }
