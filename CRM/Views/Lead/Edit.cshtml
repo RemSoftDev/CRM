@@ -78,14 +78,15 @@
                 @Html.HiddenFor(m => m.Notes[i].Id)
                 @Html.TextAreaFor(m => m.Notes[i].Text, new { @class = "form-control margin-bottom" })
             }
-            <button type="button" id="add_note" class="btn btn-default"><i class="glyphicon-plus"></i></button>
+            <button type="button" id="add_note" class="btn btn-default" style="margin-left: 247px;"><i class="glyphicon-plus"></i></button>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2">Message</label>
         <div class="col-md-10 margin-bottom">
             <textarea class="form-control margin-bottom" id="message"></textarea>
-            <button type="button" id="send_message" class="btn btn-default">Send</button>
+            <a href="/Lead/Conversation?id=@Model.Id">Conversation</a>
+            <button type="button" id="send_message" class="btn btn-default" style="margin-left: 137px;">Send</button>
         </div>
     </div>
     <div class="form-group">
