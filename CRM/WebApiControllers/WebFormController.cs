@@ -14,6 +14,9 @@ namespace CRM.WebApiControllers
         [HttpPost]
         public HttpResponseMessage CreateLead(LeadViewModel model)
         {
+            var phone = model.Phones.FirstOrDefault();
+            phone.Type = Enums.PhoneType.HomePhone;
+
             if (ModelState.IsValid)
             {
                 Lead lead = Mapper.Map<LeadViewModel, Lead>(model);

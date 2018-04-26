@@ -34,7 +34,7 @@
                 <div class="col-md-10 margin-bottom phone-type">
                     @for (int i = 0; i < Model.NewCustomer.Phones.Count; i++)
                     {
-                        @Html.HiddenFor(e => e.Id)
+                        @Html.HiddenFor(m => m.NewCustomer.Phones[i].Id)
                         @Html.TextBoxFor(m => m.NewCustomer.Phones[i].PhoneNumber, new { @class = "form-control margin-bottom", placeholder = "Phone Number", data_id = "phone_number" })
                         @Html.EnumDropDownListFor(m => m.NewCustomer.Phones[i].Type, "Phone Type", new { @class = "form-control", data_id = "phone_type" })
                         @Html.ValidationMessageFor(m => m.NewCustomer.Phones[i].PhoneNumber, "", new { @class = "text-danger" })
