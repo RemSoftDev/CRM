@@ -24,7 +24,7 @@
         if (wasPhoneFilled(phone)) {
             var index = phone.find('[data-type="newPhone"]').val() || -1;
             $(phone).after('<div class="col-md-10 col-md-offset-2 margin-bottom phone-type">' +
-                '<input name="newPhones[' + ++index + '].Id" type="hidden" value= "' + index + '" data-type="newPhone" >' +
+                '<input type="hidden" value= "' + ++index + '" data-type="newPhone" >' +
                 '<input class="form-control margin-bottom" name="newPhones[' + index + '].PhoneNumber" type="text" data-id="phone_number" placeholder="Phone Number"> ' +
                 '<select class="form-control" name="newPhones[' + index + '].Type" data-id="phone_type">' +
                 '<option value="" disabled selected>Phone Type</option>' +
@@ -43,7 +43,7 @@
         if (wasAddressFilled(address)) {
             var index = address.find('[data-type="address"]').val() || -1;
             $(address).after('<div class="col-md-10 col-md-offset-2 margin-bottom address-type">' +
-                '<input name="newAddress[' + ++index + '].Id" type="hidden" value="' + index + '" data-type="address">' +
+                '<input type="hidden" value="' + ++index + '" data-type="address">' +
                 '<input class="form-control margin-bottom" name="newAddress[' + index + '].Line1" type="text" placeholder="Line 1" data-id="line1">' +
                 '<input class="form-control margin-bottom" name="newAddress[' + index + '].Line2" type="text" placeholder="Line 2" data-id="line2">' +
                 '<input class="form-control margin-bottom" name="newAddress[' + index + '].Town" type="text" placeholder="Town" data-id="town">' +

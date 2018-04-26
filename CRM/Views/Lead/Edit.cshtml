@@ -23,14 +23,21 @@
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="form-group">
-
-        @Html.LabelFor(m => m.Phones, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10 margin-bottom">
+    <div class="form-group" id="phones">
+        @Html.LabelFor(m => m.Phones, new { @class = "col-md-1 control-label" })
+        <span class="col-md-1">
+            <button type="button" id="add_phone" class="btn btn-default"><i class="glyphicon-plus"></i></button>
+        </span>
+        <div class="col-md-10 margin-bottom phone-type">
             @for (int i = 0; i < Model.Phones.Count; i++)
             {
-                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })
-                @Html.HiddenFor(m => m.Phones[i].Type)
+                @Html.HiddenFor(e => e.Phones[i].Id)
+                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control margin-bottom", placeholder = "Phone Number", data_id = "phone_number" })
+                @Html.EnumDropDownListFor(m => m.Phones[i].Type, "Phone Type", new { @class = "form-control margin-bottom", data_id = "phone_type" })
+                @Html.ValidationMessageFor(m => m.Phones[i].PhoneNumber, "", new { @class = "text-danger" })
+
+                @*@Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.Phones[i].Type)*@
             }
             @Html.ValidationMessageFor(m => m.Phones.FirstOrDefault().PhoneNumber, "", new { @class = "text-danger" })
         </div>

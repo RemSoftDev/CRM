@@ -104,7 +104,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(LeadViewModel lead, List<string> note)
+        public ActionResult Edit(LeadViewModel lead, List<string> note, List<PhoneViewModel> newPhones)
         {
             if (ModelState.IsValid)
             {
@@ -125,26 +125,26 @@ namespace CRM.Controllers
                         leadToEdit.StatusNotes = lead.StatusNotes;
                         leadToEdit.IssueRaised = lead.IssueRaised;
 
-                        var firstPhone = leadToEdit
-                            .Phones
-                            .FirstOrDefault();
+                        var phones = leadToEdit.Phones;
 
-                        if(firstPhone == null)
+                        for (int i = 0; i < phones.Count; i++)
                         {
-                            leadToEdit.Phones.Add(new Phone()
+                            var currentPhone = lead.Phones.FirstOrDefault(p=>p.Id == phones[i].Id);
+                            if (currentPhone != null)
                             {
-                                PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber,
-                                Type = new DPhoneType()
-                                {
-                                    TypeName = "HomePhone"
-                                }
-                            });
-                        }
-                        else
-                        {
-                            firstPhone.PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber;
+                                phones[i].PhoneNumber = currentPhone.PhoneNumber;
+                                phones[i].TypeId = (int)currentPhone.Type;
+                            }
                         }
 
+                        if (newPhones != null)
+                        {
+                            var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
+                            foreach(var item in newLeadPhones)
+                            {
+                                leadToEdit.Phones.Add(item);
+                            }                           
+                        }
                     }
 
                     if (lead.Notes.Any())
@@ -239,8 +239,14 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult ConvertLead(LeadConvertViewModel model, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
         {
-            model.NewCustomer.Addresses.AddRange(newAddress);
-            model.NewCustomer.Phones.AddRange(newPhones);
+            if(newAddress != null)
+            {
+                model.NewCustomer.Address.AddRange(newAddress);
+            }
+            if(newPhones != null)
+            {
+                model.NewCustomer.Phones.AddRange(newPhones);
+            }
 
             var userCreads = User.GetCurrentUserCreads();
 

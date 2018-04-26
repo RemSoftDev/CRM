@@ -17,9 +17,10 @@ namespace CRM.AutoMapper
                     .ForMember(p => p.Type, opt => opt.MapFrom(t => (PhoneType)t.TypeId));
 
                 cfg.CreateMap<PhoneViewModel, Phone>()
+                    .ForMember(p => p.Id, opt => opt.Ignore())
                     .ForMember(p => p.Type, opt => opt.Ignore())
-                    .ForMember(p => p.TypeId, opt => opt.MapFrom(i => (int?)i.Type));
-
+                    .ForMember(p => p.TypeId, opt => opt.MapFrom(i => i.Type));
+              
                 cfg.CreateMap<Address, AddressViewModel>()
                     .ForMember(p => p.Type, opt => opt.MapFrom(a => (AddressType?)a.AddressTypeId));
 
@@ -30,13 +31,13 @@ namespace CRM.AutoMapper
                 cfg.CreateMap<User, UserViewModel>()
                     .ForMember(i => i.Role, opt => opt.MapFrom(u => (UserRole)u.Role));
 
-                cfg.CreateMap<Lead, LeadViewModel>()
-                .ForMember(l => l.Phones, opt => opt
-                    .MapFrom(i => new List<PhoneViewModel>() { new PhoneViewModel() { PhoneNumber = i.Phones.FirstOrDefault(p => p.TypeId == (int)PhoneType.HomePhone).PhoneNumber } }));
+                cfg.CreateMap<Lead, LeadViewModel>();
+                //.ForMember(l => l.Phones, opt => opt
+                //    .MapFrom(i => new List<PhoneViewModel>() { new PhoneViewModel() { PhoneNumber = i.Phones.FirstOrDefault(p => p.TypeId == (int)PhoneType.HomePhone).PhoneNumber } }));
 
-                cfg.CreateMap<LeadViewModel, Lead>()
-                    .ForMember(l => l.Phones, opt => opt
-                        .MapFrom(i => new List<Phone> { new Phone { PhoneNumber = i.Phones.FirstOrDefault().PhoneNumber, TypeId = (int)PhoneType.HomePhone } }));
+                cfg.CreateMap<LeadViewModel, Lead>();
+                    //.ForMember(l => l.Phones, opt => opt
+                    //    .MapFrom(i => new List<Phone> { new Phone { PhoneNumber = i.Phones.FirstOrDefault().PhoneNumber, TypeId = (int)PhoneType.HomePhone } }));
 
                 //cfg.CreateMap<Lead, LeadViewModel>()
                 //    .AfterMap((l, lvm) => lvm.Phone = l.Phones.FirstOrDefault()?.PhoneNumber);
