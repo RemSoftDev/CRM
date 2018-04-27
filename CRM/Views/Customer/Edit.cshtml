@@ -43,45 +43,46 @@
             @for (int i = 0; i < Model.Phones.Count; i++)
             {
                 @Html.HiddenFor(m => m.Phones[i].Id)
-                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })                
+                @Html.TextBoxFor(m => m.Phones[i].PhoneNumber, new { @class = "form-control" })  
+                @Html.EnumDropDownListFor(m => m.Phones[i].Type, new { @class = "form-control" })
             }
             @Html.ValidationMessageFor(m => m.Phones.FirstOrDefault().PhoneNumber, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(e => e.Address, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(e => e.Addresses, new { @class = "col-md-2 control-label" })
         <div class="col-md-10 margin-bottom">
-            @for (int i = 0; i < Model.Address.Count; i++)
+            @for (int i = 0; i < Model.Addresses.Count; i++)
             {
-                @Html.HiddenFor(m => m.Address[i].Id)
+                @Html.HiddenFor(m => m.Addresses[i].Id)
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].Line1)
-                    @Html.TextBoxFor(m => m.Address[i].Line1, new { @class = "form-control" })
+                    @Html.LabelFor(m => m.Addresses[i].Line1)
+                    @Html.TextBoxFor(m => m.Addresses[i].Line1, new { @class = "form-control" })
                 </div>
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].Line2)
-                    @Html.TextBoxFor(m => m.Address[i].Line2, new { @class = "form-control" })
+                    @Html.LabelFor(m => m.Addresses[i].Line2)
+                    @Html.TextBoxFor(m => m.Addresses[i].Line2, new { @class = "form-control" })
                 </div>
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].Town)
-                    @Html.TextBoxFor(m => m.Address[i].Town, new { @class = "form-control" })
+                    @Html.LabelFor(m => m.Addresses[i].Town)
+                    @Html.TextBoxFor(m => m.Addresses[i].Town, new { @class = "form-control" })
                 </div>
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].County)
-                    @Html.TextBoxFor(m => m.Address[i].County, new { @class = "form-control" })
+                    @Html.LabelFor(m => m.Addresses[i].County)
+                    @Html.TextBoxFor(m => m.Addresses[i].County, new { @class = "form-control" })
                 </div>
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].PostCode)
-                    @Html.TextBoxFor(m => m.Address[i].PostCode, new { @class = "form-control" })
+                    @Html.LabelFor(m => m.Addresses[i].PostCode)
+                    @Html.TextBoxFor(m => m.Addresses[i].PostCode, new { @class = "form-control" })
                 </div>
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].Country)
-                    @Html.TextBoxFor(m => m.Address[i].Country, new { @class = "form-control" })
+                    @Html.LabelFor(m => m.Addresses[i].Country)
+                    @Html.TextBoxFor(m => m.Addresses[i].Country, new { @class = "form-control" })
                 </div>
                 <div class="col-md-10 margin-bottom">
-                    @Html.LabelFor(m => m.Address[i].Type)
-                    @Html.EnumDropDownListFor(m => m.Address[i].Type)
+                    @Html.LabelFor(m => m.Addresses[i].Type)
+                    @Html.EnumDropDownListFor(m => m.Addresses[i].Type, new { @class = "form-control" })
                 </div>
             }
             @*<button type="button" id="add_note" class="btn btn-default"><i class="glyphicon-plus"></i></button>*@

@@ -13,6 +13,13 @@
         {
             @Html.HiddenFor(e => e.Id)
             <div class="form-group">
+                @Html.LabelFor(m => m.NewCustomer.Title, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10 margin-bottom">
+                    @Html.TextBoxFor(m => m.NewCustomer.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NewCustomer.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.LabelFor(m => m.NewCustomer.FirstName, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10 margin-bottom">
                     @Html.TextBoxFor(m => m.NewCustomer.FirstName, new { @class = "form-control" })
@@ -61,7 +68,8 @@
 
                 </div>
             </div>
-            <div class="form-group">
+            //Для конвертации пока не нужно
+            @*<div class="form-group">
                 <label class="col-md-2">Notes</label>
                 <div class="col-md-10 margin-bottom" id="notes">
                     @for (int i = 0; i < Model.NewCustomer.Notes.Count; i++)
@@ -71,7 +79,7 @@
                     }
                     <button type="button" id="add_note" class="btn btn-default"><i class="glyphicon-plus"></i></button>
                 </div>
-            </div>
+            </div>*@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" id="edit_button" value="Save" class="btn btn-default" />

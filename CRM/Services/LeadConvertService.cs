@@ -21,35 +21,55 @@ namespace CRM.Services
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 var lead = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == model.Id && l.Customer == null);
-
+                
+                // Мапим нашего нового юзера(Телефоны обнуляем, так как запишет дубыль)
                 var newCustomer = Mapper.Map<CustomerViewModel, Customer>(model.NewCustomer);
-#warning после мапа и сохраниени изменений при пустом Notes сохраняет пустую запись. Также дублирует существующие телефоны лида в базе
-
+                newCustomer.Phones = new List<Phone>();
                 newCustomer.Email = lead.Email;
                 newCustomer.Lead = lead;
 
+                // Добавляем новые телефоны
                 if (newPhones != null && newPhones.Count != 0)
                 {
                     var newPhoneAfterMap = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
 
-                    for (int i = 0; i < newPhoneAfterMap.Count; i++)
+                    foreach(var phone in newPhoneAfterMap)
                     {
-                        newCustomer.Phones.Add(newPhoneAfterMap[i]);
+                        newCustomer.Phones.Add(phone);
                     }
                 }
 
+                // Добавляем новые адресса
                 if (newAddress != null && newAddress.Count != 0)
                 {
                     var newAddressAfterMap = Mapper.Map<List<AddressViewModel>, List<Address>>(newAddress);
 
-                    for (int i = 0; i < newAddressAfterMap.Count; i++)
+                    foreach(var address in newAddressAfterMap)
                     {
-                        newCustomer.Addresses.Add(newAddressAfterMap[i]);
+                        newCustomer.Addresses.Add(address);
                     }
                 }
 
-#warning НУЖНО ДОПИСАТЬ РАБОТУ С НОВЫМИ Notes
+                // Для конвертации не нужно
+                //if(newCustomer.Notes.Count > 0)
+                //{
+                //    for (int i = 0; i < newCustomer.Notes.Count; i++)
+                //    {
+                //        if(string.IsNullOrEmpty(newCustomer.Notes[i].Text) && string.IsNullOrWhiteSpace(newCustomer.Notes[i].Text))
+                //            newCustomer.Notes.RemoveAt(i);
+                //    }
+                //}
+
                 var newCustomerInDB = context.Customers.Add(newCustomer);
+
+                // Поле того как получили айди новосозданного юзера, прописываем его в телефон который был прикреплен к лиду
+                var leadPhones = context.Phones.Where(e => e.LeadId == model.Id).ToList();
+                foreach (var phone in model.NewCustomer.Phones)
+                {
+                    var leadPhone = leadPhones.FirstOrDefault(e => e.Id == phone.Id);
+                    leadPhone = Mapper.Map<PhoneViewModel, Phone>(phone, leadPhone);
+                    leadPhone.CustomerId = newCustomerInDB.Id;
+                }
 
                 // логирование процесса конвертации
                 context.LeadConvertedLogs.Add(new LeadConvertedLog()
@@ -61,7 +81,6 @@ namespace CRM.Services
                 });
 
                 context.SaveChanges();
-                             
             }
         }
     }

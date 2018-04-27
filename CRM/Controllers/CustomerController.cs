@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRM.Extentions;
 using CRM.Models;
 using CRM.Services;
 using CRMData.Adapters;
@@ -157,7 +158,7 @@ namespace CRM.Controllers
         public ActionResult SendMessage(int id, string message)
         {
             var leadEmail = "";
-            var currentUserEmail = User.Identity.Name.Split('|')[1];
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 Customer customer = context.Customers.FirstOrDefault(c => c.Id == id);
