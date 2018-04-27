@@ -7,18 +7,20 @@ using CRMData.Adapters.Extentions;
 
 namespace CRMData.Adapters
 {
-    public sealed class CustomerAdapter
+    public sealed class UserAdapter
     {
-        public List<Customer> GetCustomersByFilter(
+        public List<User> GetUsersByFilter(
             string whereField,
             string searchValue,
             string ordered,
+            int userTypeId,
             bool isAscending = true)
         {
             using (BaseContext context = new BaseContext())
             {
-                return context.Customers
+                return context.Users
                     .Include(e => e.Phones)
+                    .Where(e => e.UserTypeId == userTypeId)
                     .AddWhere(whereField.Trim(), searchValue)
                     .AddOrder(ordered.Trim(), isAscending)
                     .ToList();

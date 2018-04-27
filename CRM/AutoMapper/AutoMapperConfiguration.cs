@@ -32,6 +32,9 @@ namespace CRM.AutoMapper
                 cfg.CreateMap<User, UserViewModel>()
                     .ForMember(i => i.Role, opt => opt.MapFrom(u => (UserRole)u.Role));
 
+                cfg.CreateMap<UserViewModel, User>();
+                    //.ForMember(c => c.Lead, opt => opt.Ignore());
+
                 cfg.CreateMap<Lead, LeadViewModel>();
                 //.ForMember(l => l.Phones, opt => opt
                 //    .MapFrom(i => new List<PhoneViewModel>() { new PhoneViewModel() { PhoneNumber = i.Phones.FirstOrDefault(p => p.TypeId == (int)PhoneType.HomePhone).PhoneNumber } }));
@@ -47,9 +50,9 @@ namespace CRM.AutoMapper
                 //    .ForMember(l => l.Id, opt => opt.Ignore())
                 //    .AfterMap((l, opt) => opt.Phones.Add(new Phone { PhoneNumber = l.Phone }));
 
-                cfg.CreateMap<Customer, CustomerViewModel>();
-                cfg.CreateMap<CustomerViewModel, Customer>()
-                    .ForMember(c => c.Lead, opt => opt.Ignore());
+                //cfg.CreateMap<Customer, CustomerViewModel>();
+                //cfg.CreateMap<CustomerViewModel, Customer>()
+                //    .ForMember(c => c.Lead, opt => opt.Ignore());
 
                 // Временно, потому нужно переделать связь между юзерами и записями
                 cfg.CreateMap<Note, NoteViewModel>();

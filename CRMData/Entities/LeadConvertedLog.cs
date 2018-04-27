@@ -9,7 +9,7 @@ namespace CRMData.Entities
 
         public int LeadId { get; set; }
 
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
 
         public DateTime ConvertDateTime { get; set; }
 

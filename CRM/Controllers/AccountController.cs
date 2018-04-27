@@ -82,7 +82,8 @@ namespace CRM.Controllers
                         Password = encryptedPassword,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Role = (int)UserRole.AdminStaff });
+                        Role = (int)UserRole.AdminStaff,
+                        UserTypeId = (int)UserType.Manager});
 
                     context.SaveChanges();
                     isNewUser = true;

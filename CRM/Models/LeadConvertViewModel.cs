@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
 
-        public CustomerViewModel NewCustomer { get; set; }
+        public UserViewModel NewCustomer { get; set; }
     }
 }

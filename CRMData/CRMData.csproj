@@ -66,29 +66,19 @@
     <Compile Include="Adapters\LeadAdapter.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="Entities\Address.cs" />
-    <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\DAddressType.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
+    <Compile Include="Entities\DUserType.cs" />
     <Compile Include="Entities\Lead.cs" />
     <Compile Include="Entities\LeadConvertedLog.cs" />
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201804221157439_InitialCreate.cs" />
-    <Compile Include="Migrations\201804221157439_InitialCreate.Designer.cs">
-      <DependentUpon>201804221157439_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804221157439_InitialCreate.resx">
-      <DependentUpon>201804221157439_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,19 +19,17 @@ namespace CRM.Controllers
     {
         public ActionResult Index()
         {
-            List<LeadViewModel> leads;
+            List<LeadViewModel> leadsView;
             using (BaseContext context = new BaseContext())
             {
-                var leads1 = context
-                    .Leads
+                var leadsNotConverted = context.Leads
                     .Include(e => e.Phones)
-                    .Where(l => l.Customer == null)
+                    .Where(l => !l.IsConverted)
                     .ToList();
 
-
-                leads = Mapper.Map<List<Lead>, List<LeadViewModel>>(leads1);
+                leadsView = Mapper.Map<List<Lead>, List<LeadViewModel>>(leadsNotConverted);
             }
-            return View(leads);
+            return View(leadsView);
         }
 
         [HttpPost]
@@ -46,32 +44,10 @@ namespace CRM.Controllers
 
             var leadAdapter = new LeadAdapter();
 
-            bool? byName = null;
-            bool? byEmail = null;
-            bool? byPhone = null;
-
-            switch (model.OrderField)
-            {
-                case "Name":
-                    byName = true;
-                    break;
-                case "Phone":
-                    byPhone = true;
-                    break;
-                case "Email":
-                    byEmail = true;
-                    break;
-                default:
-                    byName = true;
-                    break;
-            }
-
             var result = leadAdapter.GetLeadsByFilter(
                 model.Field,
                 model.SearchValue,
-                byName,
-                byEmail,
-                byPhone,
+                model.OrderField,
                 model.OrderDirection.Equals("ASC"));
 
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
@@ -216,7 +192,7 @@ namespace CRM.Controllers
         [HttpGet]
         public ActionResult ConvertLead(int id)
         {
-            var customer = new CustomerViewModel();
+            var customer = new UserViewModel();    
             customer.Addresses.Add(new AddressViewModel());
             customer.Notes.Add(new NoteViewModel());
 

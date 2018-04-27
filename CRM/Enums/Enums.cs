@@ -12,6 +12,12 @@ namespace CRM.Enums
         Practitioner
     }
 
+    public enum UserType
+    {
+        Manager = 1,
+        Customer
+    }
+
     public enum AddressType
     {
         [Display(Name = "Billing Address")]
