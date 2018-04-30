@@ -18,12 +18,14 @@ namespace CRMData.Entities
         public IList<Phone> Phones { get; set; }
         public IList<Address> Addresses { get; set; }
         public IList<Note> Notes { get; set; }
+        public IList<Email> Emails { get; set; }
 
         public User()
         {
             this.Addresses = new List<Address>();
             this.Phones = new List<Phone>();
             this.Notes = new List<Note>();
+            this.Emails = new List<Email>();
         }
     }
 }

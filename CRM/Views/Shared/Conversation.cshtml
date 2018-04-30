@@ -11,7 +11,7 @@
     </div>  
     @foreach (var mail in Model)
     {
-        <div class="mail-box @(mail.To.Contains("CRM")?"col-sm-offset-8":"")">
+        <div class="mail-box @(mail.WasReceived?"col-sm-offset-8":"")">
             <p>@mail.Body</p>
         </div>
     }

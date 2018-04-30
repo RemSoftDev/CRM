@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
 using CRM.Extentions;
+using System;
 
 namespace CRM.Controllers
 {
@@ -147,14 +148,15 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult SendMessage(int id, string message)
         {
-            var leadEmail = "";
+            LeadViewModel leadModel = new LeadViewModel();
             var userCreads = User.GetCurrentUserCreads();
+
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 Lead lead = context.Leads.FirstOrDefault(l => l.Id == id);
                 if (lead != null)
                 {
-                    leadEmail = lead?.Email;
+                    leadModel = Mapper.Map<Lead, LeadViewModel>(lead);
                     if (lead.LeadOwner == 0)
                     {
                         var currentUser = context.Users.FirstOrDefault(u => u.Email == userCreads.Email);
@@ -163,31 +165,56 @@ namespace CRM.Controllers
                     }
                 }
             }
-            if (string.IsNullOrEmpty(leadEmail))
+
+            if (string.IsNullOrEmpty(leadModel.Email))
             {
                 return Json(new { status = "error" });
             }
-            EmailService.SendEmail(leadEmail, "Test Message!", message);
+
+            EmailService.SendEmail(new EmailViewModel(leadModel.Email, "CRM Message!", message), leadModel);
+
             return Json(new { status = "success" });
         }
 
         [HttpGet]
         public ActionResult Conversation(int id)
         {
-            string leadEmail = "";
+            LeadViewModel leadModel = new LeadViewModel();
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
                 Lead lead = context.Leads.FirstOrDefault(l => l.Id == id);
                 if (lead != null)
                 {
-                    leadEmail = lead?.Email;
+                    leadModel = Mapper.Map<Lead, LeadViewModel>(lead);
                 }
             }
 
-            var mailings = EmailService.GetMailings(leadEmail);
+            var mailings = EmailService.LoadMails(leadModel);
 
             return View(mailings);
         }
+
+        [HttpPost]
+        public ActionResult GetEmails(int id)
+        {
+            LeadViewModel leadModel = new LeadViewModel();
+            DateTime? lastReseivedDate = null;
+
+            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+            {
+                Lead lead = context.Leads.Include(m => m.Emails).FirstOrDefault(l => l.Id == id);
+                if (lead != null)
+                {
+                    leadModel = Mapper.Map<Lead, LeadViewModel>(lead);
+                    lastReseivedDate = lead.Emails.LastOrDefault()?.SentDate;
+                }
+            }
+
+            var mailings = EmailService.GetMailings(lastReseivedDate, leadModel);      
+
+            return Json(new { status = "success" });
+        }
+
 
         [HttpGet]
         public ActionResult ConvertLead(int id)

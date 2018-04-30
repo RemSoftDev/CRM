@@ -57,6 +57,15 @@ namespace CRM.AutoMapper
                 // Временно, потому нужно переделать связь между юзерами и записями
                 cfg.CreateMap<Note, NoteViewModel>();
                 cfg.CreateMap<NoteViewModel, Note>();
+
+                cfg.CreateMap<EmailViewModel, Email>()
+                    .ForMember(e => e.Text, opt => opt.MapFrom(i => i.Body));
+
+                cfg.CreateMap<Email, EmailViewModel>()
+                    .ForMember(e => e.Body, opt => opt.MapFrom(i => i.Text))
+                    .ForMember(e => e.From, opt => opt.Ignore())
+                    .ForMember(e => e.To, opt => opt.Ignore());
+
             });
         }
     }

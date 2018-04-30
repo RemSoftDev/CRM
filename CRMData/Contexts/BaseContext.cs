@@ -43,6 +43,7 @@ namespace CRMData.Contexts
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Phone> Phones { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
 
         public virtual DbSet<DAddressType> DAddressTypes { get; set; }

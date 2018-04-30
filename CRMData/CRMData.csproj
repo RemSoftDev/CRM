@@ -69,6 +69,7 @@
     <Compile Include="Entities\DAddressType.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
     <Compile Include="Entities\DUserType.cs" />
+    <Compile Include="Entities\Email.cs" />
     <Compile Include="Entities\Lead.cs" />
     <Compile Include="Entities\LeadConvertedLog.cs" />
     <Compile Include="Entities\Note.cs" />

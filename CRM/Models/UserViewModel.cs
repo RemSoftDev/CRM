@@ -1,10 +1,11 @@
 ﻿using CRM.Enums;
+using CRM.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CRM.Models
 {
-    public class UserViewModel
+    public class UserViewModel : IUser
     {
         public int Id { get; set; }
         public string Title { get; set; }

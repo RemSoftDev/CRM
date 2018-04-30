@@ -58,7 +58,7 @@
 
     $('#send_message').on('click', function () {
         var message = $('#message').val();
-        var leadId = $('#leadId').val();
+        var leadId = $('#Id').val();
         if (!message) {
             alert("Message can't be empty!");
         }
@@ -71,6 +71,7 @@
                     message: message
                 },
                 success: function (response) {
+                    $('#message').val('');
                     alert("Message was sent successfully!");
                 },
                 error: function (error) {
