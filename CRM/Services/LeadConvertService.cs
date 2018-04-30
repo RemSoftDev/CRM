@@ -22,6 +22,7 @@ namespace CRM.Services
             {
                 var lead = context.Leads
                     .Include(e => e.Phones)
+                    .Include(l => l.Emails)
                     .FirstOrDefault(l => l.Id == model.Id && l.User == null);
                 
                 // Мапим нашего нового юзера(Телефоны обнуляем, так как запишет дубыль)
@@ -71,6 +72,13 @@ namespace CRM.Services
                     var leadPhone = leadPhones.FirstOrDefault(e => e.Id == phone.Id);
                     leadPhone = Mapper.Map<PhoneViewModel, Phone>(phone, leadPhone);
                     leadPhone.UserId = newCustomerInDB.Id;
+                }
+
+                // прикріплюємо імейли до новоствореного юзера.
+                var leadEmails = context.Emails.Where(e => e.LeadId == model.Id).ToList();
+                foreach (var email in leadEmails)
+                {
+                    email.UserId = newCustomerInDB.Id;
                 }
 
                 // прикрипляем записи лида к ново созданному юзеру

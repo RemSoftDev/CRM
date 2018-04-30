@@ -82,7 +82,7 @@ namespace CRM.Services
                     foreach (var uid in result)
                     {
                         var message = inbox.GetMessage(uid, cancel.Token);
-                        if (message.Date > lastReceivedDate.Value)
+                        if (lastReceivedDate != null && message.Date > lastReceivedDate.Value)
                         {
                             emailsList.Add(new EmailViewModel(message));
                         }

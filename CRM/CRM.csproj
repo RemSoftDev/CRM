@@ -177,6 +177,7 @@
     <Compile Include="AutoMapper\AutoMapperConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extentions\PrincipalExtention.cs" />
@@ -223,6 +224,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Customer\editCustomer.js" />
     <Content Include="Scripts\Customer\searchCustomer.js" />
+    <Content Include="Scripts\Email\email.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -259,7 +261,7 @@
     <Content Include="Views\Lead\Edit.cshtml" />
     <Content Include="Views\Lead\Index.cshtml" />
     <Content Include="Views\Lead\ConvertLead.cshtml" />
-    <Content Include="Views\Shared\Conversation.cshtml" />
+    <Content Include="Views\Email\Conversation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

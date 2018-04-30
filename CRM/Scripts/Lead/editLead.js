@@ -64,7 +64,7 @@
         }
         else {
             $.ajax({
-                url: "/Lead/SendMessage",
+                url: "/Email/SendMessage",
                 type: 'POST',
                 data: {
                     id: leadId,
