@@ -1,6 +1,10 @@
 ﻿using CRM.App_Start;
 using CRM.Attributes;
 using CRM.AutoMapper;
+using CRM.Services;
+using CRM.Services.Interfaces;
+using Ninject;
+using Ninject.Web.Common.WebHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +17,21 @@ using System.Web.Security;
 
 namespace CRM
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : NinjectHttpApplication
     {
-        protected void Application_Start()
+        protected override void OnApplicationStarted()
         {
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);          
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //GlobalFilters.Filters.Add(new LogHistoryAttribute());
 
             AutoMapperConfiguration.Configure();
         }
+
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {
             var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
@@ -39,6 +44,22 @@ namespace CRM
                     HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
                 }
             }
+        }
+
+        protected override IKernel CreateKernel()
+        {
+            var kernel = new StandardKernel();
+
+            Register(kernel);
+
+            return kernel;
+        }
+
+        private void Register(IKernel kernel)
+        {
+            kernel.Bind<IEncryptionService>()
+                .ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
+                .InSingletonScope();
         }
     }
 }
