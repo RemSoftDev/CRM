@@ -46,7 +46,7 @@ namespace CRM.Services
             }
 
             model.SentDate = DateTime.Now;
-            new Task(() => { SaveEmail<T>(model, user); }).Start();
+            new Task(() => { SaveEmail(model, user); }).Start();
         }
 
         public static List<EmailViewModel> GetMailings<T>(DateTime? lastReceivedDate, T user) where T : IUser

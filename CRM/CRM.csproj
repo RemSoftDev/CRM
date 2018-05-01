@@ -237,6 +237,7 @@
     <Content Include="Scripts\Lead\editLead.js" />
     <Content Include="Scripts\Lead\searchLead.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\phones_addresses.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Web.config" />

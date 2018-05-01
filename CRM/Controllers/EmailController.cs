@@ -123,7 +123,7 @@ namespace CRM.Controllers
         private IUser GetUserModel(int id, string type = "")
         {
             IUser user;
-            if (type == "lead" || HttpContext.Request.UrlReferrer.AbsolutePath.Contains("Lead"))
+            if (type == "Lead" || HttpContext.Request.UrlReferrer.AbsolutePath.Contains("Lead"))
             {
                 Lead lead = GetLeadModel(id);
                 user = Mapper.Map<Lead, LeadViewModel>(lead);

@@ -86,7 +86,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(UserViewModel user, List<string> note)
+        public ActionResult Edit(UserViewModel user, List<string> note, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
         {
             if (ModelState.IsValid)
             {
@@ -114,10 +114,10 @@ namespace CRM.Controllers
                                 phoneToEdit.PhoneNumber = incomePhone.PhoneNumber;
                                 phoneToEdit.TypeId = incomePhone.TypeId;
                             }
-                            else
-                            {
-                                customerToEdit.Phones.Add(incomePhone);
-                            }
+                            //else
+                            //{
+                            //    customerToEdit.Phones.Add(incomePhone);
+                            //}
                         });
 
                         // Изменение адресов
@@ -160,6 +160,22 @@ namespace CRM.Controllers
                         context.Notes.AddRange(note.Select(e => new Note() { Text = e, UserId = user.Id }));
                     }
 
+                    // Додавання нових телефонів
+                    if (newPhones != null && newPhones.Any())
+                    {
+                        var newUserPhones = Mapper.Map<List<Phone>>(newPhones);
+                        newUserPhones.ForEach(phone => phone.UserId = user.Id);
+
+                        context.Phones.AddRange(newUserPhones);
+                    }
+                    // Додавання нових адрес
+                    if (newAddress != null && newAddress.Any())
+                    {
+                        var newUserAddresses = Mapper.Map<List<Address>>(newAddress);
+                        newUserAddresses.ForEach(address => address.UserId = user.Id);
+
+                        context.Addresses.AddRange(newUserAddresses);
+                    }
                     context.SaveChanges();
                 }
             }
