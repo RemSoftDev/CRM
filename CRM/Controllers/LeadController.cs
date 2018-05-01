@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
 using CRM.Extentions;
+using System;
 
 namespace CRM.Controllers
 {
@@ -19,19 +20,17 @@ namespace CRM.Controllers
     {
         public ActionResult Index()
         {
-            List<LeadViewModel> leads;
+            List<LeadViewModel> leadsView;
             using (BaseContext context = new BaseContext())
             {
-                var leads1 = context
-                    .Leads
+                var leadsNotConverted = context.Leads
                     .Include(e => e.Phones)
-                    .Where(l => l.Customer == null)
+                    .Where(l => !l.IsConverted)
                     .ToList();
 
-
-                leads = Mapper.Map<List<Lead>, List<LeadViewModel>>(leads1);
+                leadsView = Mapper.Map<List<Lead>, List<LeadViewModel>>(leadsNotConverted);
             }
-            return View(leads);
+            return View(leadsView);
         }
 
         [HttpPost]
@@ -46,32 +45,10 @@ namespace CRM.Controllers
 
             var leadAdapter = new LeadAdapter();
 
-            bool? byName = null;
-            bool? byEmail = null;
-            bool? byPhone = null;
-
-            switch (model.OrderField)
-            {
-                case "Name":
-                    byName = true;
-                    break;
-                case "Phone":
-                    byPhone = true;
-                    break;
-                case "Email":
-                    byEmail = true;
-                    break;
-                default:
-                    byName = true;
-                    break;
-            }
-
             var result = leadAdapter.GetLeadsByFilter(
                 model.Field,
                 model.SearchValue,
-                byName,
-                byEmail,
-                byPhone,
+                model.OrderField,
                 model.OrderDirection.Equals("ASC"));
 
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
@@ -104,7 +81,7 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(LeadViewModel lead, List<string> note)
+        public ActionResult Edit(LeadViewModel lead, List<string> note, List<PhoneViewModel> newPhones)
         {
             if (ModelState.IsValid)
             {
@@ -125,26 +102,26 @@ namespace CRM.Controllers
                         leadToEdit.StatusNotes = lead.StatusNotes;
                         leadToEdit.IssueRaised = lead.IssueRaised;
 
-                        var firstPhone = leadToEdit
-                            .Phones
-                            .FirstOrDefault();
+                        var phones = leadToEdit.Phones;
 
-                        if(firstPhone == null)
+                        for (int i = 0; i < phones.Count; i++)
                         {
-                            leadToEdit.Phones.Add(new Phone()
+                            var currentPhone = lead.Phones.FirstOrDefault(p=>p.Id == phones[i].Id);
+                            if (currentPhone != null)
                             {
-                                PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber,
-                                Type = new DPhoneType()
-                                {
-                                    TypeName = "HomePhone"
-                                }
-                            });
-                        }
-                        else
-                        {
-                            firstPhone.PhoneNumber = lead.Phones.FirstOrDefault().PhoneNumber;
+                                phones[i].PhoneNumber = currentPhone.PhoneNumber;
+                                phones[i].TypeId = (int)currentPhone.Type;
+                            }
                         }
 
+                        if (newPhones != null)
+                        {
+                            var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
+                            foreach(var item in newLeadPhones)
+                            {
+                                leadToEdit.Phones.Add(item);
+                            }                           
+                        }
                     }
 
                     if (lead.Notes.Any())
@@ -168,47 +145,37 @@ namespace CRM.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public ActionResult SendMessage(int id, string message)
-        {
-            var leadEmail = "";
-            var currentUserEmail = User.Identity.Name.Split('|')[1];
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
-            {
-                Lead lead = context.Leads.FirstOrDefault(l => l.Id == id);
-                if (lead != null)
-                {
-                    leadEmail = lead?.Email;
-                    if (lead.LeadOwner == 0)
-                    {
-                        var currentUser = context.Users.FirstOrDefault(u => u.Email == currentUserEmail);
-                        lead.LeadOwner = currentUser.Id;
-                        context.SaveChanges();
-                    }
-                }
-            }
-            if (string.IsNullOrEmpty(leadEmail))
-            {
-                return Json(new { status = "error" });
-            }
-            EmailService.SendEmail(leadEmail, "Test Message!", message);
-            return Json(new { status = "success" });
-        }
-
         [HttpGet]
         public ActionResult ConvertLead(int id)
         {
-            return View(id);
+            var customer = new UserViewModel();    
+            customer.Addresses.Add(new AddressViewModel());
+            customer.Notes.Add(new NoteViewModel());
+
+            using (var context = new BaseContext())
+            {
+                var currentLead = context.Leads
+                    .Include(e => e.Phones)
+                    .FirstOrDefault(e => e.Id == id);
+ 
+                customer.Phones = Mapper.Map<List<PhoneViewModel>>(currentLead.Phones);
+            }
+
+            return View(new LeadConvertViewModel()
+            {
+                Id = id,
+                NewCustomer = customer
+            });
         }
 
         [HttpPost]
-        public JsonResult ConvertLead(CustomerViewModel model, int id)
+        public ActionResult ConvertLead(LeadConvertViewModel model, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
         {
             var userCreads = User.GetCurrentUserCreads();
 
-            LeadConvertService.Convert(model, id, userCreads.Email);
+            LeadConvertService.Convert(model, newAddress, newPhones, userCreads.Email);
 
-            return Json(new { status = "success" });
+            return RedirectToAction("Index", "Customer");
         }
     }
 }

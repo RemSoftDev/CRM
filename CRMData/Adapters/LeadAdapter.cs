@@ -11,10 +11,8 @@ namespace CRMData.Adapters
     {
         public List<Lead> GetLeadsByFilter(
             string whereField, 
-            string searchValue, 
-            bool? byName = true,
-            bool? byEmail = null,
-            bool? byPhone = null,
+            string searchValue,
+            string ordered,
             bool isAscending = true)
         {
             using (BaseContext context = new BaseContext())
@@ -22,7 +20,7 @@ namespace CRMData.Adapters
                 return context.Leads
                     .Include(e => e.Phones)
                     .AddWhere(whereField, searchValue)
-                    .AddOrder(byName, byEmail, byPhone, isAscending)
+                    .AddOrder(ordered.Trim(), isAscending)
                     .ToList();
             }
         }

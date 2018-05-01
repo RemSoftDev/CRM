@@ -1,6 +1,8 @@
 ﻿using CRM.Enums;
 using CRM.Models;
 using CRM.Services;
+using CRM.Extentions;
+using CRM.Services.Interfaces;
 using CRMData.Contexts;
 using CRMData.Entities;
 using System;
@@ -14,6 +16,13 @@ namespace CRM.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IEncryptionService encryptionService;
+
+        public AccountController(IEncryptionService encryptionService)
+        {
+            this.encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
@@ -25,7 +34,7 @@ namespace CRM.Controllers
             User user;
             using (BaseContext context = new BaseContext())
             {
-                string encryptedPassword = EncryptionService.Encrypt(model.Password);
+                string encryptedPassword = encryptionService.Encrypt(model.Password);
                 user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
             }
                 
@@ -73,7 +82,7 @@ namespace CRM.Controllers
             bool isNewUser = false;
             using (BaseContext context = new BaseContext())
             {
-                string encryptedPassword = EncryptionService.Encrypt(model.Password);
+                string encryptedPassword = encryptionService.Encrypt(model.Password);
                 User user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
                 if (user == null)
                 {
@@ -82,7 +91,8 @@ namespace CRM.Controllers
                         Password = encryptedPassword,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Role = (int)UserRole.AdminStaff });
+                        Role = (int)UserRole.AdminStaff,
+                        UserTypeId = (int)UserType.Manager});
 
                     context.SaveChanges();
                     isNewUser = true;

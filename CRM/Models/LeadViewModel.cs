@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRM.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Web;
 
 namespace CRM.Models
 {
-    public class LeadViewModel
+    public class LeadViewModel : IUser
     {
         public int Id { get; set; }
         [Required]

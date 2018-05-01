@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CRM.Enums;
+using CRM.Extentions;
 using CRM.Models;
 using CRM.Services;
 using CRMData.Adapters;
@@ -17,12 +19,12 @@ namespace CRM.Controllers
     {
         public ActionResult Index()
         {
-            List<CustomerViewModel> customers;
+            List<UserViewModel> customers;
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-                customers = Mapper.Map<List<Customer>, List<CustomerViewModel>>(context
-                    .Customers
-                    .Include("Phones")
+                customers = Mapper.Map<List<User>, List<UserViewModel>>(context.Users
+                    .Where(e => e.UserTypeId == (int)UserType.Customer)
+                    .Include(e => e.Phones)
                     .ToList());
             }
             return View(customers);
@@ -38,41 +40,42 @@ namespace CRM.Controllers
                 return Json(new { status = "error", message = "Model is not valid!" });
             }
 
-            var customerAdapter = new CustomerAdapter();
+            var customerAdapter = new UserAdapter();
 
-            var result = customerAdapter.GetCustomersByFilter(
+            var result = customerAdapter.GetUsersByFilter(
                 model.Field,
                 model.SearchValue,
                 model.OrderField,
+                (int)UserType.Customer,
                 model.OrderDirection.Equals("ASC"));
 
-            var items = Mapper.Map<List<Customer>, List<CustomerViewModel>>(result);
+            var items = Mapper.Map<List<User>, List<UserViewModel>>(result);
             return PartialView("_CustomersPagePartial", items);
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            CustomerViewModel customer;
+            UserViewModel customer;
             using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
             {
-;               Customer customerDb = context.Customers
-                    .Include(e => e.Phones)
-                    .Include(e => e.Addresses)
-                    .Include(e => e.Lead)
-                    .FirstOrDefault(c => c.Id == id);
+                ; User customerDb = context.Users
+                      .Include(e => e.Phones)
+                      .Include(e => e.Addresses)
+                      //.Include(e => e.Lead)
+                      .FirstOrDefault(c => c.Id == id);
 
-                customer = Mapper.Map<Customer, CustomerViewModel>(customerDb);
+                customer = Mapper.Map<User, UserViewModel>(customerDb);
 
-                List<Note> customerNote = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).ToList();
-                customerNote.AddRange(context.Notes.Where(n => n.CustomerId == customerDb.Id).ToList());
-                customer.Notes = Mapper.Map<List<Note>,List<NoteViewModel>>(customerNote);
+                //List<Note> customerNote = context.Notes.Where(n => n.LeadId == customerDb.Lead.Id).ToList();
+                List<Note> customerNote = context.Notes.Where(n => n.UserId == customerDb.Id).ToList();
+                customer.Notes = Mapper.Map<List<Note>, List<NoteViewModel>>(customerNote);
 
-                customer.Address = Mapper.Map<List<Address>, List<AddressViewModel>>((List<Address>)customerDb.Addresses);
+                customer.Addresses = Mapper.Map<List<Address>, List<AddressViewModel>>((List<Address>)customerDb.Addresses);
 
-                if (customer.Address.Count == 0)
+                if (customer.Addresses.Count == 0)
                 {
-                    customer.Address.Add(new AddressViewModel());
+                    customer.Addresses.Add(new AddressViewModel());
                 }
             }
             if (customer != null)
@@ -83,95 +86,100 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(CustomerViewModel customer, List<string> note)
+        public ActionResult Edit(UserViewModel user, List<string> note, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
         {
             if (ModelState.IsValid)
             {
                 using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
                 {
-                    Customer customerToEdit = context.Customers
+                    User customerToEdit = context.Users
                         .Include(e => e.Phones)
-                        .FirstOrDefault(c => c.Id == customer.Id);
+                        .Include(e => e.Addresses)
+                        .FirstOrDefault(c => c.Id == user.Id);
 
                     if (customerToEdit != null)
                     {
-                        customerToEdit.Title = customer.Title;
-                        customerToEdit.Email = customer.Email;
-                        customerToEdit.FirstName = customer.FirstName;
-                        customerToEdit.LastName = customer.LastName;
-                        customerToEdit.Phones
-                            .FirstOrDefault()
-                            .PhoneNumber = customer.Phones.FirstOrDefault().PhoneNumber;
+                        customerToEdit.Title = user.Title;
+                        customerToEdit.Email = user.Email;
+                        customerToEdit.FirstName = user.FirstName;
+                        customerToEdit.LastName = user.LastName;
 
-
-                        List<Address> addresses = Mapper.Map<List<Address>>(customer.Address);
-
-                        var ids = addresses.Select(a => a.Id).ToList();
-
-                        var currnetAddr = context.Addresses.Where(e => ids.Contains(e.Id)).ToList();
-
-                        if(currnetAddr.Count != 0)
+                        // Изменение телефонов
+                        var phones = Mapper.Map<List<Phone>>(user.Phones);
+                        phones.ForEach(incomePhone =>
                         {
-                            currnetAddr.ForEach(e =>
+                            var phoneToEdit = customerToEdit.Phones.FirstOrDefault(c => c.Id == incomePhone.Id);
+                            if (phoneToEdit != null)
                             {
-                                var item = addresses.FirstOrDefault(a => a.Id == e.Id);
+                                phoneToEdit.PhoneNumber = incomePhone.PhoneNumber;
+                                phoneToEdit.TypeId = incomePhone.TypeId;
+                            }
+                            //else
+                            //{
+                            //    customerToEdit.Phones.Add(incomePhone);
+                            //}
+                        });
 
-                                e.Line1 = item.Line1;
-                                e.Line2 = item.Line2;
-                                e.PostCode = item.PostCode;
-                                e.Town = item.Town;
-                                e.Country = item.Country;
-                                e.County = item.County;
-                                e.AddressTypeId = item.AddressTypeId;
-                                e.AddressType = item.AddressType;
-                            });
-                        }
-                        else
+                        // Изменение адресов
+                        var addresses = Mapper.Map<List<Address>>(user.Addresses);
+                        addresses.ForEach(incomeAddress =>
                         {
-                            addresses.ForEach(e => customerToEdit.Addresses.Add(e));
-                        }
+                            var addrToEdit = customerToEdit.Addresses.FirstOrDefault(c => c.Id == incomeAddress.Id);
+                            if (addrToEdit != null)
+                            {
+                                addrToEdit.Line1 = incomeAddress.Line1;
+                                addrToEdit.Line2 = incomeAddress.Line2;
+                                addrToEdit.PostCode = incomeAddress.PostCode;
+                                addrToEdit.Town = incomeAddress.Town;
+                                addrToEdit.Country = incomeAddress.Country;
+                                addrToEdit.County = incomeAddress.County;
+                                addrToEdit.AddressTypeId = incomeAddress.AddressTypeId;
+                                addrToEdit.AddressType = incomeAddress.AddressType;
+                            }
+                            else
+                            {
+                                addresses.ForEach(e => customerToEdit.Addresses.Add(e));
+                            }
+                        });
                     }
 
-                    if (customer.Notes.Any())
+                    // Изменение записей
+                    if (user.Notes.Any())
                     {
-                        foreach (NoteViewModel reNewNote in customer.Notes)
+                        foreach (NoteViewModel reNewNote in user.Notes)
                         {
                             Note oldNote = context.Notes.FirstOrDefault(e => e.Id == reNewNote.Id);
-                            if(oldNote != null)
+                            if (oldNote != null)
                                 oldNote.Text = reNewNote.Text;
                         }
                     }
 
-                    if(note != null && note.Any())
+                    // Добавление новых записей
+                    if (note != null && note.Any())
                     {
-                        context.Notes.AddRange(note.Select(e => new Note() { Text = e, CustomerId = customer.Id }));
+                        context.Notes.AddRange(note.Select(e => new Note() { Text = e, UserId = user.Id }));
                     }
 
+                    // Додавання нових телефонів
+                    if (newPhones != null && newPhones.Any())
+                    {
+                        var newUserPhones = Mapper.Map<List<Phone>>(newPhones);
+                        newUserPhones.ForEach(phone => phone.UserId = user.Id);
+
+                        context.Phones.AddRange(newUserPhones);
+                    }
+                    // Додавання нових адрес
+                    if (newAddress != null && newAddress.Any())
+                    {
+                        var newUserAddresses = Mapper.Map<List<Address>>(newAddress);
+                        newUserAddresses.ForEach(address => address.UserId = user.Id);
+
+                        context.Addresses.AddRange(newUserAddresses);
+                    }
                     context.SaveChanges();
                 }
             }
             return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public ActionResult SendMessage(int id, string message)
-        {
-            var leadEmail = "";
-            var currentUserEmail = User.Identity.Name.Split('|')[1];
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
-            {
-                Customer customer = context.Customers.FirstOrDefault(c => c.Id == id);
-                if (customer != null)
-                {
-                    leadEmail = customer?.Email;
-                }
-            }
-            if (string.IsNullOrEmpty(leadEmail))
-            {
-                return Json(new { status = "error" });
-            }
-            EmailService.SendEmail(leadEmail, "Test Message!", message);
-            return Json(new { status = "success" });
         }
     }
 }

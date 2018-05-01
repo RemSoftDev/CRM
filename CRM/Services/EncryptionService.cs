@@ -1,19 +1,22 @@
-﻿using System;
+﻿using CRM.Services.Interfaces;
+using CRM.Extentions;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace CRM.Services
 {
-    public static class EncryptionService
+    public sealed class EncryptionService : IEncryptionService
     {
-        private static string EncryptionKey;
+        private string EncryptionKey;
 
-        static EncryptionService()
+        public EncryptionService(string encKey)
         {
-            EncryptionKey = "abc123";
+            EncryptionKey = encKey.ValidateNotEmpty(nameof(encKey));
         }
-        public static string Encrypt(string inputText)
+
+        public string Encrypt(string inputText)
         {
             byte[] clearBytes = Encoding.Unicode.GetBytes(inputText);
             using (Aes encryptor = Aes.Create())
@@ -34,7 +37,7 @@ namespace CRM.Services
             return inputText;
         }
 
-        public static string Decrypt(string encryptedText)
+        public string Decrypt(string encryptedText)
         {
             encryptedText = encryptedText.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(encryptedText);

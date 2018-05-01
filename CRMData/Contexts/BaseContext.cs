@@ -23,6 +23,9 @@ namespace CRMData.Contexts
             context.DAddressTypes.Add(new DAddressType() { TypeName = "ContactAddress" });
             context.DAddressTypes.Add(new DAddressType() { TypeName = "EmergencyContactAddress" });
 
+            context.DUserTypes.Add(new DUserType() { TypeName = "Manager" });
+            context.DUserTypes.Add(new DUserType() { TypeName = "Customer" });
+
             base.Seed(context);
         }
     }
@@ -37,16 +40,15 @@ namespace CRMData.Contexts
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Lead> Leads { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Phone> Phones { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
 
         public virtual DbSet<DAddressType> DAddressTypes { get; set; }
         public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
-
-
+        public virtual DbSet<DUserType> DUserTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -58,6 +60,23 @@ namespace CRMData.Contexts
                 .HasOptional(e => e.AddressType)
                 .WithMany(e => e.Addresses)
                 .HasForeignKey(e => e.AddressTypeId);
+
+            modelBuilder.Entity<User>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<User>()
+                .HasRequired(e => e.UserType)
+                .WithMany(e => e.Users)
+                .HasForeignKey(e => e.UserTypeId);
+
+            modelBuilder.Entity<Lead>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<Phone>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             base.OnModelCreating(modelBuilder);
         }

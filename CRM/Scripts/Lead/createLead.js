@@ -3,7 +3,8 @@
         var leadModel = {
             name: $('#name').val(),
             email: $('#email').val(),
-            phones: [{ phoneNumber : $('#phone').val() }]
+            phones: [{ phoneNumber: $('#phone').val() }],
+            message: $('#message').val()
         };
         $.ajax({
             url: "/api/webform",

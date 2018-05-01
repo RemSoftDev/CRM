@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace CRMData.Entities
 {
-    public class Lead
+    public sealed class Lead
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -19,13 +14,17 @@ namespace CRMData.Entities
         public string StatusNotes { get; set; }
         public string IssueRaised { get; set; }
         public int? LeadOwner { get; set; }
-        public Customer Customer { get; set; }
+        public bool IsConverted { get; set; }
+
+        public User User { get; set; }
 
         public IList<Phone> Phones { get; set; }
+        public IList<Email> Emails { get; set; }
 
         public Lead()
         {
             this.Phones = new List<Phone>();
+            this.Emails = new List<Email>();
         }
     }
 }
