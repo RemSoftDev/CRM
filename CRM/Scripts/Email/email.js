@@ -12,8 +12,10 @@ function GetNewEmails() {
             type: $('#type').val()
         },
         success: function (response) {
-            var lastMail = $('[data-type="email"]:last')
-            lastMail.after(GetMailingsHtml(response.mailings));
+            if (response.mailings) {
+                var lastMail = $('[data-type="email"]:last')
+                lastMail.after(GetMailingsHtml(response.mailings));
+            }
         },
         error: function (error) {
             console.log(error);
