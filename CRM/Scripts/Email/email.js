@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     GetNewEmails();
-    setInterval(function () { GetNewEmails(); }, 60 * 1000);
+    //setInterval(function () { GetNewEmails(); }, 60 * 1000);
 });
 
 function GetNewEmails() {

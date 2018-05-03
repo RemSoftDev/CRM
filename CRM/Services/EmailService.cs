@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using static System.Security.Authentication.SslProtocols;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,7 +63,10 @@ namespace CRM.Services
             {
                 using (var cancel = new CancellationTokenSource())
                 {
-                    client.Connect("imap.gmail.com", 993, true, cancel.Token);
+                    // Протокол повинен бути Tls
+                    client.SslProtocols = Tls | Tls11 | Tls12;
+
+                    client.Connect("imap.gmail.com", 993, true, cancel.Token);                    
                     client.AuthenticationMechanisms.Remove("XOAUTH");
                     client.Authenticate(Email, Password, cancel.Token);
 
