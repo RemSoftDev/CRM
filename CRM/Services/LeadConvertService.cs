@@ -24,9 +24,14 @@ namespace CRM.Services
                     .Include(e => e.Phones)
                     .Include(l => l.Emails)
                     .FirstOrDefault(l => l.Id == model.Id && l.User == null);
-                
+
+                // Проверка на неправильный адресс
+                model.NewCustomer.Addresses.RemoveAll(e => string.IsNullOrWhiteSpace(e.Line1) || string.IsNullOrWhiteSpace(e.Line2));
+
                 // Мапим нашего нового юзера(Телефоны обнуляем, так как запишет дубыль)
+
                 var newCustomer = Mapper.Map<UserViewModel, User>(model.NewCustomer);
+
                 newCustomer.UserTypeId = (int)UserType.Customer;
                 newCustomer.Phones = new List<Phone>();
                 newCustomer.Email = lead.Email;
@@ -35,8 +40,10 @@ namespace CRM.Services
                 if (newPhones != null && newPhones.Count != 0)
                 {
                     var newPhoneAfterMap = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
+                    newPhoneAfterMap = newPhoneAfterMap.Where(e => !string.IsNullOrWhiteSpace(e.PhoneNumber))
+                        .ToList();
 
-                    foreach(var phone in newPhoneAfterMap)
+                    foreach (var phone in newPhoneAfterMap)
                     {
                         newCustomer.Phones.Add(phone);
                     }
@@ -46,8 +53,10 @@ namespace CRM.Services
                 if (newAddress != null && newAddress.Count != 0)
                 {
                     var newAddressAfterMap = Mapper.Map<List<AddressViewModel>, List<Address>>(newAddress);
+                    newAddressAfterMap = newAddressAfterMap.Where(e => !(string.IsNullOrWhiteSpace(e.Line1) || string.IsNullOrWhiteSpace(e.Line2)))
+                        .ToList();
 
-                    foreach(var address in newAddressAfterMap)
+                    foreach (var address in newAddressAfterMap)
                     {
                         newCustomer.Addresses.Add(address);
                     }

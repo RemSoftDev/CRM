@@ -14,7 +14,7 @@ namespace CRM.AutoMapper
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Phone, PhoneViewModel>()
-                    .ForMember(p => p.Type, opt => opt.MapFrom(t => (PhoneType)t.TypeId));
+                    .ForMember(p => p.Type, opt => opt.MapFrom(t => (PhoneType?)t.TypeId));
 
                 cfg.CreateMap<PhoneViewModel, Phone>()
                     //.ForMember(p => p.Id, opt => opt.Ignore())
@@ -33,7 +33,7 @@ namespace CRM.AutoMapper
                     .ForMember(i => i.Role, opt => opt.MapFrom(u => (UserRole)u.Role));
 
                 cfg.CreateMap<UserViewModel, User>();
-                    //.ForMember(c => c.Lead, opt => opt.Ignore());
+                //.ForMember(c => c.Lead, opt => opt.Ignore());
 
                 cfg.CreateMap<Lead, LeadViewModel>();
                 //.ForMember(l => l.Phones, opt => opt

@@ -110,7 +110,7 @@ namespace CRM.Controllers
                             if (currentPhone != null)
                             {
                                 phones[i].PhoneNumber = currentPhone.PhoneNumber;
-                                phones[i].TypeId = (int)currentPhone.Type;
+                                phones[i].TypeId = (int?)currentPhone.Type;
                             }
                         }
 
@@ -119,7 +119,8 @@ namespace CRM.Controllers
                             var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
                             foreach(var item in newLeadPhones)
                             {
-                                leadToEdit.Phones.Add(item);
+                                if(!string.IsNullOrWhiteSpace(item.PhoneNumber))
+                                    leadToEdit.Phones.Add(item);
                             }                           
                         }
                     }
@@ -136,7 +137,11 @@ namespace CRM.Controllers
 
                     if (note != null && note.Any())
                     {
-                        context.Notes.AddRange(note.Select(e => new Note() { Text = e, LeadId = lead.Id }));
+                        var notesToAdd = note
+                            .Where(e => !string.IsNullOrWhiteSpace(e))
+                            .Select(e => new Note() { Text = e, LeadId = lead.Id });
+
+                        context.Notes.AddRange(notesToAdd);
                     }
 
                     context.SaveChanges();

@@ -138,7 +138,9 @@ namespace CRM.Controllers
                             }
                             else
                             {
-                                addresses.ForEach(e => customerToEdit.Addresses.Add(e));
+                                addresses.Where(e => !(string.IsNullOrWhiteSpace(e.Line1) || string.IsNullOrWhiteSpace(e.Line2)))
+                                .ToList()
+                                .ForEach(e => customerToEdit.Addresses.Add(e));
                             }
                         });
                     }
@@ -157,13 +159,20 @@ namespace CRM.Controllers
                     // Добавление новых записей
                     if (note != null && note.Any())
                     {
-                        context.Notes.AddRange(note.Select(e => new Note() { Text = e, UserId = user.Id }));
+                        var notesToAdd = note
+                            .Where(e => !string.IsNullOrWhiteSpace(e))
+                            .Select(e => new Note() { Text = e, UserId = user.Id });
+
+                        context.Notes.AddRange(notesToAdd);
                     }
 
                     // Додавання нових телефонів
                     if (newPhones != null && newPhones.Any())
                     {
-                        var newUserPhones = Mapper.Map<List<Phone>>(newPhones);
+                        var newUserPhones = Mapper.Map<List<Phone>>(newPhones)
+                            .Where(e => !string.IsNullOrWhiteSpace(e.PhoneNumber))
+                            .ToList();
+
                         newUserPhones.ForEach(phone => phone.UserId = user.Id);
 
                         context.Phones.AddRange(newUserPhones);
@@ -171,7 +180,10 @@ namespace CRM.Controllers
                     // Додавання нових адрес
                     if (newAddress != null && newAddress.Any())
                     {
-                        var newUserAddresses = Mapper.Map<List<Address>>(newAddress);
+                        var newUserAddresses = Mapper.Map<List<Address>>(newAddress)
+                            .Where(e => !(string.IsNullOrWhiteSpace(e.Line1) || string.IsNullOrWhiteSpace(e.Line2)))
+                            .ToList();
+
                         newUserAddresses.ForEach(address => address.UserId = user.Id);
 
                         context.Addresses.AddRange(newUserAddresses);
