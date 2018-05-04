@@ -16,6 +16,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace CRM.Services
 {
@@ -63,10 +65,11 @@ namespace CRM.Services
             {
                 using (var cancel = new CancellationTokenSource())
                 {
-                    // Протокол повинен бути Tls
                     client.SslProtocols = Tls | Tls11 | Tls12;
+                    client.ServerCertificateValidationCallback = 
+                        new RemoteCertificateValidationCallback(ServificateValidationCallBack);
 
-                    client.Connect("imap.gmail.com", 993, true, cancel.Token);                    
+                    client.Connect("imap.gmail.com", 993, true, cancel.Token);
                     client.AuthenticationMechanisms.Remove("XOAUTH");
                     client.Authenticate(Email, Password, cancel.Token);
 
@@ -102,6 +105,11 @@ namespace CRM.Services
             }
 
             return emailsList;
+        }
+
+        private static bool ServificateValidationCallBack(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
         }
 
         private static void SaveEmail<T>(List<EmailViewModel> models, T user) where T : IUser
