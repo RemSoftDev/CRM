@@ -192,6 +192,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
+    <Compile Include="Controllers\PhoneController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extentions\ObjectExtention.cs" />
     <Compile Include="Extentions\PrincipalExtention.cs" />
@@ -279,6 +280,7 @@
     <Content Include="Views\Lead\Index.cshtml" />
     <Content Include="Views\Lead\ConvertLead.cshtml" />
     <Content Include="Views\Email\Conversation.cshtml" />
+    <Content Include="Views\Phone\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

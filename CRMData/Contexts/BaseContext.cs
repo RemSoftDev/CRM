@@ -23,7 +23,7 @@ namespace CRMData.Contexts
             context.DAddressTypes.Add(new DAddressType() { TypeName = "ContactAddress" });
             context.DAddressTypes.Add(new DAddressType() { TypeName = "EmergencyContactAddress" });
 
-            context.DUserTypes.Add(new DUserType() { TypeName = "Manager" });
+            context.DUserTypes.Add(new DUserType() { TypeName = "AdminTeamMember" });
             context.DUserTypes.Add(new DUserType() { TypeName = "Customer" });
 
             base.Seed(context);
@@ -45,6 +45,7 @@ namespace CRMData.Contexts
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
+        public virtual DbSet<Call> Calls { get; set; }
 
         public virtual DbSet<DAddressType> DAddressTypes { get; set; }
         public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
@@ -52,6 +53,19 @@ namespace CRMData.Contexts
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Lead>().ToTable("Lead");
+            modelBuilder.Entity<Address>().ToTable("Address");
+            modelBuilder.Entity<Phone>().ToTable("Phone");
+            modelBuilder.Entity<Note>().ToTable("Note");
+            modelBuilder.Entity<Email>().ToTable("Email");
+            modelBuilder.Entity<LeadConvertedLog>().ToTable("LeadConvertedLog");
+            modelBuilder.Entity<Call>().ToTable("Call");
+
+            modelBuilder.Entity<DAddressType>().ToTable("DAddressType");
+            modelBuilder.Entity<DPhoneType>().ToTable("DPhoneType");
+            modelBuilder.Entity<DUserType>().ToTable("DUserType");
+
             modelBuilder.Entity<Address>()
                 .Property(e => e.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
@@ -70,11 +84,25 @@ namespace CRMData.Contexts
                 .WithMany(e => e.Users)
                 .HasForeignKey(e => e.UserTypeId);
 
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Calls)
+                .WithOptional(e => e.User)
+                .HasForeignKey(e => e.UserId);
+
             modelBuilder.Entity<Lead>()
                 .Property(e => e.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            modelBuilder.Entity<Lead>()
+                .HasMany(e => e.Calls)
+                .WithOptional(e => e.Lead)
+                .HasForeignKey(e => e.LeadId);
+
             modelBuilder.Entity<Phone>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<Call>()
                 .Property(e => e.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
@@ -140,7 +168,6 @@ namespace CRMData.Contexts
 
             this.Register(mockContext.Object);
         }
-
 
         private DbSet<Lead> GetLeadMock()
         {

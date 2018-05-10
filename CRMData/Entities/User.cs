@@ -19,6 +19,7 @@ namespace CRMData.Entities
         public IList<Address> Addresses { get; set; }
         public IList<Note> Notes { get; set; }
         public IList<Email> Emails { get; set; }
+        public IList<Call> Calls { get; set; }
 
         public User()
         {

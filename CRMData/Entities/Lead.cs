@@ -2,7 +2,7 @@
 
 namespace CRMData.Entities
 {
-    public sealed class Lead
+    public class Lead
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,7 +17,8 @@ namespace CRMData.Entities
         public bool IsConverted { get; set; }
 
         public User User { get; set; }
-
+        
+        public virtual IList<Call> Calls { get; set; }
         public IList<Phone> Phones { get; set; }
         public IList<Email> Emails { get; set; }
 

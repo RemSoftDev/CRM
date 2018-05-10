@@ -106,7 +106,7 @@ namespace CRM.Controllers
 
                         for (int i = 0; i < phones.Count; i++)
                         {
-                            var currentPhone = lead.Phones.FirstOrDefault(p=>p.Id == phones[i].Id);
+                            var currentPhone = lead.Phones.FirstOrDefault(p => p.Id == phones[i].Id);
                             if (currentPhone != null)
                             {
                                 phones[i].PhoneNumber = currentPhone.PhoneNumber;
@@ -117,11 +117,11 @@ namespace CRM.Controllers
                         if (newPhones != null)
                         {
                             var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
-                            foreach(var item in newLeadPhones)
+                            foreach (var item in newLeadPhones)
                             {
-                                if(!string.IsNullOrWhiteSpace(item.PhoneNumber))
+                                if (!string.IsNullOrWhiteSpace(item.PhoneNumber))
                                     leadToEdit.Phones.Add(item);
-                            }                           
+                            }
                         }
                     }
 
@@ -153,7 +153,7 @@ namespace CRM.Controllers
         [HttpGet]
         public ActionResult ConvertLead(int id)
         {
-            var customer = new UserViewModel();    
+            var customer = new UserViewModel();
             customer.Addresses.Add(new AddressViewModel());
             customer.Notes.Add(new NoteViewModel());
 
@@ -162,8 +162,20 @@ namespace CRM.Controllers
                 var currentLead = context.Leads
                     .Include(e => e.Phones)
                     .FirstOrDefault(e => e.Id == id);
- 
+
                 customer.Phones = Mapper.Map<List<PhoneViewModel>>(currentLead.Phones);
+
+                var splitResult = currentLead.Name.Split(' ');
+
+                if (splitResult.Length > 0)
+                {
+                    customer.FirstName = splitResult[0];
+                    for (int i = 1; i < splitResult.Length; i++)
+                    {
+                        customer.LastName += $"{splitResult[i]} ";
+                    }
+                    customer.LastName = customer.LastName.TrimEnd();
+                }
             }
 
             return View(new LeadConvertViewModel()

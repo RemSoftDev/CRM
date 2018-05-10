@@ -14,7 +14,7 @@ namespace CRM.Enums
 
     public enum UserType
     {
-        Manager = 1,
+        AdminTeamMember = 1,
         Customer
     }
 

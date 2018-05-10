@@ -66,6 +66,7 @@
     <Compile Include="Adapters\LeadAdapter.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
     <Compile Include="Entities\Address.cs" />
+    <Compile Include="Entities\Call.cs" />
     <Compile Include="Entities\DAddressType.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
     <Compile Include="Entities\DUserType.cs" />
