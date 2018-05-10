@@ -7,12 +7,12 @@ using System.Linq.Expressions;
 
 namespace CRMData.Repository
 {
-	public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+	public class EfGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 	{
-		private BaseContext _context;
-		DbSet<TEntity> _dbSet;
+		private readonly BaseContext _context;
+		readonly DbSet<TEntity> _dbSet;
 
-		public EFGenericRepository(BaseContext context)
+		public EfGenericRepository(BaseContext context)
 		{
 			_context = context;
 			_dbSet = context.Set<TEntity>();
@@ -35,17 +35,14 @@ namespace CRMData.Repository
 		public void Create(TEntity item)
 		{
 			_dbSet.Add(item);
-			_context.SaveChanges();
 		}
 		public void Update(TEntity item)
 		{
 			_context.Entry(item).State = EntityState.Modified;
-			_context.SaveChanges();
 		}
 		public void Remove(TEntity item)
 		{
 			_dbSet.Remove(item);
-			_context.SaveChanges();
 		}
 
 		public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
@@ -59,6 +56,11 @@ namespace CRMData.Repository
 		{
 			var query = Include(includeProperties);
 			return query.Where(predicate).ToList();
+		}
+
+		public void AddRange(IEnumerable<TEntity> entities)
+		{
+			_dbSet.AddRange(entities);
 		}
 
 		private IQueryable<TEntity> Include(params Expression<Func<TEntity, object>>[] includeProperties)

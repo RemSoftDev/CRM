@@ -7,6 +7,9 @@ namespace CRMData.Repository
 	public interface IUnitOfWork : IDisposable
 	{
 		BaseContext Context { get; }
-		EFGenericRepository<Lead> LeadsRepository { get; }
+		IGenericRepository<Lead> LeadsRepository { get; }
+		IGenericRepository<Note> NotesRepository { get; }
+		void Save();
+		void Dispose(bool disposing);
 	}
 }
