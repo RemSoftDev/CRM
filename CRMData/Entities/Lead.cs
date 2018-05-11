@@ -17,10 +17,11 @@ namespace CRMData.Entities
         public bool IsConverted { get; set; }
 
         public User User { get; set; }
+
+        public virtual IList<Phone> Phones { get; set; }
+        public virtual IList<Email> Emails { get; set; }
         
         public virtual IList<Call> Calls { get; set; }
-        public IList<Phone> Phones { get; set; }
-        public IList<Email> Emails { get; set; }
 
         public Lead()
         {
