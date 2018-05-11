@@ -96,11 +96,32 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Migrations\201805082022139_InitialCreate.cs" />
+    <Compile Include="Migrations\201805082022139_InitialCreate.Designer.cs">
+      <DependentUpon>201805082022139_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805101921166_ForeignKeysForLeads.cs" />
+    <Compile Include="Migrations\201805101921166_ForeignKeysForLeads.Designer.cs">
+      <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\EFGenericRepository.cs" />
+    <Compile Include="Repository\IGenericRepository.cs" />
+    <Compile Include="Repository\IUnitOfWork.cs" />
+    <Compile Include="Repository\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201805082022139_InitialCreate.resx">
+      <DependentUpon>201805082022139_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805101921166_ForeignKeysForLeads.resx">
+      <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
