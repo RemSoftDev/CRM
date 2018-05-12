@@ -86,11 +86,17 @@
     <Compile Include="Adapters\Extentions\QueryLeadExtentions.cs" />
     <Compile Include="Adapters\LeadAdapter.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
+    <Compile Include="EntitiesConfiguration\DGridConfiguration.cs" />
+    <Compile Include="EntitiesConfiguration\GridFieldConfiguration.cs" />
+    <Compile Include="EntitiesConfiguration\GridProfileConfiguration.cs" />
     <Compile Include="Entities\Address.cs" />
     <Compile Include="Entities\DAddressType.cs" />
+    <Compile Include="Entities\DGrid.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
     <Compile Include="Entities\DUserType.cs" />
     <Compile Include="Entities\Email.cs" />
+    <Compile Include="Entities\GridField.cs" />
+    <Compile Include="Entities\GridProfile.cs" />
     <Compile Include="Entities\Lead.cs" />
     <Compile Include="Entities\LeadConvertedLog.cs" />
     <Compile Include="Entities\Note.cs" />

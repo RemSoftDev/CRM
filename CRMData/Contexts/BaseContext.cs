@@ -1,4 +1,5 @@
 ﻿using CRMData.Entities;
+using CRMData.EntitiesConfiguration;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace CRMData.Contexts
             context.DAddressTypes.Add(new DAddressType() { TypeName = "EmergencyContactAddress" });
 
             context.DUserTypes.Add(new DUserType() { TypeName = "Manager" });
-            context.DUserTypes.Add(new DUserType() { TypeName = "Customer" });
+            context.DUserTypes.Add(new DUserType() { TypeName = "Customer" });            
 
             base.Seed(context);
         }
@@ -33,7 +34,7 @@ namespace CRMData.Contexts
     public class BaseContext : DbContext
     {
         public BaseContext()
-            : base("CRM_DB")
+            : base("CRM_DB1")
         {
             Database.SetInitializer(new CRMDBInitializer());            
         }
@@ -45,13 +46,20 @@ namespace CRMData.Contexts
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
+        public virtual DbSet<GridProfile> GridProfiles { get; set; }
+        public virtual DbSet<GridField> GridFields { get; set; }
 
         public virtual DbSet<DAddressType> DAddressTypes { get; set; }
         public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
         public virtual DbSet<DUserType> DUserTypes { get; set; }
+        public virtual DbSet<DGrid> DGrids { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Configurations.Add(new GridProfileConfiguration());
+            modelBuilder.Configurations.Add(new GridFieldConfiguration());
+            modelBuilder.Configurations.Add(new DGridConfiguration());
+
             modelBuilder.Entity<Address>()
                 .Property(e => e.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
