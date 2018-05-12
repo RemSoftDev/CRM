@@ -92,7 +92,7 @@ namespace CRM.Controllers
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Role = (int)UserRole.AdminStaff,
-                        UserTypeId = (int)UserType.Manager});
+                        UserTypeId = (int)UserType.AdminTeamMember});
 
                     context.SaveChanges();
                     isNewUser = true;

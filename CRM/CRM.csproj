@@ -192,6 +192,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
+    <Compile Include="Controllers\PhoneController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extentions\ObjectExtention.cs" />
     <Compile Include="Extentions\PrincipalExtention.cs" />
@@ -288,6 +289,7 @@
     <None Include="Web.Dev3.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="Views\Phone\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
