@@ -5,7 +5,7 @@ using System.Linq;
 using System.Data.Entity;
 using CRM.DAL.Adapters.Extentions;
 
-namespace CRMData.Adapters
+namespace CRM.DAL.Adapters
 {
     public sealed class LeadAdapter
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM.Enums;
 using CRM.Models;
-using CRMData.Entities;
+using CRM.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
 

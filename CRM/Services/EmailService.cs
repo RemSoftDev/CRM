@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CRM.Interfaces;
 using CRM.Models;
-using CRMData.Contexts;
-using CRMData.Entities;
+using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;

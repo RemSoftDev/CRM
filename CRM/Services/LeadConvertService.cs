@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRM.Models;
-using CRMData.Contexts;
-using CRMData.Entities;
+using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

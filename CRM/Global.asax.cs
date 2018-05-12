@@ -2,7 +2,7 @@
 using CRM.AutoMapper;
 using CRM.Services;
 using CRM.Services.Interfaces;
-using CRMData.Repository;
+using CRM.DAL.Repository;
 using Ninject;
 using Ninject.Web.Common.WebHost;
 using System;

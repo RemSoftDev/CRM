@@ -1,4 +1,4 @@
-﻿using CRMData.Entities;
+﻿using CRM.DAL.Entities;
 using System.Linq;
 
 namespace CRM.DAL.Adapters.Extentions

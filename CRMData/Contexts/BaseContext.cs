@@ -1,8 +1,8 @@
-﻿using CRMData.Entities;
+﻿using CRM.DAL.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 
-namespace CRMData.Contexts
+namespace CRM.DAL.Contexts
 {
 
 	public class BaseContext : DbContext

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CRMData.Entities
+namespace CRM.DAL.Entities
 {
     public sealed class DAddressType
     {

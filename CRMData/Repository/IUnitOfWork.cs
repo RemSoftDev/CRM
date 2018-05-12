@@ -1,8 +1,8 @@
-﻿using CRMData.Contexts;
-using CRMData.Entities;
+﻿using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using System;
 
-namespace CRMData.Repository
+namespace CRM.DAL.Repository
 {
 	public interface IUnitOfWork : IDisposable
 	{

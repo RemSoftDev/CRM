@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CRM.Models;
 using CRM.Services;
-using CRMData.Contexts;
-using CRMData.Entities;
+using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using System.Linq;
 using System.Net;
 using System.Net.Http;

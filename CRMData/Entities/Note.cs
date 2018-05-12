@@ -1,4 +1,4 @@
-﻿namespace CRMData.Entities
+﻿namespace CRM.DAL.Entities
 {
     public class Note
     {

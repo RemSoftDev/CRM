@@ -1,7 +1,7 @@
-﻿using CRMData.Entities;
+﻿using CRM.DAL.Entities;
 using System.Data.Entity;
 
-namespace CRMData.Contexts
+namespace CRM.DAL.Contexts
 {
 	public class CRMDBInitializer : CreateDatabaseIfNotExists<BaseContext>
     {

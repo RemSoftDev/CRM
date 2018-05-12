@@ -1,19 +1,19 @@
-namespace CRMData.Migrations
+namespace CRM.DAL.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<CRMData.Contexts.BaseContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<CRM.DAL.Contexts.BaseContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "CRMData.Contexts.BaseContext";
+            ContextKey = "CRM.DAL.Contexts.BaseContext";
         }
 
-        protected override void Seed(CRMData.Contexts.BaseContext context)
+        protected override void Seed(CRM.DAL.Contexts.BaseContext context)
         {
             //  This method will be called after migrating to the latest version.
 

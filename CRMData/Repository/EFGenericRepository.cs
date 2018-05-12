@@ -1,11 +1,11 @@
-﻿using CRMData.Contexts;
+﻿using CRM.DAL.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace CRMData.Repository
+namespace CRM.DAL.Repository
 {
 	public class EfGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 	{

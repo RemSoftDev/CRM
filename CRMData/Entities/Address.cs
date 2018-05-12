@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CRMData.Entities
+namespace CRM.DAL.Entities
 {
     public class Address
     {

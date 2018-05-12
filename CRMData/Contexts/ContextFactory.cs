@@ -1,4 +1,4 @@
-﻿using CRMData.Entities;
+﻿using CRM.DAL.Entities;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 
-namespace CRMData.Contexts
+namespace CRM.DAL.Contexts
 {
 	public class ContextFactory
     {

@@ -1,4 +1,4 @@
-namespace CRMData.Migrations
+namespace CRM.DAL.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

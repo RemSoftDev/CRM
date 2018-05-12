@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace CRMData.Repository
+namespace CRM.DAL.Repository
 {
 	public interface IGenericRepository<TEntity> where TEntity : class
 	{

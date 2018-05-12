@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CRMData.Entities
+namespace CRM.DAL.Entities
 {
     public sealed class Call
     {
