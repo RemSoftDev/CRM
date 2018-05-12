@@ -7,9 +7,19 @@ namespace CRMData.Repository
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly BaseContext _dbContext;
+		private bool _disposed;
 
 		private IGenericRepository<Lead> _leadsRepository;
 		private IGenericRepository<Note> _notesRepository;
+		private IGenericRepository<Address> _addressRepository;
+		private IGenericRepository<DAddressType> _dAddressTypesRepository;
+		private IGenericRepository<DPhoneType> _dPhonesTypesRepository;
+		private IGenericRepository<DUserType> _dUserTypesRepository;
+		private IGenericRepository<Email> _emailsRepository;
+		private IGenericRepository<LeadConvertedLog> _leadsConvertedLogsRepositoryRepository;
+		private IGenericRepository<Phone> _phonesRepository;
+		private IGenericRepository<User> _usersRepository;
+		private IGenericRepository<Call> _callsRepository;
 
 		public UnitOfWork()
 		{
@@ -18,33 +28,42 @@ namespace CRMData.Repository
 
 		public BaseContext Context => _dbContext;
 
-		public IGenericRepository<Lead> LeadsRepository
-		{
-			get
-			{
-				if (_leadsRepository == null)
-				{
-					_leadsRepository = new EfGenericRepository<Lead>(_dbContext);
-				}
+		#region Repositories
+		public IGenericRepository<Lead> LeadsRepository => _leadsRepository ?? (_leadsRepository = new EfGenericRepository<Lead>(_dbContext));
 
-				return _leadsRepository;
-			}
-		}
+		public IGenericRepository<Note> NotesRepository =>
+			_notesRepository ?? (_notesRepository = new EfGenericRepository<Note>(_dbContext));
 
-		public IGenericRepository<Note> NotesRepository
-		{
-			get
-			{
-				if (_notesRepository == null)
-				{
-					_notesRepository = new EfGenericRepository<Note>(_dbContext);
-				}
+		public IGenericRepository<Address> AddressRepository =>
+			_addressRepository ?? (_addressRepository = new EfGenericRepository<Address>(_dbContext));
 
-				return _notesRepository;
-			}
-		}
+		public IGenericRepository<DAddressType> DAddressTypesRepository =>
+			_dAddressTypesRepository ?? (_dAddressTypesRepository = new EfGenericRepository<DAddressType>(_dbContext));
 
-		private bool _disposed;
+		public IGenericRepository<DPhoneType> DPhonesTypesRepository =>
+			_dPhonesTypesRepository ?? (_dPhonesTypesRepository = new EfGenericRepository<DPhoneType>(_dbContext));
+
+		public IGenericRepository<DUserType> DUserTypesRepository =>
+			_dUserTypesRepository ?? (_dUserTypesRepository = new EfGenericRepository<DUserType>(_dbContext));
+
+		public IGenericRepository<Email> EmailsRepository =>
+			_emailsRepository ?? (_emailsRepository = new EfGenericRepository<Email>(_dbContext));
+
+
+		public IGenericRepository<LeadConvertedLog> LeadsConvertedLogsRepositoryRepository =>
+			_leadsConvertedLogsRepositoryRepository ?? (_leadsConvertedLogsRepositoryRepository =
+				new EfGenericRepository<LeadConvertedLog>(_dbContext));
+
+		public IGenericRepository<Phone> PhonesRepository =>
+			_phonesRepository ?? (_phonesRepository = new EfGenericRepository<Phone>(_dbContext));
+
+		public IGenericRepository<User> UsersRepository =>
+			_usersRepository ?? (_usersRepository = new EfGenericRepository<User>(_dbContext));
+
+		public IGenericRepository<Call> CallsRepository =>
+			_callsRepository ?? (_callsRepository = new EfGenericRepository<Call>(_dbContext));
+
+		#endregion
 
 		public void Save()
 		{
@@ -70,4 +89,5 @@ namespace CRMData.Repository
 			GC.SuppressFinalize(this);
 		}
 	}
+
 }

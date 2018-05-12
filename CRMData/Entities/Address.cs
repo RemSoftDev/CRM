@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRMData.Entities
 {
@@ -21,10 +16,7 @@ namespace CRMData.Entities
         public int? AddressTypeId { get; set; }
         public virtual DAddressType AddressType { get; set; }
 
-        //public int? CustomerId { get; set; }
-        //public virtual Customer Customer { get; set; }
-
-        public int? UserId { get; set; }
+	    public int? UserId { get; set; }
         public virtual User User { get; set; }
     }
 }
