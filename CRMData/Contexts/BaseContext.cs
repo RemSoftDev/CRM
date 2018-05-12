@@ -34,7 +34,7 @@ namespace CRMData.Contexts
     public class BaseContext : DbContext
     {
         public BaseContext()
-            : base("CRM_DB1")
+            : base("CRM_DB")
         {
             Database.SetInitializer(new CRMDBInitializer());            
         }
