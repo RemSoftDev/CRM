@@ -11,6 +11,8 @@ namespace CRMData.EntitiesConfiguration
             ToTable("DGrid");
 
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            Property(e => e.Type).IsRequired();
         }
     }
 }

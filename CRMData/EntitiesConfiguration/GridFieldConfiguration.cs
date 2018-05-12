@@ -13,6 +13,10 @@ namespace CRMData.EntitiesConfiguration
             Property(e => e.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            Property(e => e.ColumnName).IsRequired();
+            Property(e => e.Order).IsRequired();
+            Property(e => e.GridProfileId).IsRequired();
+
             HasRequired(e => e.GridProfile)
                 .WithMany(e => e.GridFields)
                 .HasForeignKey(e => e.GridProfileId);
