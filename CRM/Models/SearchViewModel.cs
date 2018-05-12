@@ -15,12 +15,16 @@ namespace CRM.Models
         public int ItemsPerPage { get; set; }
         public string OrderField { get; set; }
         public string OrderDirection { get; set; }
+        public List<LeadViewModel> Items { get; set; }
+        public Dictionary<string, bool> Columns { get; set; }
 
         public SearchViewModel()
         {
             this.Page = 1;
             this.ItemsPerPage = 25;
             this.OrderDirection = "ASC";
+            this.Items = new List<LeadViewModel>();
+            this.Columns = new Dictionary<string, bool>();
         }
     }
 }

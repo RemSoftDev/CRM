@@ -185,6 +185,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\AuthenticateAttribute.cs" />
+    <Compile Include="Attributes\GridAttribute.cs" />
     <Compile Include="Attributes\LogHistoryAttribute.cs" />
     <Compile Include="AutoMapper\AutoMapperConfiguration.cs" />
     <Compile Include="ConfigProvider.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Models\AddressViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\GridViewModel.cs" />
     <Compile Include="Models\LeadConvertViewModel.cs" />
     <Compile Include="Models\LeadViewModel.cs" />
     <Compile Include="Models\LogHistoryModel.cs" />
@@ -228,6 +230,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\images\sort.png" />
+    <Content Include="fonts\images\sortdown.png" />
+    <Content Include="fonts\images\sortup.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />

@@ -5,29 +5,29 @@
 
 <h2>Leads</h2>
 <div class="row form-group">
-    <div class="col-xs-3">
-        <select class="form-control" id="search_field">
-            <option>Name</option>
-            <option>Email</option>
-            <option>Phone</option>
-        </select>
-    </div>
-    <div class="col-xs-3">
-        <input class="form-control" type="text" id="search_value" placeholder="Search Value" />
-    </div>
-    <div class="col-xs-3">
-        <select class="form-control" id="order_field">
-            <option>Name</option>
-            <option>Email</option>
-            <option>Phone</option>
-        </select>
-    </div> 
-    <div class="col-xs-2">
-        <select class="form-control" id="order_direction">
-            <option>ASC</option>
-            <option>DESC</option>
-        </select>
-    </div>
+    @*<div class="col-xs-3">
+            <select class="form-control" id="search_field">
+                <option>Name</option>
+                <option>Email</option>
+                <option>Phone</option>
+            </select>
+        </div>
+        <div class="col-xs-3">
+            <input class="form-control" type="text" id="search_value" placeholder="Search Value" />
+        </div>
+        <div class="col-xs-3">
+            <select class="form-control" id="order_field">
+                <option>Name</option>
+                <option>Email</option>
+                <option>Phone</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <select class="form-control" id="order_direction">
+                <option>ASC</option>
+                <option>DESC</option>
+            </select>
+        </div>*@
     <input type="button" class="btn btn-default col-md-1" value="search" id="search_button" />
 </div>
 <div>
@@ -38,4 +38,5 @@
 
 @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
 @Scripts.Render("~/scripts/Lead/searchLead.js")
+
 

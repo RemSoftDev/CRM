@@ -20,17 +20,26 @@ namespace CRM.Controllers
     {
         public ActionResult Index()
         {
+            var columns = ReflectionService.GetModelProperties<LeadViewModel>();
+            SearchViewModel searchModel = new SearchViewModel();
             List<LeadViewModel> leadsView;
             using (BaseContext context = new BaseContext())
             {
                 var leadsNotConverted = context.Leads
                     .Include(e => e.Phones)
-                    .Where(l => !l.IsConverted)
+                    .Where(l => !l.IsConverted)                   
                     .ToList();
 
                 leadsView = Mapper.Map<List<Lead>, List<LeadViewModel>>(leadsNotConverted);
+            }           
+
+            //var q = ReflectionService<LeadViewModel>.GetPropValue(leadsView.FirstOrDefault(), "Phones");
+            searchModel.Items = leadsView;
+            foreach(var i in columns)
+            {
+                searchModel.Columns.Add(i, true);
             }
-            return View(leadsView);
+            return View(searchModel);
         }
 
         [HttpPost]
@@ -52,7 +61,8 @@ namespace CRM.Controllers
                 model.OrderDirection.Equals("ASC"));
 
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
-            return PartialView("_LeadsPagePartial", items);
+            model.Items = items;
+            return PartialView("_LeadsPagePartial", model);
         }
 
         public ActionResult Create()
