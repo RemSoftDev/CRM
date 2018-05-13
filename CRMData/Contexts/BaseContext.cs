@@ -5,12 +5,12 @@ using System.Data.Entity;
 namespace CRM.DAL.Contexts
 {
 
-	public class BaseContext : DbContext
+    public class BaseContext : DbContext
     {
         public BaseContext()
             : base("CRM_DB")
         {
-            Database.SetInitializer(new CRMDBInitializer());            
+            Database.SetInitializer(new CrmdbInitializer());            
         }
 
         public virtual DbSet<User> Users { get; set; }

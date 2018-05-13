@@ -1,26 +1,26 @@
 ﻿using CRM.Enums;
 using CRM.Models;
-using CRM.Services;
 using CRM.Extentions;
 using CRM.Services.Interfaces;
-using CRM.DAL.Contexts;
 using CRM.DAL.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CRM.DAL.Repository;
 
 namespace CRM.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IEncryptionService encryptionService;
+	    private readonly IUnitOfWork _unitOfWork;
+	    private readonly IEncryptionService _encryptionService;
 
-        public AccountController(IEncryptionService encryptionService)
+        public AccountController(IEncryptionService encryptionService, IUnitOfWork unitOfWork)
         {
-            this.encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
+	        _unitOfWork = unitOfWork;
+	        _encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
         }
 
         [HttpPost]
@@ -31,14 +31,10 @@ namespace CRM.Controllers
             {
                 return View(model);
             }
-            User user;
-            using (BaseContext context = new BaseContext())
-            {
-                string encryptedPassword = encryptionService.Encrypt(model.Password);
-                user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
-            }
-                
-            if (user != null)
+
+	        User user = GetUser(model.Email, model.Password);
+
+			if (user != null)
             {
                 FormsAuthentication.SetAuthCookie(model.Email, false);
 
@@ -80,30 +76,39 @@ namespace CRM.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
             bool isNewUser = false;
-            using (BaseContext context = new BaseContext())
-            {
-                string encryptedPassword = encryptionService.Encrypt(model.Password);
-                User user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
-                if (user == null)
-                {
-                    context.Users.Add(new User {
-                        Email = model.Email,
-                        Password = encryptedPassword,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Role = (int)UserRole.AdminStaff,
-                        UserTypeId = (int)UserType.AdminTeamMember});
 
-                    context.SaveChanges();
-                    isNewUser = true;
-                }
-            }
+	        User user = GetUser(model.Email, model.Password);
 
-            if (isNewUser)
+	        if (user == null)
+	        {
+				_unitOfWork.UsersRepository.Create(new User
+				{
+					Email = model.Email,
+					Password = _encryptionService.Encrypt(model.Password),
+					FirstName = model.FirstName,
+					LastName = model.LastName,
+					Role = (int)UserRole.AdminStaff,
+					UserTypeId = (int)UserType.AdminTeamMember
+				});
+
+				_unitOfWork.Save();
+		        isNewUser = true;
+	        }
+
+			if (isNewUser)
             {
                 return RedirectToAction("Login", "Account");
             }
             return View(model);
         }
+
+	    private User GetUser(string email, string password)
+	    {
+		    string encryptedPassword = _encryptionService.Encrypt(password);
+
+		    return _unitOfWork.UsersRepository
+			    .Get(u => u.Email == email && u.Password == encryptedPassword)
+			    .FirstOrDefault();
+		}
     }
 }

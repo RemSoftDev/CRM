@@ -3,7 +3,7 @@ using System.Data.Entity;
 
 namespace CRM.DAL.Contexts
 {
-	public class CRMDBInitializer : CreateDatabaseIfNotExists<BaseContext>
+	public class CrmdbInitializer : CreateDatabaseIfNotExists<BaseContext>
     {
         protected override void Seed(BaseContext context)
         {

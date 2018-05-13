@@ -23,10 +23,10 @@ namespace CRM.DAL.Entities
 
         public User()
         {
-            this.Addresses = new List<Address>();
-            this.Phones = new List<Phone>();
-            this.Notes = new List<Note>();
-            this.Emails = new List<Email>();
+            Addresses = new List<Address>();
+            Phones = new List<Phone>();
+            Notes = new List<Note>();
+            Emails = new List<Email>();
         }
     }
 }
