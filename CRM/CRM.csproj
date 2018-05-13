@@ -218,6 +218,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\PhoneHub.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Models\AddressViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Services\LogHistoryService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SearchService.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="WebApiControllers\WebFormController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +279,7 @@
     <Content Include="Scripts\phones_addresses.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\util.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -300,6 +303,7 @@
     <Content Include="Views\Lead\Index.cshtml" />
     <Content Include="Views\Lead\ConvertLead.cshtml" />
     <Content Include="Views\Email\Conversation.cshtml" />
+    <Content Include="Views\Phone\PhoneCall.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CRM.Hubs;
 
 namespace CRM.Controllers
 {
@@ -42,10 +43,23 @@ namespace CRM.Controllers
             {
                 FormsAuthentication.SetAuthCookie(model.Email, false);
 
-                var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
+                //string jsonUserInfo = JsonConvert.SerializeObject(new AutenticateUser()
+                //{
+                //    Id = user.Id,
+                //    FirstName = user.FirstName,
+                //    Email = user.Email,
+                //    Role = user.Role
+                //});
+                //var authTicket = new FormsAuthenticationTicket(1, user.FirstName, DateTime.Now, DateTime.Now.AddDays(5), false, jsonUserInfo);
+
+                var authTicket = new FormsAuthenticationTicket(1, $"{user.Id}|{user.FirstName}|{user.Email}", DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
                 string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                 var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 HttpContext.Response.Cookies.Add(authCookie);
+
+                // insert userId into list of online users
+                AutorizedUsers.Add(user.Id);
+
                 return RedirectToAction("Index", "Lead");
             }
             else
@@ -66,6 +80,13 @@ namespace CRM.Controllers
         [HttpPost]
         public ActionResult LogOut()
         {
+            // remove userId from list of online users
+            var userCreds = User.GetCurrentUserCreads();
+            if (userCreds != null)
+            {
+                AutorizedUsers.Remove(userCreds.Id);
+            }
+
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Account");
         }

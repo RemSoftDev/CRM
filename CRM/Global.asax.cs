@@ -15,53 +15,72 @@ using System.Web.Security;
 
 namespace CRM
 {
-	public class MvcApplication : NinjectHttpApplication
-	{
-		protected override void OnApplicationStarted()
-		{
-			AreaRegistration.RegisterAllAreas();
-			GlobalConfiguration.Configure(WebApiConfig.Register);
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
-			BundleConfig.RegisterBundles(BundleTable.Bundles);
+    public class MvcApplication : NinjectHttpApplication
+    {
+        protected override void OnApplicationStarted()
+        {
+            AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			//GlobalFilters.Filters.Add(new LogHistoryAttribute());
+            //GlobalFilters.Filters.Add(new LogHistoryAttribute());
 
-			AutoMapperConfiguration.Configure();
-		}
+            AutoMapperConfiguration.Configure();
+        }
 
-		protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
-		{
-			var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
-			if (authCookie != null)
-			{
-				FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-				if (authTicket != null && !authTicket.Expired)
-				{
-					var roles = authTicket.UserData.Split(',');
-					HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
-				}
-			}
-		}
+        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+        {
+            var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                if (authTicket != null && !authTicket.Expired)
+                {
+                    //var jsonUserInfo = JsonConvert.DeserializeObject<AutenticateUser>(authTicket.UserData, new JsonSerializerSettings()
+                    //{
+                    //    Error = delegate (object jsonSender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                    //    {
+                    //        args.ErrorContext.Handled = true;
+                    //    },
 
-		protected override IKernel CreateKernel()
-		{
-			var kernel = new StandardKernel();
+                    //});
 
-			Register(kernel);
+                    //if (jsonUserInfo != null)
+                    //{
 
-			return kernel;
-		}
+                    //    var identity = new FormsIdentity(authTicket);
+                    //    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jsonUserInfo.Id.ToString()));
+                    //    identity.AddClaim(new Claim(ClaimTypes.Email, jsonUserInfo.Email));
 
-		private void Register(IKernel kernel)
-		{
-			kernel.Bind<IEncryptionService>()
-				.ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
-				.InSingletonScope();
+                    //    HttpContext.Current.User = new GenericPrincipal(identity, new string[] { ((UserRole)jsonUserInfo.Role).ToString() });
+                    //}
 
-			kernel.Bind<IUnitOfWork>()
-				.ToMethod(e => new UnitOfWork())
-				.InSingletonScope();
-		}
-	}
+                    var roles = authTicket.UserData.Split(',');
+                    HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
+                }
+            }
+        }
+
+        protected override IKernel CreateKernel()
+        {
+            var kernel = new StandardKernel();
+
+            Register(kernel);
+
+            return kernel;
+        }
+
+        private void Register(IKernel kernel)
+        {
+            kernel.Bind<IEncryptionService>()
+                .ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
+                .InSingletonScope();
+
+            kernel.Bind<IUnitOfWork>()
+                .ToMethod(e => new UnitOfWork())
+                .InSingletonScope();
+        }
+    }
 }

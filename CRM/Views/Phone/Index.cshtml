@@ -8,5 +8,31 @@
 
 @*@Html.DropDownList("dropdown")*@
 
-<input type="button" name="call">
+<input type="button" name="call" id="btnLogin">
+
+<!--Ссылка на библиотеку SignalR -->
+<script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
+<!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+<script src="~/signalr/hubs"></script>
+
+<script>
+    $(function () {
+
+        var callHub = $.connection.phoneHub;
+
+        callHub.client.onCall = function (errMesage) {
+            alert(errMesage);
+        }
+
+        // Открываем соединение
+        $.connection.hub.start().done(function () {
+            callHub.server.connect();
+        });
+
+        $("#btnLogin").click(function () {
+            callHub.server.call(2, +38067);
+        });
+
+    });
+</script>
 

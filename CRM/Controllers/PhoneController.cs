@@ -13,5 +13,10 @@ namespace CRM.Controllers
         {
             return View();
         }
+
+        public ActionResult PhoneCall()
+        {
+            return View();
+        }
     }
 }

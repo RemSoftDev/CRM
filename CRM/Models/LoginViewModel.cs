@@ -2,7 +2,7 @@
 
 namespace CRM.Models
 {
-    public class LoginViewModel
+    public sealed class LoginViewModel
     {
         [Required]
         [EmailAddress]
