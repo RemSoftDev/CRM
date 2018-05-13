@@ -8,6 +8,7 @@ namespace CRM.DAL.Repository
 	{
 		void Create(TEntity item);
 		TEntity FindById(int id);
+		TEntity FindBy(Func<TEntity, bool> predicate);
 		IEnumerable<TEntity> Get();
 		IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
 		void Remove(TEntity item);

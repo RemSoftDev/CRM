@@ -15,11 +15,11 @@ namespace CRM.DAL.Entities
         public int UserTypeId { get; set; }
         public DUserType UserType { get; set; }
 
-        public IList<Phone> Phones { get; set; }
-        public IList<Address> Addresses { get; set; }
-        public IList<Note> Notes { get; set; }
-        public IList<Email> Emails { get; set; }
-        public IList<Call> Calls { get; set; }
+        public virtual IList<Phone> Phones { get; set; }
+        public virtual IList<Address> Addresses { get; set; }
+        public virtual IList<Note> Notes { get; set; }
+        public virtual IList<Email> Emails { get; set; }
+        public virtual IList<Call> Calls { get; set; }
 
         public User()
         {

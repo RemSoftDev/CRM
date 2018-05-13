@@ -115,6 +115,10 @@
     <Compile Include="Migrations\201805131843005_TempMigration1.Designer.cs">
       <DependentUpon>201805131843005_TempMigration1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.cs" />
+    <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.Designer.cs">
+      <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
@@ -138,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805131843005_TempMigration1.resx">
       <DependentUpon>201805131843005_TempMigration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805131947426_addLazyLoadingToUser.resx">
+      <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
