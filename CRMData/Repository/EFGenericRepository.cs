@@ -1,11 +1,11 @@
-﻿using CRMData.Contexts;
+﻿using CRM.DAL.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace CRMData.Repository
+namespace CRM.DAL.Repository
 {
 	public class EfGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 	{
@@ -18,37 +18,20 @@ namespace CRMData.Repository
 			_dbSet = context.Set<TEntity>();
 		}
 
-		public IEnumerable<TEntity> Get()
-		{
-			return _dbSet.AsNoTracking().ToList();
-		}
+		public TEntity FindBy(Func<TEntity, bool> predicate) => _dbSet.FirstOrDefault(predicate);
 
-		public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
-		{
-			return _dbSet.AsNoTracking().Where(predicate).ToList();
-		}
-		public TEntity FindById(int id)
-		{
-			return _dbSet.Find(id);
-		}
+		public IEnumerable<TEntity> Get() => _dbSet.AsNoTracking().ToList();
 
-		public void Create(TEntity item)
-		{
-			_dbSet.Add(item);
-		}
-		public void Update(TEntity item)
-		{
-			_context.Entry(item).State = EntityState.Modified;
-		}
-		public void Remove(TEntity item)
-		{
-			_dbSet.Remove(item);
-		}
+		public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate) => _dbSet.AsNoTracking().Where(predicate).ToList();
+		public TEntity FindById(int id) => _dbSet.Find(id);
 
-		public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
-		{
-			return Include(includeProperties).ToList();
-		}
+		public void Create(TEntity item) => _dbSet.Add(item);
+
+		public void Update(TEntity item) => _context.Entry(item).State = EntityState.Modified;
+
+		public void Remove(TEntity item) => _dbSet.Remove(item);
+
+		public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties) => Include(includeProperties).ToList();
 
 		public IEnumerable<TEntity> GetWithInclude(
 			Func<TEntity, bool> predicate,

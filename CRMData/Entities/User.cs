@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CRMData.Entities
+namespace CRM.DAL.Entities
 {
     public class User
     {
@@ -15,18 +15,18 @@ namespace CRMData.Entities
         public int UserTypeId { get; set; }
         public DUserType UserType { get; set; }
 
-        public IList<Phone> Phones { get; set; }
-        public IList<Address> Addresses { get; set; }
-        public IList<Note> Notes { get; set; }
-        public IList<Email> Emails { get; set; }
-        public IList<Call> Calls { get; set; }
+        public virtual IList<Phone> Phones { get; set; }
+        public virtual IList<Address> Addresses { get; set; }
+        public virtual IList<Note> Notes { get; set; }
+        public virtual IList<Email> Emails { get; set; }
+        public virtual IList<Call> Calls { get; set; }
 
         public User()
         {
-            this.Addresses = new List<Address>();
-            this.Phones = new List<Phone>();
-            this.Notes = new List<Note>();
-            this.Emails = new List<Email>();
+            Addresses = new List<Address>();
+            Phones = new List<Phone>();
+            Notes = new List<Note>();
+            Emails = new List<Email>();
         }
     }
 }

@@ -7,8 +7,8 @@
     <ProjectGuid>{B28269B4-88BC-4330-8336-CC63F5312E89}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CRMData</RootNamespace>
-    <AssemblyName>CRMData</AssemblyName>
+    <RootNamespace>CRM.DAL</RootNamespace>
+    <AssemblyName>CRM.DAL</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -86,6 +86,8 @@
     <Compile Include="Adapters\Extentions\QueryLeadExtentions.cs" />
     <Compile Include="Adapters\LeadAdapter.cs" />
     <Compile Include="Contexts\BaseContext.cs" />
+    <Compile Include="Contexts\ContextFactory.cs" />
+    <Compile Include="Contexts\CRMDBInitializer.cs" />
     <Compile Include="Entities\Address.cs" />
     <Compile Include="Entities\Call.cs" />
     <Compile Include="Entities\DAddressType.cs" />
@@ -105,6 +107,18 @@
     <Compile Include="Migrations\201805101921166_ForeignKeysForLeads.Designer.cs">
       <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805131823367_TempMigration.cs" />
+    <Compile Include="Migrations\201805131823367_TempMigration.Designer.cs">
+      <DependentUpon>201805131823367_TempMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805131843005_TempMigration1.cs" />
+    <Compile Include="Migrations\201805131843005_TempMigration1.Designer.cs">
+      <DependentUpon>201805131843005_TempMigration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.cs" />
+    <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.Designer.cs">
+      <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
@@ -122,6 +136,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805101921166_ForeignKeysForLeads.resx">
       <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805131823367_TempMigration.resx">
+      <DependentUpon>201805131823367_TempMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805131843005_TempMigration1.resx">
+      <DependentUpon>201805131843005_TempMigration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805131947426_addLazyLoadingToUser.resx">
+      <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

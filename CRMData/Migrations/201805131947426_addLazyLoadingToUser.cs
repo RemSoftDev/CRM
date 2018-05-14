@@ -3,7 +3,7 @@ namespace CRM.DAL.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class ForeignKeysForLeads : DbMigration
+    public partial class addLazyLoadingToUser : DbMigration
     {
         public override void Up()
         {

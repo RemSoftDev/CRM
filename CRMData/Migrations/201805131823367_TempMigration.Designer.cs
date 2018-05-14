@@ -7,13 +7,13 @@ namespace CRM.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class ForeignKeysForLeads : IMigrationMetadata
+    public sealed partial class TempMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ForeignKeysForLeads));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(TempMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201805101921166_ForeignKeysForLeads"; }
+            get { return "201805131823367_TempMigration"; }
         }
         
         string IMigrationMetadata.Source

@@ -1,24 +1,25 @@
-namespace CRMData.Migrations
+using CRM.DAL.Contexts;
+
+namespace CRM.DAL.Migrations
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+	using System.Data.Entity.Migrations;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<CRMData.Contexts.BaseContext>
-    {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = false;
-            ContextKey = "CRMData.Contexts.BaseContext";
-        }
+	internal sealed class Configuration : DbMigrationsConfiguration<BaseContext>
+	{
+		public Configuration()
+		{
+			AutomaticMigrationsEnabled = false;
+			ContextKey = "CRM.DAL.Contexts.BaseContext";
+		}
 
-        protected override void Seed(CRMData.Contexts.BaseContext context)
-        {
-            //  This method will be called after migrating to the latest version.
+		protected override void Seed(BaseContext context)
+		{
+			//  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
-        }
-    }
+			//  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+			//  to avoid creating duplicate seed data.
+			CrmDbInitializer.InitDataInDB(context);
+
+		}
+	}
 }
