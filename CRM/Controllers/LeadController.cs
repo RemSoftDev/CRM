@@ -27,6 +27,7 @@ namespace CRM.Controllers
             {
                 var leadsNotConverted = context.Leads
                     .Include(e => e.Phones)
+                    .Include(l => l.Notes)
                     .Where(l => !l.IsConverted)                   
                     .ToList();
 
@@ -37,7 +38,7 @@ namespace CRM.Controllers
             searchModel.Items = leadsView;
             foreach(var i in columns)
             {
-                searchModel.Columns.Add(i, true);
+                searchModel.Columns.Add(new GridFieldViewModel(i, true, 0));
             }
             return View(searchModel);
         }

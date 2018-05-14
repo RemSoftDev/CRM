@@ -21,6 +21,7 @@ namespace CRMData.Adapters
             {
                 return context.Leads
                     .Include(e => e.Phones)
+                    .Include(l => l.Notes)
                     .AddWhere(whereField, searchValue)
                     .AddOrder(ordered.Trim(), isAscending)
                     .ToList();

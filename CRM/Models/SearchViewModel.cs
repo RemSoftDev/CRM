@@ -16,7 +16,7 @@ namespace CRM.Models
         public string OrderField { get; set; }
         public string OrderDirection { get; set; }
         public List<LeadViewModel> Items { get; set; }
-        public Dictionary<string, bool> Columns { get; set; }
+        public List<GridFieldViewModel> Columns { get; set; }
 
         public SearchViewModel()
         {
@@ -24,7 +24,7 @@ namespace CRM.Models
             this.ItemsPerPage = 25;
             this.OrderDirection = "ASC";
             this.Items = new List<LeadViewModel>();
-            this.Columns = new Dictionary<string, bool>();
+            this.Columns = new List<GridFieldViewModel>();
         }
     }
 }

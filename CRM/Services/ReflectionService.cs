@@ -33,7 +33,16 @@ namespace CRM.Services
             {
                 if ((value as ICollection).Count > 0)
                 {
-                    var fields = GetModelProperties<PhoneViewModel>();
+                    var itemType = value
+                        .GetType()
+                        .GetGenericArguments()
+                        .Single();
+
+                    var fields = typeof(ReflectionService)
+                        .GetMethod("GetModelProperties")
+                        .MakeGenericMethod(itemType)
+                        .Invoke(value, new object[] { }) as List<string>;
+
                     var enumerator = (value as IEnumerable).GetEnumerator();
                     enumerator.MoveNext();
 

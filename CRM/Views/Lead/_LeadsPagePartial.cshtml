@@ -19,14 +19,14 @@
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                 <span aria-hidden="true">Colunms</span>
             </button>
-            <ul class="dropdown-menu" role="menu" data-mvcgrid-type="columnVisibilityList" data-mvcgrid-name="TestGrid" id="columns">
+            <ul class="dropdown-menu sortable" role="menu" data-mvcgrid-type="columnVisibilityList" data-mvcgrid-name="TestGrid" id="columns">
                 @foreach (var item in Model.Columns)
                 {
                     <li>
                         <a>
                             <label>
-                                <input type="checkbox" name="TestGridcols" value="@item.Key" @(item.Value ? "checked" : "")>
-                                @item.Key
+                                <input type="checkbox" name="TestGridcols" value="@item.Field" @(item.ShowOnGrid ? "checked" : "")>
+                                @item.Field
                             </label>
                         </a>
                     </li>
@@ -45,11 +45,11 @@
         <tr>
             @foreach (var column in Model.Columns)
             {
-                if (column.Value)
+                if (column.ShowOnGrid)
                 {
-                    <td style="cursor : pointer;" id="">
-                        <span>@column.Key</span>
-                        <img class="pull-right" src="~/fonts/images/sort.png" />
+                    <td class="@(column.OrderDirection == 0 ? "sort" : (column.OrderDirection == 1) ? "sort-up" : "sort-down")" id="@column.Field" style="cursor : pointer;" onclick="SetOrderByField('@column.Field')">
+                        <span>@column.Field</span>
+                        @*<img class="pull-right" src="~/fonts/images/sort.png" />*@
                     </td>
                 }
             }
@@ -62,9 +62,9 @@
             <tr>
                 @foreach (var column in Model.Columns)
                 {
-                    if (column.Value)
+                    if (column.ShowOnGrid)
                     {
-                        <td>@(ReflectionService.GetPropValue(lead, column.Key))</td>
+                        <td>@(ReflectionService.GetPropValue(lead, column.Field))</td>
                     }
                 }
                 <td><a href="/Lead/Edit?id=@lead.Id" style="padding-right: 13px;">Edit</a><a href="/Lead/ConvertLead?id=@lead.Id">Convert</a></td>

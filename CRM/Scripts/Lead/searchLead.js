@@ -6,28 +6,36 @@
         //    orderField: $('#order_field option:selected').val(),
         //    orderDirection: $('#order_direction option:selected').val()
         //};
-        $.ajax({
-            url: "/Lead/Search",
-            type: 'POST',
-            data: getSearchModel(),
-            success: function (response) {
-                if (response.status != "error") {
-                    $('table').html(response);
-                }               
-            },
-            error: function (error) {
-                alert(error);
-            }
-        });
+        search(getSearchModel());
     });
+
+
+    $('.sortable').sortable();
 });
+
+function search(model) {
+    $.ajax({
+        url: "/Lead/Search",
+        type: 'POST',
+        data: model,
+        success: function (response) {
+            if (response.status != "error") {
+                $('table').html($(response).filter('table')[0].outerHTML);
+            }
+        },
+        error: function (error) {
+            alert(error);
+        }
+    });
+}
 
 function getSearchModel() {
     var columns = [];
     $('#columns li').each(function (i) {
         columns.push({
-            key: $(this).find('input').val(),
-            value: $(this).find('input').is(':checked')
+            field: $(this).find('input').val(),
+            showOnGrid: $(this).find('input').is(':checked'),
+            orderDirection: getOrderDirection($(this).find('input').val())
         })
     });
     return {
@@ -38,4 +46,39 @@ function getSearchModel() {
         orderDirection: '',
         columns : columns
     };
+}
+
+function SetOrderByField(field) {
+    var searchModel = getSearchModel();
+    searchModel.orderField = field;
+
+    searchModel.orderDirection = setOrderDirection(field);
+    search(searchModel);
+}
+
+function getOrderDirection(field) {
+    var el = $('#' + field);
+    var elClass = el.attr("class");
+    if (elClass == 'sort') {
+        return 0;
+    }
+    if (elClass == 'sort-up') {
+        return 1;
+    }
+    if (elClass == 'sort-down'){
+        return 2;
+    }
+}
+
+function setOrderDirection(field) {
+    var currentDirection = getOrderDirection(field);
+    if (currentDirection == 0) {
+        return 'ASC';
+    }
+    if (currentDirection == 1) {
+        return 'DESC';
+    }
+    if (currentDirection == 2) {
+        return 'ASC';
+    }
 }
