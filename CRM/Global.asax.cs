@@ -1,8 +1,9 @@
 ﻿using CRM.App_Start;
 using CRM.AutoMapper;
+using CRM.DAL.Repository;
+using CRM.Managers;
 using CRM.Services;
 using CRM.Services.Interfaces;
-using CRM.DAL.Repository;
 using Ninject;
 using Ninject.Web.Common.WebHost;
 using System;
@@ -68,6 +69,9 @@ namespace CRM
 
 			kernel.Bind<ILeadConvertService>()
 				.ToMethod(e => new LeadConvertService(kernel.Get<IUnitOfWork>()));
+
+			kernel.Bind<IUserManager>()
+				.ToMethod(e => new UserManager(kernel.Get<IUnitOfWork>(), kernel.Get<IEncryptionService>()));
 		}
 	}
 }

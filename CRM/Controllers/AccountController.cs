@@ -1,114 +1,148 @@
-﻿using CRM.Enums;
-using CRM.Models;
+﻿using CRM.DAL.Entities;
+using CRM.DAL.Repository;
+using CRM.Enums;
 using CRM.Extentions;
+using CRM.Managers;
+using CRM.Models;
 using CRM.Services.Interfaces;
-using CRM.DAL.Entities;
+using Microsoft.AspNet.Identity;
 using System;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using CRM.DAL.Repository;
 
 namespace CRM.Controllers
 {
-    public class AccountController : Controller
-    {
-	    private readonly IUnitOfWork _unitOfWork;
-	    private readonly IEncryptionService _encryptionService;
+	public class AccountController : Controller
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IUserManager _userManager;
+		private readonly IEncryptionService _encryptionService;
 
-        public AccountController(IEncryptionService encryptionService, IUnitOfWork unitOfWork)
-        {
-	        _unitOfWork = unitOfWork;
-	        _encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
-        }
+		public AccountController(
+			IEncryptionService encryptionService,
+			IUnitOfWork unitOfWork,
+			IUserManager userManager)
+		{
+			_unitOfWork = unitOfWork;
+			_userManager = userManager;
+			_encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Login(LoginViewModel model, string returnUrl)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
 
-	        User user = GetUser(model.Email, model.Password);
+			User user = _userManager.GetUser(model.Email, model.Password);
 
 			if (user != null)
-            {
-                FormsAuthentication.SetAuthCookie(model.Email, false);
+			{
+				FormsAuthentication.SetAuthCookie(model.Email, false);
 
-                var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
-                string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-                var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                HttpContext.Response.Cookies.Add(authCookie);
-                return RedirectToAction("Index", "Lead");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid login attempt.");
-                return View(model);
-            }
-        }
+				var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
+				string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+				var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+				HttpContext.Response.Cookies.Add(authCookie);
+				return RedirectToAction("Index", "Lead");
+			}
+			else
+			{
+				ModelState.AddModelError("", "Invalid login attempt.");
+				return View(model);
+			}
+		}
 
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
-        }
+		[HttpGet]
+		[AllowAnonymous]
+		public ActionResult Login()
+		{
+			return View();
+		}
 
-        [Authorize]
-        [HttpPost]
-        public ActionResult LogOut()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Login", "Account");
-        }
+		[Authorize]
+		[HttpPost]
+		public ActionResult LogOut()
+		{
+			FormsAuthentication.SignOut();
+			return RedirectToAction("Login", "Account");
+		}
 
-        [HttpGet]
-        public ActionResult Register()
-        {
-            return View();
-        }
+		[HttpGet]
+		public ActionResult Register()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
-        {
-            bool isNewUser = false;
+		//     [HttpPost]
+		//     public ActionResult Register(RegisterViewModel model)
+		//     {
+		//         bool isNewUser = false;
 
-	        User user = GetUser(model.Email, model.Password);
+		//      User user = GetUser(model.Email, model.Password);
 
-	        if (user == null)
-	        {
-				_unitOfWork.UsersRepository.Create(new User
+		//      if (user == null)
+		//      {
+		//	_unitOfWork.UsersRepository.Create(new User
+		//	{
+		//		Email = model.Email,
+		//		Password = _encryptionService.Encrypt(model.Password),
+		//		FirstName = model.FirstName,
+		//		LastName = model.LastName,
+		//		Role = (int)UserRole.AdminStaff,
+		//		UserTypeId = (int)UserType.AdminTeamMember
+		//	});
+
+		//	_unitOfWork.Save();
+		//       isNewUser = true;
+		//      }
+
+		//if (isNewUser)
+		//         {
+		//             return RedirectToAction("Login", "Account");
+		//         }
+		//         return View(model);
+		//     }
+
+		[HttpPost]
+		public ActionResult Register(RegisterViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				//ToDO Create Mapper
+				var user = new User
 				{
 					Email = model.Email,
-					Password = _encryptionService.Encrypt(model.Password),
+					Password = model.Password,
 					FirstName = model.FirstName,
 					LastName = model.LastName,
 					Role = (int)UserRole.AdminStaff,
 					UserTypeId = (int)UserType.AdminTeamMember
-				});
+				};
 
-				_unitOfWork.Save();
-		        isNewUser = true;
-	        }
+				var result = _userManager.Create(user, model.Password);
 
-			if (isNewUser)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return View(model);
-        }
+				if (result.Succeeded)
+				{
+					return RedirectToAction("Login", "Account"); ;
+				}
 
-	    private User GetUser(string email, string password)
-	    {
-		    string encryptedPassword = _encryptionService.Encrypt(password);
+				AddErrors(result);
+			}
 
-		    return _unitOfWork.UsersRepository
-			    .Get(u => u.Email == email && u.Password == encryptedPassword)
-			    .FirstOrDefault();
+			return View(model);
 		}
-    }
+
+		private void AddErrors(IdentityResult result)
+		{
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError("", error);
+			}
+		}
+	}
 }
