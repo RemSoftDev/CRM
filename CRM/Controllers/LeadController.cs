@@ -26,7 +26,7 @@ namespace CRM.Controllers
 		public ActionResult Index()
 		{
 			var leadsNotConverted = _unitOfWork.LeadsRepository.GetWithInclude(l => !l.IsConverted);
-			var leadsView = Mapper.Map<IEnumerable<Lead>, IEnumerable<LeadViewModel>>(leadsNotConverted); ;
+			var leadsView = Mapper.Map<IEnumerable<Lead>, IEnumerable<LeadViewModel>>(leadsNotConverted); 
 
 			return View(leadsView);
 		}

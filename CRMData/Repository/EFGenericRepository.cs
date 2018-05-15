@@ -28,6 +28,11 @@ namespace CRM.DAL.Repository
 		public void Create(TEntity item) => _dbSet.Add(item);
 
 		public void Update(TEntity item) => _context.Entry(item).State = EntityState.Modified;
+		public bool Any(Func<TEntity, bool> predicate)
+		{
+			return _dbSet.Any(predicate);
+		}
+
 		public void UpdateRange(IEnumerable<TEntity> items)
 		{
 			foreach (var item in items)

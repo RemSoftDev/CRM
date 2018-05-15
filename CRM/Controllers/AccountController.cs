@@ -10,6 +10,7 @@ using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using AutoMapper;
 
 namespace CRM.Controllers
 {
@@ -78,42 +79,12 @@ namespace CRM.Controllers
 			return View();
 		}
 
-		//     [HttpPost]
-		//     public ActionResult Register(RegisterViewModel model)
-		//     {
-		//         bool isNewUser = false;
-
-		//      User user = GetUser(model.Email, model.Password);
-
-		//      if (user == null)
-		//      {
-		//	_unitOfWork.UsersRepository.Create(new User
-		//	{
-		//		Email = model.Email,
-		//		Password = _encryptionService.Encrypt(model.Password),
-		//		FirstName = model.FirstName,
-		//		LastName = model.LastName,
-		//		Role = (int)UserRole.AdminStaff,
-		//		UserTypeId = (int)UserType.AdminTeamMember
-		//	});
-
-		//	_unitOfWork.Save();
-		//       isNewUser = true;
-		//      }
-
-		//if (isNewUser)
-		//         {
-		//             return RedirectToAction("Login", "Account");
-		//         }
-		//         return View(model);
-		//     }
-
 		[HttpPost]
 		public ActionResult Register(RegisterViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				//ToDO Create Mapper
+				////ToDO Create Mapper
 				var user = new User
 				{
 					Email = model.Email,
@@ -123,6 +94,10 @@ namespace CRM.Controllers
 					Role = (int)UserRole.AdminStaff,
 					UserTypeId = (int)UserType.AdminTeamMember
 				};
+
+				//var user = Mapper.Map<RegisterViewModel, User>(model);
+				//user.Role = (int) UserRole.AdminStaff;
+				//user.UserTypeId = (int) UserType.AdminTeamMember;
 
 				var result = _userManager.Create(user, model.Password);
 

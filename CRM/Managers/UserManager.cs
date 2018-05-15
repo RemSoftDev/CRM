@@ -20,17 +20,9 @@ namespace CRM.Managers
 
 		public IdentityResult Create(User user, string password)
 		{
-			List<string> errors = new List<string>();
+			var errors = ValidateAndGetError(user);
 
-			if (IsEmailExist(user.Email))
-			{
-				errors.Add("Email alrady exist");
-			}
-
-			if (IsUserNameExist(user.FirstName, user.LastName))
-			{
-				errors.Add($"User with first name{user.FirstName} and lase name {user.LastName} alrady exist");
-			}
+			ValidateAndGetError(user);
 
 
 			if (!errors.Any())
@@ -46,10 +38,22 @@ namespace CRM.Managers
 			return new IdentityResult(errors);
 		}
 
+		private IEnumerable<string> ValidateAndGetError(User user)
+		{
+			if (IsEmailExist(user.Email))
+			{
+				yield return $"Email {user.Email} alrady exist";
+			}
+
+			if (IsUserNameExist(user.FirstName, user.LastName))
+			{
+				yield return $"User with first name{user.FirstName} and lase name {user.LastName} alrady exist";
+			}
+		}
+
 		private bool IsUserNameExist(string userFirstName, string userLastName)
 		{
-			//TODO refactor
-			return _unitOfWork.Context.Users.Any(u => u.FirstName.Equals(userFirstName) && u.LastName.Equals(userLastName));
+			return _unitOfWork.UsersRepository.Any(u => u.FirstName.Equals(userFirstName) && u.LastName.Equals(userLastName));
 		}
 
 		public User GetUser(string email, string password)
@@ -63,8 +67,7 @@ namespace CRM.Managers
 
 		private bool IsEmailExist(string email)
 		{
-			//ToDo Add Any to Repository
-			return _unitOfWork.Context.Users.Any(u => u.Email.Equals(email));
+			return _unitOfWork.UsersRepository.Any(u => u.Email.Equals(email));
 		}
 	}
 }

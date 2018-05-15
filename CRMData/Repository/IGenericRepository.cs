@@ -13,6 +13,7 @@ namespace CRM.DAL.Repository
 		IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
 		void Remove(TEntity item);
 		void Update(TEntity item);
+		bool Any(Func<TEntity, bool> predicate);
 		void UpdateRange(IEnumerable<TEntity> items);
 		IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
 		void AddRange(IEnumerable<TEntity> entities);
