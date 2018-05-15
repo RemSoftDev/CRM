@@ -50,7 +50,7 @@ namespace CRM.DAL.Repository
 			_emailsRepository ?? (_emailsRepository = new EfGenericRepository<Email>(_dbContext));
 
 
-		public IGenericRepository<LeadConvertedLog> LeadsConvertedLogsRepositoryRepository =>
+		public IGenericRepository<LeadConvertedLog> LeadsConvertedLogsRepository =>
 			_leadsConvertedLogsRepositoryRepository ?? (_leadsConvertedLogsRepositoryRepository =
 				new EfGenericRepository<LeadConvertedLog>(_dbContext));
 

@@ -15,10 +15,12 @@ namespace CRM.Controllers
 	public class EmailController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IEmailService _emailService;
 
-		public EmailController(IUnitOfWork unitOfWork)
+		public EmailController(IUnitOfWork unitOfWork, IEmailService emailService)
 		{
 			_unitOfWork = unitOfWork;
+			_emailService = emailService;
 		}
 
 		[HttpPost]
@@ -35,7 +37,7 @@ namespace CRM.Controllers
 				SetLeadOwner(user);
 			}
 
-			EmailService.SendEmail(new EmailViewModel(user.Email, "CRM Message!", message), user);
+			_emailService.SendEmail(new EmailViewModel(user.Email, "CRM Message!", message), user);
 
 			return Json(new { status = "success" });
 		}
@@ -43,7 +45,7 @@ namespace CRM.Controllers
 		public ActionResult Conversation(int id)
 		{
 			IUser user = GetUserModel(id);
-			var mailings = EmailService.LoadMails(user);
+			var mailings = _emailService.LoadMails(user);
 
 			ViewBag.Id = id;
 			ViewBag.UserType = (user is LeadViewModel) ? "Lead" : "Customer";
@@ -56,7 +58,7 @@ namespace CRM.Controllers
 		{
 			IUser user = GetUserModel(id, type);
 
-			var mailings = EmailService.GetMailings(GetLastReceivedDate(user), user);
+			var mailings = _emailService.GetMailings(GetLastReceivedDate(user), user);
 
 			return Json(new { mailings });
 		}

@@ -60,8 +60,14 @@ namespace CRM
 				.InSingletonScope();
 
 			kernel.Bind<IUnitOfWork>()
-				.ToMethod(e => new UnitOfWork())
+				.To<UnitOfWork>()
 				.InSingletonScope();
+
+			kernel.Bind<IEmailService>()
+				.ToMethod(e => new EmailService(kernel.Get<IUnitOfWork>()));
+
+			kernel.Bind<ILeadConvertService>()
+				.ToMethod(e => new LeadConvertService(kernel.Get<IUnitOfWork>()));
 		}
 	}
 }
