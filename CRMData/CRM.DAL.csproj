@@ -107,17 +107,13 @@
     <Compile Include="Migrations\201805101921166_ForeignKeysForLeads.Designer.cs">
       <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805131823367_TempMigration.cs" />
-    <Compile Include="Migrations\201805131823367_TempMigration.Designer.cs">
-      <DependentUpon>201805131823367_TempMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805131843005_TempMigration1.cs" />
-    <Compile Include="Migrations\201805131843005_TempMigration1.Designer.cs">
-      <DependentUpon>201805131843005_TempMigration1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.cs" />
     <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.Designer.cs">
       <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805141853318_tempMigration.cs" />
+    <Compile Include="Migrations\201805141853318_tempMigration.Designer.cs">
+      <DependentUpon>201805141853318_tempMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,14 +133,11 @@
     <EmbeddedResource Include="Migrations\201805101921166_ForeignKeysForLeads.resx">
       <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805131823367_TempMigration.resx">
-      <DependentUpon>201805131823367_TempMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805131843005_TempMigration1.resx">
-      <DependentUpon>201805131843005_TempMigration1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805131947426_addLazyLoadingToUser.resx">
       <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805141853318_tempMigration.resx">
+      <DependentUpon>201805141853318_tempMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

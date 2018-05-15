@@ -28,6 +28,13 @@ namespace CRM.DAL.Repository
 		public void Create(TEntity item) => _dbSet.Add(item);
 
 		public void Update(TEntity item) => _context.Entry(item).State = EntityState.Modified;
+		public void UpdateRange(IEnumerable<TEntity> items)
+		{
+			foreach (var item in items)
+			{
+				Update(item);
+			}
+		}
 
 		public void Remove(TEntity item) => _dbSet.Remove(item);
 

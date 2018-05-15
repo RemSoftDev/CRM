@@ -14,7 +14,7 @@ namespace CRM.DAL.Repository
 		IGenericRepository<DPhoneType> DPhonesTypesRepository { get; }
 		IGenericRepository<DUserType> DUserTypesRepository { get; }
 		IGenericRepository<Email> EmailsRepository { get; }
-		IGenericRepository<LeadConvertedLog> LeadsConvertedLogsRepositoryRepository { get; }
+		IGenericRepository<LeadConvertedLog> LeadsConvertedLogsRepository { get; }
 		IGenericRepository<Phone> PhonesRepository { get; }
 		IGenericRepository<User> UsersRepository { get; }
 		IGenericRepository<Call> CallsRepository { get; }

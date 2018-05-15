@@ -217,6 +217,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EncryptionService.cs" />
+    <Compile Include="Services\IEmailService.cs" />
+    <Compile Include="Services\ILeadConvertService.cs" />
+    <Compile Include="Services\ILogHistoryService.cs" />
     <Compile Include="Services\Interfaces\IEncryptionService.cs" />
     <Compile Include="Services\LeadConvertService.cs" />
     <Compile Include="Services\LogHistoryService.cs" />
