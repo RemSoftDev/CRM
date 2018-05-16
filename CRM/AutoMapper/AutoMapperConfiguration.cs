@@ -2,6 +2,7 @@
 using CRM.DAL.Entities;
 using CRM.Enums;
 using CRM.Models;
+using Ninject.Infrastructure.Language;
 
 namespace CRM.AutoMapper
 {
@@ -76,6 +77,24 @@ namespace CRM.AutoMapper
 					.ForMember(e => e.Phones, opt => opt.Ignore())
 					.ForMember(e => e.Addresses, opt => opt.Ignore())
 					.ForMember(e => e.Notes, opt => opt.Ignore())
+					.ForMember(e => e.Emails, opt => opt.Ignore())
+					.ForMember(e => e.Calls, opt => opt.Ignore());
+
+				cfg.CreateMap<Lead, CreateLeadViewModel>()
+					.ForMember(e => e.FirstName, opt => opt.Ignore())
+					.ForMember(e => e.LastName, opt => opt.Ignore());
+
+				cfg.CreateMap<CreateLeadViewModel, Lead>()
+					.ForMember(e => e.Discipline, opt => opt.Ignore())
+					.ForMember(e => e.Phones, opt => opt.MapFrom(i => i.Phone.ToEnumerable()))
+					.ForMember(e => e.AgeGroup, opt => opt.Ignore())
+					.ForMember(e => e.Status, opt => opt.Ignore())
+					.ForMember(e => e.StatusNotes, opt => opt.Ignore())
+					.ForMember(e => e.IssueRaised, opt => opt.Ignore())
+					.ForMember(e => e.LeadOwner, opt => opt.Ignore())
+					.ForMember(e => e.IsConverted, opt => opt.Ignore())
+					.ForMember(e => e.User, opt => opt.Ignore())
+					.ForMember(e => e.Phones, opt => opt.Ignore())
 					.ForMember(e => e.Emails, opt => opt.Ignore())
 					.ForMember(e => e.Calls, opt => opt.Ignore());
 
