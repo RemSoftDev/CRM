@@ -3,10 +3,11 @@
 @model SearchViewModel
 
 <div>
-    <div class="col-md-3 row">
+    <div class="col-md-3 row" style="padding-left:0;">
         <div class="col-md-6">Page size :</div>
         <div class=" col-md-6">
             <select class="form-control" id="items_per_page">
+                <option>1</option>
                 <option>10</option>
                 <option>25</option>
                 <option>50</option>
@@ -14,18 +15,18 @@
             </select>
         </div>
     </div>
-    <div class="col-md-5 row">
+    <div class="col-md-2 row">
         <div class="col-md-6 pull-right">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                 <span aria-hidden="true">Colunms</span>
             </button>
-            <ul class="dropdown-menu sortable" role="menu" data-mvcgrid-type="columnVisibilityList" data-mvcgrid-name="TestGrid" id="columns">
+            <ul class="dropdown-menu sortable" role="menu" id="columns">
                 @foreach (var item in Model.Columns)
                 {
                     <li>
                         <a>
                             <label>
-                                <input type="checkbox" name="TestGridcols" value="@item.Field" @(item.ShowOnGrid ? "checked" : "")>
+                                <input type="checkbox" value="@item.Field" @(item.ShowOnGrid ? "checked" : "")>
                                 @item.Field
                             </label>
                         </a>
@@ -34,9 +35,23 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-4 row pull-right" style="margin-bottom: 20px;">
-        <div class="col-md-4">Search :</div>
-        <div class="col-md-8"><input class="form-control" id="search_value" /></div>
+    <div class="col-md-7 row pull-right" style="margin-bottom: 20px;">
+        <div class="col-md-2">Search :</div>
+        <div class=" col-md-3">
+            <select class="form-control" id="search_field">
+                @foreach (var column in Model.Columns)
+                {
+                    if (column.ShowOnGrid)
+                    {
+                        <option>@column.Field</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-5"><input class="form-control" id="search_value" /></div>
+        <div class="col-md-2">
+            <input type="button" class="btn btn-default" value="search" id="search_button" />
+        </div>
     </div>
 </div>
 
@@ -49,7 +64,6 @@
                 {
                     <td class="@(column.OrderDirection == 0 ? "sort" : (column.OrderDirection == 1) ? "sort-up" : "sort-down")" id="@column.Field" style="cursor : pointer;" onclick="SetOrderByField('@column.Field')">
                         <span>@column.Field</span>
-                        @*<img class="pull-right" src="~/fonts/images/sort.png" />*@
                     </td>
                 }
             }
@@ -72,5 +86,48 @@
         }
     </tbody>
 </table>
+<div class="row" id="pagination">
+    <div class="col-md-6">
+        @ShowItemsLabel()
+    </div>
+    <div class="col-md-6">
+        <ul class="pagination pull-right" style="margin-top: 0;">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            @WritePaginationItem()
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </div>
+</div>
 
+@helper ShowItemsLabel()
+    {
+        var showFrom = Model.Page * Model.ItemsPerPage - Model.ItemsPerPage;
+        var showTo = (showFrom + Model.ItemsPerPage) < Model.ItemsCount ? (showFrom + Model.ItemsPerPage) : Model.ItemsCount;
 
+        <span>Showing @(showFrom + (Model.Items.Any() ? 1 : 0)) to @showTo of @Model.ItemsCount items</span>
+}
+
+@helper WritePaginationItem()
+    {
+        var totalPages = Model.ItemsCount / Model.ItemsPerPage;
+        if (Model.ItemsCount > 0 && totalPages == 0)
+        {
+            totalPages = 1;
+        }
+        for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(Model.Page == i? "active" : "")">
+                <a class="page-link" href="#" onclick="LoadPage(@i)">
+                    @i
+                    @if (Model.Page == 1)
+                    {
+                        <span class="sr-only">(current)</span>
+                    }
+                </a>
+            </li>
+        }
+}

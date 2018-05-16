@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using CRM.Extentions;
 using System;
+using System.Linq.Expressions;
 
 namespace CRM.Controllers
 {
@@ -21,26 +22,43 @@ namespace CRM.Controllers
         public ActionResult Index()
         {
             var columns = ReflectionService.GetModelProperties<LeadViewModel>();
-            SearchViewModel searchModel = new SearchViewModel();
-            List<LeadViewModel> leadsView;
-            using (BaseContext context = new BaseContext())
-            {
-                var leadsNotConverted = context.Leads
-                    .Include(e => e.Phones)
-                    .Include(l => l.Notes)
-                    .Where(l => !l.IsConverted)                   
-                    .ToList();
+            SearchViewModel model = new SearchViewModel();
 
-                leadsView = Mapper.Map<List<Lead>, List<LeadViewModel>>(leadsNotConverted);
-            }           
+            var leadAdapter = new LeadAdapter();
+            int totalItems;
 
-            //var q = ReflectionService<LeadViewModel>.GetPropValue(leadsView.FirstOrDefault(), "Phones");
-            searchModel.Items = leadsView;
-            foreach(var i in columns)
+            var result = leadAdapter.GetLeadsByFilter(
+                model.Field,
+                model.SearchValue,
+                model.OrderField,
+                model.Page,
+                model.ItemsPerPage,
+                out totalItems,
+                model.OrderDirection);
+
+            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
+            model.Items = items;
+            model.ItemsCount = totalItems;
+            foreach (var i in columns)
             {
-                searchModel.Columns.Add(new GridFieldViewModel(i, true, 0));
+                model.Columns.Add(new GridFieldViewModel(i, true, 0));
             }
-            return View(searchModel);
+            return View(model);
+        }
+
+        private IEnumerable<Lead> ListStores(Expression<Func<Lead, string>> sort, bool desc, int page, int pageSize, out int totalRecords)
+        {
+            List<Lead> leads = new List<Lead>();
+            using (var context = new BaseContext())
+            {
+                totalRecords = context.Leads.Count();
+                int skipRows = (page - 1) * pageSize;
+                if (desc)
+                    leads = context.Leads.Include(l => l.Phones).Include(l => l.Notes).OrderByDescending(sort).Skip(skipRows).Take(pageSize).ToList();
+                else
+                    leads = context.Leads.Include(l => l.Phones).Include(l => l.Notes).OrderBy(sort).Skip(skipRows).Take(pageSize).ToList();
+            }
+            return leads;
         }
 
         [HttpPost]
@@ -48,21 +66,21 @@ namespace CRM.Controllers
         {
             model.TableName = "Leads";
 
-            if (!ModelState.IsValid)
-            {
-                return Json(new { status = "error", message = "Model is not valid!" });
-            }
-
             var leadAdapter = new LeadAdapter();
+            int totalItems;
 
             var result = leadAdapter.GetLeadsByFilter(
                 model.Field,
                 model.SearchValue,
                 model.OrderField,
-                model.OrderDirection.Equals("ASC"));
+                model.Page,
+                model.ItemsPerPage,
+                out totalItems,
+                model.OrderDirection);
 
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
             model.Items = items;
+            model.ItemsCount = totalItems;
             return PartialView("_LeadsPagePartial", model);
         }
 
