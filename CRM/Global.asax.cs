@@ -15,6 +15,14 @@ using System.Web.Security;
 
 namespace CRM
 {
+    /// <summary>
+    /// Class get access to IKernel
+    /// </summary>
+    public static class Kernel
+    {
+        public static IKernel GetKernel { get; set; }
+    }
+
     public class MvcApplication : NinjectHttpApplication
     {
         protected override void OnApplicationStarted()
@@ -38,6 +46,8 @@ namespace CRM
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 if (authTicket != null && !authTicket.Expired)
                 {
+                    #region version autentication using Claim
+
                     //var jsonUserInfo = JsonConvert.DeserializeObject<AutenticateUser>(authTicket.UserData, new JsonSerializerSettings()
                     //{
                     //    Error = delegate (object jsonSender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
@@ -57,6 +67,8 @@ namespace CRM
                     //    HttpContext.Current.User = new GenericPrincipal(identity, new string[] { ((UserRole)jsonUserInfo.Role).ToString() });
                     //}
 
+                    #endregion
+
                     var roles = authTicket.UserData.Split(',');
                     HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
                 }
@@ -66,6 +78,7 @@ namespace CRM
         protected override IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
+            CRM.Kernel.GetKernel = kernel;
 
             Register(kernel);
 
@@ -80,6 +93,10 @@ namespace CRM
 
             kernel.Bind<IUnitOfWork>()
                 .ToMethod(e => new UnitOfWork())
+                .InSingletonScope();
+
+            kernel.Bind<IUserConnectionStorage>()
+                .To<UserConnectionStorage>()  
                 .InSingletonScope();
         }
     }

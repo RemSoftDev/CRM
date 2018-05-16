@@ -3,13 +3,10 @@
     var callHub = $.connection.phoneHub;
 
     callHub.client.onReciveCall = function (path) {
-        //console.log(path[0].Name);
-        //console.log(path[0].ConnectionId);
+        console.log(path[0].Name);
+        console.log(path[0].ConnectionId);
 
-        //console.log(path[1].Name);
-        //console.log(path[1].ConnectionId);
-
-        window.location = path;
+        //window.location = path;
     }
 
     // Открываем соединение

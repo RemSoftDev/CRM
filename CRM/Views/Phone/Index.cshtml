@@ -1,4 +1,7 @@
-﻿@{
+﻿@using System.Collections.Generic;
+@using CRM.Models
+@model SelectList
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -6,9 +9,23 @@
 <h2>Index</h2>
 @Html.TextBox("phone")
 
-@*@Html.DropDownList("dropdown")*@
+@using (Ajax.BeginForm("GetF", new AjaxOptions()
+{
+    HttpMethod = "Post",
+    UpdateTargetId = "drop",
+    InsertionMode = InsertionMode.Replace
+}))
+{
+    <input type="submit" />
+}
+
+<div id="drop">
+    @Html.Partial("Drop", Model)
+</div>
 
 <input type="button" name="call" id="btnLogin">
+
+<script type="text/javascript" src="~/scripts/jquery.unobtrusive-ajax.js"></script>
 
 <!--Ссылка на библиотеку SignalR -->
 <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
@@ -30,7 +47,11 @@
         });
 
         $("#btnLogin").click(function () {
-            callHub.server.call(2, +38067);
+            callHub.server.call(2, +3806222);
+            setTimeout(5000);
+            callHub.server.call(3, +3806333);
+            setTimeout(5000);
+            callHub.server.call(7, +3806777);
         });
 
     });

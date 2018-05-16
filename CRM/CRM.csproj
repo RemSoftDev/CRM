@@ -237,10 +237,12 @@
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EncryptionService.cs" />
     <Compile Include="Services\Interfaces\IEncryptionService.cs" />
+    <Compile Include="Services\Interfaces\IUserConnectionStorage.cs" />
     <Compile Include="Services\LeadConvertService.cs" />
     <Compile Include="Services\LogHistoryService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SearchService.cs" />
+    <Compile Include="Services\UserConnectionStorage.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebApiControllers\WebFormController.cs" />
   </ItemGroup>
@@ -267,6 +269,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.signalR-2.2.3.js" />
     <Content Include="Scripts\jquery.signalR-2.2.3.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -304,6 +308,7 @@
     <Content Include="Views\Lead\ConvertLead.cshtml" />
     <Content Include="Views\Email\Conversation.cshtml" />
     <Content Include="Views\Phone\PhoneCall.cshtml" />
+    <Content Include="Views\Phone\Drop.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -22,6 +22,7 @@ namespace CRM.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+
         public ActionResult Index()
         {
             var leadsNotConverted = _unitOfWork.LeadsRepository.GetWithInclude(l => !l.IsConverted);

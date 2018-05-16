@@ -18,10 +18,12 @@ namespace CRM.Controllers
     public class AccountController : Controller
     {
         private readonly IEncryptionService encryptionService;
+        private readonly IUserConnectionStorage userConnectionStorage;
 
-        public AccountController(IEncryptionService encryptionService)
+        public AccountController(IEncryptionService encryptionService, IUserConnectionStorage userConnectionStorage)
         {
             this.encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
+            this.userConnectionStorage = userConnectionStorage;
         }
 
         [HttpPost]
@@ -58,7 +60,7 @@ namespace CRM.Controllers
                 HttpContext.Response.Cookies.Add(authCookie);
 
                 // insert userId into list of online users
-                AutorizedUsers.Add(user.Id);
+                userConnectionStorage.AddUser(user.Id);
 
                 return RedirectToAction("Index", "Lead");
             }
@@ -84,7 +86,7 @@ namespace CRM.Controllers
             var userCreds = User.GetCurrentUserCreads();
             if (userCreds != null)
             {
-                AutorizedUsers.Remove(userCreds.Id);
+                userConnectionStorage.RemoveUser(userCreds.Id);
             }
 
             FormsAuthentication.SignOut();

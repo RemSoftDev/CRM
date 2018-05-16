@@ -5,51 +5,26 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using CRM.Extentions;
+using System.Threading;
+using System.Threading.Tasks;
+using CRM.Services.Interfaces;
 
 namespace CRM.Hubs
 {
-    public static class AutorizedUsers
-    {
-        private static ConcurrentDictionary<int, string> autorzedUsers = new ConcurrentDictionary<int, string>();
-
-        public static void Add(int id)
-        {
-            autorzedUsers.TryAdd(id, null);
-        }
-
-        public static void Update(int id, string connctId)
-        {
-            if(autorzedUsers.TryGetValue(id, out string value))
-            {
-                autorzedUsers[id] = connctId;
-            }
-        }
-
-        public static void Remove(int id)
-        {
-            autorzedUsers.TryRemove(id, out string removedConnectId);
-        }
-
-        public static string Find(int id)
-        {
-            if (autorzedUsers.TryGetValue(id, out string value))
-            {
-                return value;
-            };
-
-            return null;
-        }
-
-    }
-
-
     public class PhoneHub : Hub
     {
+        private readonly IUserConnectionStorage _userConnectionStorage;
+
+        public PhoneHub(IUserConnectionStorage userConnectionStorage)
+        {
+            this._userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
+        }
+
         public void Call(int id, string phoneNumber)
         {
             if (Context.User.Identity.IsAuthenticated)
             {
-                string connId = AutorizedUsers.Find(id);
+                var connId = _userConnectionStorage.Find(id);
 
                 if (connId == null)
                 {
@@ -57,12 +32,8 @@ namespace CRM.Hubs
                 }
                 else
                 {
-                    Clients.Client(connId)
-                        .onReciveCall(new List<OnlineUser>
-                        {
-                        new OnlineUser() { Name = "TEST", ConnectionId = "1"},
-                        new OnlineUser() { Name = "TEST2", ConnectionId = "2"}
-                        });
+                    Clients.Clients(connId)
+                        .onReciveCall();
 
                     //$"{Context.Request.Url.GetLeftPart(UriPartial.Authority)}/lead/edit/1"
                 }
@@ -70,33 +41,34 @@ namespace CRM.Hubs
         }
 
         // Подключение нового пользователя
-        public void Connect()
+        public override Task OnConnected()
         {
             if (Context.User.Identity.IsAuthenticated)
             {
-                var id = Context.ConnectionId;
+                var connectid = Context.ConnectionId;
 
-                AutorizedUsers.Update(Context.User.GetCurrentUserCreads().Id, id);
+                _userConnectionStorage.AddConnection(Context.User.GetCurrentUserCreads().Id, connectid);
+
+                return base.OnConnected();
             }
+
+            return Task.CompletedTask;
         }
+
 
         // Отключение пользователя
-        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        public override Task OnDisconnected(bool stopCalled)
         {
             if (Context.User.Identity.IsAuthenticated)
             {
-                AutorizedUsers.Update(Context.User.GetCurrentUserCreads().Id, null);
+                var connectid = Context.ConnectionId;
 
+                _userConnectionStorage.RemoveConnectId(Context.User.GetCurrentUserCreads().Id, connectid);
+
+                return base.OnDisconnected(stopCalled);
             }
 
-            return base.OnDisconnected(stopCalled);
+            return Task.CompletedTask;
         }
-    }
-
-    public class OnlineUser
-    {
-        public string ConnectionId { get; set; }
-
-        public string Name { get; set; }
     }
 }
