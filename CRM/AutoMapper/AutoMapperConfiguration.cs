@@ -67,6 +67,18 @@ namespace CRM.AutoMapper
 				cfg.CreateMap<User, RegisterViewModel>()
 					.ForMember(r => r.ConfirmPassword, u => u.Ignore());
 
+				cfg.CreateMap<RegisterViewModel, User>()
+					.ForMember(e => e.Id, opt => opt.Ignore())
+					.ForMember(e => e.Title, opt => opt.Ignore())
+					.ForMember(e => e.Role, opt => opt.UseValue((int)UserRole.AdminStaff))
+					.ForMember(e => e.UserTypeId, opt => opt.UseValue((int)UserType.AdminTeamMember))
+					.ForMember(e => e.UserType, opt => opt.Ignore())
+					.ForMember(e => e.Phones, opt => opt.Ignore())
+					.ForMember(e => e.Addresses, opt => opt.Ignore())
+					.ForMember(e => e.Notes, opt => opt.Ignore())
+					.ForMember(e => e.Emails, opt => opt.Ignore())
+					.ForMember(e => e.Calls, opt => opt.Ignore());
+
 			});
 		}
 	}

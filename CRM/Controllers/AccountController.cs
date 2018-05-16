@@ -1,33 +1,23 @@
-﻿using CRM.DAL.Entities;
-using CRM.DAL.Repository;
+﻿using AutoMapper;
+using CRM.DAL.Entities;
 using CRM.Enums;
-using CRM.Extentions;
 using CRM.Managers;
 using CRM.Models;
-using CRM.Services.Interfaces;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using AutoMapper;
 
 namespace CRM.Controllers
 {
 	public class AccountController : Controller
 	{
-		private readonly IUnitOfWork _unitOfWork;
 		private readonly IUserManager _userManager;
-		private readonly IEncryptionService _encryptionService;
 
-		public AccountController(
-			IEncryptionService encryptionService,
-			IUnitOfWork unitOfWork,
-			IUserManager userManager)
+		public AccountController(IUserManager userManager)
 		{
-			_unitOfWork = unitOfWork;
 			_userManager = userManager;
-			_encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
 		}
 
 		[HttpPost]
@@ -44,16 +34,16 @@ namespace CRM.Controllers
 			if (user != null)
 			{
 				FormsAuthentication.SetAuthCookie(model.Email, false);
-
 				var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
 				string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 				var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
 				HttpContext.Response.Cookies.Add(authCookie);
+
 				return RedirectToAction("Index", "Lead");
 			}
 			else
 			{
-				ModelState.AddModelError("", "Invalid login attempt.");
+				AddError("Invalid login attempt.");
 				return View(model);
 			}
 		}
@@ -80,30 +70,19 @@ namespace CRM.Controllers
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public ActionResult Register(RegisterViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				////ToDO Create Mapper
-				var user = new User
-				{
-					Email = model.Email,
-					Password = model.Password,
-					FirstName = model.FirstName,
-					LastName = model.LastName,
-					Role = (int)UserRole.AdminStaff,
-					UserTypeId = (int)UserType.AdminTeamMember
-				};
 
-				//var user = Mapper.Map<RegisterViewModel, User>(model);
-				//user.Role = (int) UserRole.AdminStaff;
-				//user.UserTypeId = (int) UserType.AdminTeamMember;
+				var user = Mapper.Map<RegisterViewModel, User>(model);
 
 				var result = _userManager.Create(user, model.Password);
 
 				if (result.Succeeded)
 				{
-					return RedirectToAction("Login", "Account"); ;
+					return RedirectToAction("Login", "Account");
 				}
 
 				AddErrors(result);
@@ -118,6 +97,11 @@ namespace CRM.Controllers
 			{
 				ModelState.AddModelError("", error);
 			}
+		}
+
+		private void AddError(string errorMessage)
+		{
+			ModelState.AddModelError("", errorMessage);
 		}
 	}
 }

@@ -22,9 +22,8 @@ namespace CRM.Managers
 		{
 			var errors = ValidateAndGetError(user);
 
-			ValidateAndGetError(user);
 
-
+			// ReSharper disable once PossibleMultipleEnumeration
 			if (!errors.Any())
 			{
 				user.Password = _encryptionService.Encrypt(user.Password);
@@ -35,6 +34,7 @@ namespace CRM.Managers
 				return IdentityResult.Success;
 			}
 
+			// ReSharper disable once PossibleMultipleEnumeration
 			return new IdentityResult(errors);
 		}
 
@@ -67,7 +67,7 @@ namespace CRM.Managers
 
 		private bool IsEmailExist(string email)
 		{
-			return _unitOfWork.UsersRepository.Any(u => u.Email.Equals(email));
+			return _unitOfWork.UsersRepository.Any(u => u.Email == email);
 		}
 	}
 }
