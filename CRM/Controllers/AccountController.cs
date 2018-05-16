@@ -1,114 +1,107 @@
-﻿using CRM.Enums;
-using CRM.Models;
-using CRM.Extentions;
-using CRM.Services.Interfaces;
+﻿using AutoMapper;
 using CRM.DAL.Entities;
+using CRM.Enums;
+using CRM.Managers;
+using CRM.Models;
+using Microsoft.AspNet.Identity;
 using System;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using CRM.DAL.Repository;
 
 namespace CRM.Controllers
 {
-    public class AccountController : Controller
-    {
-	    private readonly IUnitOfWork _unitOfWork;
-	    private readonly IEncryptionService _encryptionService;
+	public class AccountController : Controller
+	{
+		private readonly IUserManager _userManager;
 
-        public AccountController(IEncryptionService encryptionService, IUnitOfWork unitOfWork)
-        {
-	        _unitOfWork = unitOfWork;
-	        _encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
-        }
+		public AccountController(IUserManager userManager)
+		{
+			_userManager = userManager;
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Login(LoginViewModel model, string returnUrl)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
 
-	        User user = GetUser(model.Email, model.Password);
+			User user = _userManager.GetUser(model.Email, model.Password);
 
 			if (user != null)
-            {
-                FormsAuthentication.SetAuthCookie(model.Email, false);
+			{
+				FormsAuthentication.SetAuthCookie(model.Email, false);
+				var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
+				string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+				var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+				HttpContext.Response.Cookies.Add(authCookie);
 
-                var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
-                string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-                var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                HttpContext.Response.Cookies.Add(authCookie);
-                return RedirectToAction("Index", "Lead");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid login attempt.");
-                return View(model);
-            }
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [Authorize]
-        [HttpPost]
-        public ActionResult LogOut()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Login", "Account");
-        }
-
-        [HttpGet]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
-        {
-            bool isNewUser = false;
-
-	        User user = GetUser(model.Email, model.Password);
-
-	        if (user == null)
-	        {
-				_unitOfWork.UsersRepository.Create(new User
-				{
-					Email = model.Email,
-					Password = _encryptionService.Encrypt(model.Password),
-					FirstName = model.FirstName,
-					LastName = model.LastName,
-					Role = (int)UserRole.AdminStaff,
-					UserTypeId = (int)UserType.AdminTeamMember
-				});
-
-				_unitOfWork.Save();
-		        isNewUser = true;
-	        }
-
-			if (isNewUser)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return View(model);
-        }
-
-	    private User GetUser(string email, string password)
-	    {
-		    string encryptedPassword = _encryptionService.Encrypt(password);
-
-		    return _unitOfWork.UsersRepository
-			    .Get(u => u.Email == email && u.Password == encryptedPassword)
-			    .FirstOrDefault();
+				return RedirectToAction("Index", "Lead");
+			}
+			else
+			{
+				AddError("Invalid login attempt.");
+				return View(model);
+			}
 		}
-    }
+
+		[HttpGet]
+		[AllowAnonymous]
+		public ActionResult Login()
+		{
+			return View();
+		}
+
+		[Authorize]
+		[HttpPost]
+		public ActionResult LogOut()
+		{
+			FormsAuthentication.SignOut();
+			return RedirectToAction("Login", "Account");
+		}
+
+		[HttpGet]
+		public ActionResult Register()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Register(RegisterViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+
+				var user = Mapper.Map<RegisterViewModel, User>(model);
+
+				var result = _userManager.Create(user, model.Password);
+
+				if (result.Succeeded)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+
+				AddErrors(result);
+			}
+
+			return View(model);
+		}
+
+		private void AddErrors(IdentityResult result)
+		{
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError("", error);
+			}
+		}
+
+		private void AddError(string errorMessage)
+		{
+			ModelState.AddModelError("", errorMessage);
+		}
+	}
 }
