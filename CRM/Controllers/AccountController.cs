@@ -3,32 +3,32 @@ using CRM.DAL.Entities;
 using CRM.Enums;
 using CRM.Managers;
 using CRM.Models;
+using CRM.Services.Interfaces;
+using CRM.Extentions;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using CRM.Hubs;
+
 
 namespace CRM.Controllers
 {
-    public class AccountController : Controller
-    {
-        private readonly IEncryptionService encryptionService;
-        private readonly IUserConnectionStorage userConnectionStorage;
 	public class AccountController : Controller
 	{
 		private readonly IUserManager _userManager;
+        private readonly IEncryptionService _encryptionService;
+        private readonly IUserConnectionStorage _userConnectionStorage;
 
-        public AccountController(IEncryptionService encryptionService, IUserConnectionStorage userConnectionStorage)
+        public AccountController(
+            IUserManager userManager,
+            IEncryptionService encryptionService, 
+            IUserConnectionStorage userConnectionStorage)
         {
-            this.encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
-            this.userConnectionStorage = userConnectionStorage;
+            _userManager = userManager.ValidateNotDefault(nameof(userManager));
+            _encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
+            _userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
         }
-		public AccountController(IUserManager userManager)
-		{
-			_userManager = userManager;
-		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
@@ -44,37 +44,8 @@ namespace CRM.Controllers
 			if (user != null)
 			{
 				FormsAuthentication.SetAuthCookie(model.Email, false);
-				var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
-				string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-				var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-				HttpContext.Response.Cookies.Add(authCookie);
 
-				return RedirectToAction("Index", "Lead");
-			}
-			else
-			{
-				AddError("Invalid login attempt.");
-				return View(model);
-			}
-		}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            User user;
-            using (BaseContext context = new BaseContext())
-            {
-                string encryptedPassword = encryptionService.Encrypt(model.Password);
-                user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
-            }
-                
-            if (user != null)
-            {
-                FormsAuthentication.SetAuthCookie(model.Email, false);
+                #region claim
 
                 //string jsonUserInfo = JsonConvert.SerializeObject(new AutenticateUser()
                 //{
@@ -85,22 +56,24 @@ namespace CRM.Controllers
                 //});
                 //var authTicket = new FormsAuthenticationTicket(1, user.FirstName, DateTime.Now, DateTime.Now.AddDays(5), false, jsonUserInfo);
 
+                #endregion
+
                 var authTicket = new FormsAuthenticationTicket(1, $"{user.Id}|{user.FirstName}|{user.Email}", DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
-                string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-                var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                HttpContext.Response.Cookies.Add(authCookie);
+				string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+				var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+				HttpContext.Response.Cookies.Add(authCookie);
 
                 // insert userId into list of online users
-                userConnectionStorage.AddUser(user.Id);
+                _userConnectionStorage.AddUser(user.Id);
 
                 return RedirectToAction("Index", "Lead");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid login attempt.");
-                return View(model);
-            }
-        }
+			}
+			else
+			{
+				AddError("Invalid login attempt.");
+				return View(model);
+			}
+		}
 
 		[HttpGet]
 		[AllowAnonymous]
@@ -117,7 +90,7 @@ namespace CRM.Controllers
             var userCreds = User.GetCurrentUserCreads();
             if (userCreds != null)
             {
-                userConnectionStorage.RemoveUser(userCreds.Id);
+                _userConnectionStorage.RemoveUser(userCreds.Id);
             }
 
             FormsAuthentication.SignOut();

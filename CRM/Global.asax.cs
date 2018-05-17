@@ -97,13 +97,20 @@ namespace CRM
 				.InSingletonScope();
 
 			kernel.Bind<IEmailService>()
-				.ToMethod(e => new EmailService(kernel.Get<IUnitOfWork>()));
+				.To<EmailService>()
+                .InSingletonScope();
 
-			kernel.Bind<ILeadConvertService>()
-				.ToMethod(e => new LeadConvertService(kernel.Get<IUnitOfWork>()));
+            kernel.Bind<ILeadConvertService>()
+                .To<LeadConvertService>()
+                .InSingletonScope();
 
-			kernel.Bind<IUserManager>()
-				.ToMethod(e => new UserManager(kernel.Get<IUnitOfWork>(), kernel.Get<IEncryptionService>()));
-		}
+            kernel.Bind<IUserManager>()
+                .To<UserManager>()
+                .InSingletonScope();
+
+            kernel.Bind<PhoneService>()
+                .ToSelf()
+                .InSingletonScope();
+        }
 	}
 }

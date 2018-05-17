@@ -1,6 +1,6 @@
-﻿using CRM.Extentions;
+﻿using CRM.DAL.Repository;
+using CRM.Extentions;
 using CRM.Services.Interfaces;
-using CRMData.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;

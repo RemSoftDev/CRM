@@ -34,19 +34,19 @@
 
 <script>
     $(function () {
-
         var callHub = $.connection.phoneHub;
+
+        // Открываем соединение
+        $.connection.hub.start();
 
         callHub.client.onCall = function (errMesage) {
             alert(errMesage);
         }
 
-        // Открываем соединение
-        $.connection.hub.start().done(function () {
-            callHub.server.connect();
-        });
-
         $("#btnLogin").click(function () {
+
+            $("select(Id=dropUserList)").val();
+
             callHub.server.call(2, +3806222);
             setTimeout(5000);
             callHub.server.call(3, +3806333);

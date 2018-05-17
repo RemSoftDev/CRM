@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.SignalR;
-using CRM.Extentions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using CRM.Extentions;
+using CRM.Services;
 using CRM.Services.Interfaces;
+using Microsoft.AspNet.SignalR;
+using System;
+using System.Threading.Tasks;
 
 namespace CRM.Hubs
 {
     public class PhoneHub : Hub
     {
         private readonly IUserConnectionStorage _userConnectionStorage;
+        private readonly PhoneService _phoneService;
 
-        public PhoneHub(IUserConnectionStorage userConnectionStorage)
+        public PhoneHub(IUserConnectionStorage userConnectionStorage, PhoneService phoneService)
         {
-            this._userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
+            _userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
+            _phoneService = phoneService.ValidateNotDefault(nameof(phoneService));
         }
 
         public void Call(int id, string phoneNumber)
@@ -32,10 +30,11 @@ namespace CRM.Hubs
                 }
                 else
                 {
-                    Clients.Clients(connId)
-                        .onReciveCall();
+                    string rightPart = _phoneService.GetRightPartRedirectUrlByPhoneNum(phoneNumber);
+                    string redirectUrl = BuildFullRedirectUrl(rightPart);
 
-                    //$"{Context.Request.Url.GetLeftPart(UriPartial.Authority)}/lead/edit/1"
+                    Clients.Clients(connId)
+                        .onReciveCall(redirectUrl);
                 }
             }
         }
@@ -69,6 +68,11 @@ namespace CRM.Hubs
             }
 
             return Task.CompletedTask;
+        }
+
+        private string BuildFullRedirectUrl(string rightParts)
+        {
+            return $"{Context.Request.Url.GetLeftPart(UriPartial.Authority)}/{rightParts}";
         }
     }
 }
