@@ -14,7 +14,7 @@ namespace CRM.Services
 
         public string GetRedirectUrlByPhoneNum(string phoneNum)
         {
-            return null
+            return null;
         }
     }
 }

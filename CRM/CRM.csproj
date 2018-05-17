@@ -240,6 +240,7 @@
     <Compile Include="Services\Interfaces\IUserConnectionStorage.cs" />
     <Compile Include="Services\LeadConvertService.cs" />
     <Compile Include="Services\LogHistoryService.cs" />
+    <Compile Include="Services\PhoneService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\UserConnectionStorage.cs" />
@@ -284,7 +285,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\util.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
