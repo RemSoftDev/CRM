@@ -1,7 +1,7 @@
-﻿using CRMData.Entities;
+﻿using CRM.DAL.Entities;
 using System.Linq;
 
-namespace CRMData.Adapters.Extentions
+namespace CRM.DAL.Adapters.Extentions
 {
     public static class QueryUserExtentions
     {

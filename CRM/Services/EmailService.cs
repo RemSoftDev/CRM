@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CRM.Interfaces;
 using CRM.Models;
-using CRMData.Contexts;
-using CRMData.Entities;
+using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
@@ -12,20 +12,26 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using static System.Security.Authentication.SslProtocols;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using CRM.DAL.Repository;
 
 namespace CRM.Services
 {
-    public static class EmailService
-    {
+    public class EmailService : IEmailService
+	{
+		private readonly IUnitOfWork _unitOfWork;
+
+		public EmailService(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
+
         private const string Email = "csharpcrm@gmail.com";
         private const string Password = "CRM123qaz@!";
-        public static void SendEmail<T>(EmailViewModel model, T user) where T : IUser
+        public void SendEmail<T>(EmailViewModel model, T user) where T : IUser
         {
             var fromAddress = new MailAddress(Email, "CRM");
             var toAddress = new MailAddress(model.To);
@@ -52,7 +58,7 @@ namespace CRM.Services
             new Task(() => { SaveEmail(model, user); }).Start();
         }
 
-        public static List<EmailViewModel> GetMailings<T>(DateTime? lastReceivedDate, T user) where T : IUser
+        public List<EmailViewModel> GetMailings<T>(DateTime? lastReceivedDate, T user) where T : IUser
         {
             if (string.IsNullOrEmpty(user.Email))
             {
@@ -107,42 +113,40 @@ namespace CRM.Services
             return emailsList;
         }
 
-        private static bool ServificateValidationCallBack(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        private bool ServificateValidationCallBack(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             return true;
         }
 
-        private static void SaveEmail<T>(List<EmailViewModel> models, T user) where T : IUser
+        private void SaveEmail<T>(List<EmailViewModel> models, T user) where T : IUser
         {
-            using (BaseContext context = new BaseContext())
-            {
-                var emails = Mapper.Map<List<EmailViewModel>, List<Email>>(models);
+			var emails = Mapper.Map<List<EmailViewModel>, List<Email>>(models);
 
-                if (user is LeadViewModel)
-                {
-                    foreach (var email in emails)
-                    {
-                        email.LeadId = user.Id;
-                    }
+	        if (user is LeadViewModel)
+	        {
+	            foreach (var email in emails)
+	            {
+	                email.LeadId = user.Id;
+	            }
 
-                }
-                else if (user is UserViewModel)
-                {
-                    foreach (var email in emails)
-                    {
-                        email.UserId = user.Id;
-                    }
-                }
-                context.Emails.AddRange(emails);
-                context.SaveChanges();
-            }
-        }
+	        }
+	        else if (user is UserViewModel)
+	        {
+	            foreach (var email in emails)
+	            {
+	                email.UserId = user.Id;
+	            }
+	        }
 
-        private static void SaveEmail<T>(EmailViewModel model, T user) where T : IUser
+			_unitOfWork.EmailsRepository.AddRange(emails);
+			_unitOfWork.Save();
+
+		}
+
+		private void SaveEmail<T>(EmailViewModel model, T user) where T : IUser
         {
 
             using (var client = new ImapClient())
-            using (BaseContext context = new BaseContext())
             {
                 var item = Mapper.Map<EmailViewModel, Email>(model);
 
@@ -154,27 +158,24 @@ namespace CRM.Services
                 {
                     item.UserId = user.Id;
                 }
-                context.Emails.Add(item);
-                context.SaveChanges();
+				_unitOfWork.EmailsRepository.Create(item);
+				_unitOfWork.Save();
             }
         }
-        public static List<EmailViewModel> LoadMails<T>(T user) where T : IUser
+        public List<EmailViewModel> LoadMails<T>(T user) where T : IUser
         {
             List<EmailViewModel> emails = new List<EmailViewModel>();
-            using (BaseContext context = new BaseContext())
             {
                 if (user is LeadViewModel)
                 {
-                    var items = context
-                    .Emails
+                    var items = _unitOfWork.EmailsRepository.Get()
                     .Where(e => e.LeadId == user.Id)
                     .ToList();
                     emails = Mapper.Map<List<Email>, List<EmailViewModel>>(items);
                 }
                 else if (user is UserViewModel)
                 {
-                    var items = context
-                    .Emails
+                    var items = _unitOfWork.EmailsRepository.Get()
                     .Where(e => e.UserId == user.Id)
                     .ToList();
                     emails = Mapper.Map<List<Email>, List<EmailViewModel>>(items);

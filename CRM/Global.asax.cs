@@ -1,8 +1,9 @@
 ﻿using CRM.App_Start;
 using CRM.AutoMapper;
+using CRM.DAL.Repository;
+using CRM.Managers;
 using CRM.Services;
 using CRM.Services.Interfaces;
-using CRMData.Repository;
 using Ninject;
 using Ninject.Web.Common.WebHost;
 using System;
@@ -91,13 +92,18 @@ namespace CRM
                 .ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
                 .InSingletonScope();
 
-            kernel.Bind<IUnitOfWork>()
-                .ToMethod(e => new UnitOfWork())
-                .InSingletonScope();
+			kernel.Bind<IUnitOfWork>()
+				.To<UnitOfWork>()
+				.InSingletonScope();
 
-            kernel.Bind<IUserConnectionStorage>()
-                .To<UserConnectionStorage>()  
-                .InSingletonScope();
-        }
-    }
+			kernel.Bind<IEmailService>()
+				.ToMethod(e => new EmailService(kernel.Get<IUnitOfWork>()));
+
+			kernel.Bind<ILeadConvertService>()
+				.ToMethod(e => new LeadConvertService(kernel.Get<IUnitOfWork>()));
+
+			kernel.Bind<IUserManager>()
+				.ToMethod(e => new UserManager(kernel.Get<IUnitOfWork>(), kernel.Get<IEncryptionService>()));
+		}
+	}
 }

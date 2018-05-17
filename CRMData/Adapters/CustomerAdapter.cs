@@ -1,11 +1,11 @@
-﻿using CRMData.Contexts;
-using CRMData.Entities;
+﻿using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
-using CRMData.Adapters.Extentions;
+using CRM.DAL.Adapters.Extentions;
 
-namespace CRMData.Adapters
+namespace CRM.DAL.Adapters
 {
     public sealed class UserAdapter
     {

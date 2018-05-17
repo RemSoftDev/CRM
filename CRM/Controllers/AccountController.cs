@@ -1,13 +1,10 @@
-﻿using CRM.Enums;
+﻿using AutoMapper;
+using CRM.DAL.Entities;
+using CRM.Enums;
+using CRM.Managers;
 using CRM.Models;
-using CRM.Services;
-using CRM.Extentions;
-using CRM.Services.Interfaces;
-using CRMData.Contexts;
-using CRMData.Entities;
+using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -19,13 +16,47 @@ namespace CRM.Controllers
     {
         private readonly IEncryptionService encryptionService;
         private readonly IUserConnectionStorage userConnectionStorage;
+	public class AccountController : Controller
+	{
+		private readonly IUserManager _userManager;
 
         public AccountController(IEncryptionService encryptionService, IUserConnectionStorage userConnectionStorage)
         {
             this.encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
             this.userConnectionStorage = userConnectionStorage;
         }
+		public AccountController(IUserManager userManager)
+		{
+			_userManager = userManager;
+		}
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Login(LoginViewModel model, string returnUrl)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			User user = _userManager.GetUser(model.Email, model.Password);
+
+			if (user != null)
+			{
+				FormsAuthentication.SetAuthCookie(model.Email, false);
+				var authTicket = new FormsAuthenticationTicket(1, user.FirstName + "|" + user.Email, DateTime.Now, DateTime.Now.AddDays(5), false, ((UserRole)user.Role).ToString());
+				string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+				var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+				HttpContext.Response.Cookies.Add(authCookie);
+
+				return RedirectToAction("Index", "Lead");
+			}
+			else
+			{
+				AddError("Invalid login attempt.");
+				return View(model);
+			}
+		}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
@@ -71,12 +102,12 @@ namespace CRM.Controllers
             }
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
-        }
+		[HttpGet]
+		[AllowAnonymous]
+		public ActionResult Login()
+		{
+			return View();
+		}
 
         [Authorize]
         [HttpPost]
@@ -93,40 +124,45 @@ namespace CRM.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        [HttpGet]
-        public ActionResult Register()
-        {
-            return View();
-        }
+		[HttpGet]
+		public ActionResult Register()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
-        {
-            bool isNewUser = false;
-            using (BaseContext context = new BaseContext())
-            {
-                string encryptedPassword = encryptionService.Encrypt(model.Password);
-                User user = context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == encryptedPassword);
-                if (user == null)
-                {
-                    context.Users.Add(new User {
-                        Email = model.Email,
-                        Password = encryptedPassword,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Role = (int)UserRole.AdminStaff,
-                        UserTypeId = (int)UserType.AdminTeamMember});
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Register(RegisterViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
 
-                    context.SaveChanges();
-                    isNewUser = true;
-                }
-            }
+				var user = Mapper.Map<RegisterViewModel, User>(model);
 
-            if (isNewUser)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            return View(model);
-        }
-    }
+				var result = _userManager.Create(user, model.Password);
+
+				if (result.Succeeded)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+
+				AddErrors(result);
+			}
+
+			return View(model);
+		}
+
+		private void AddErrors(IdentityResult result)
+		{
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError("", error);
+			}
+		}
+
+		private void AddError(string errorMessage)
+		{
+			ModelState.AddModelError("", errorMessage);
+		}
+	}
 }
