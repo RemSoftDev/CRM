@@ -51,11 +51,6 @@ namespace CRM.Managers
 			}
 		}
 
-		private bool IsUserNameExist(string userFirstName, string userLastName)
-		{
-			return _unitOfWork.UsersRepository.Any(u => u.FirstName.Equals(userFirstName) && u.LastName.Equals(userLastName));
-		}
-
 		public User GetUser(string email, string password)
 		{
 			string encryptedPassword = _encryptionService.Encrypt(password);
@@ -68,6 +63,10 @@ namespace CRM.Managers
 		private bool IsEmailExist(string email)
 		{
 			return _unitOfWork.UsersRepository.Any(u => u.Email == email);
+		}
+		private bool IsUserNameExist(string userFirstName, string userLastName)
+		{
+			return _unitOfWork.UsersRepository.Any(u => u.FirstName.Equals(userFirstName) && u.LastName.Equals(userLastName));
 		}
 	}
 }
