@@ -1,4 +1,5 @@
 ﻿using CRM.Interfaces;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CRM.Models
@@ -19,9 +20,17 @@ namespace CRM.Models
 			get => $"{FirstName} {LastName}";
 			set
 			{
-				var name = value.Split(' ');
-				FirstName = name[0];
-				LastName = name[1];
+				if (value.Contains(" "))
+				{
+					var name = value.Split(' ');
+					FirstName = name[0];
+					LastName = name[1];
+
+				}
+				else
+				{
+					FirstName = value;
+				}
 			}
 		}
 
@@ -36,6 +45,12 @@ namespace CRM.Models
 		[Display(Name = "Message")]
 		public string Message { get; set; }
 
-
+		public IEnumerable<string> Phones
+		{
+			get
+			{
+				yield return Phone;
+			}
+		}
 	}
 }

@@ -18,7 +18,7 @@ namespace CRM.DAL.Entities
 
 		public User User { get; set; }
 
-		public virtual IEnumerable<Phone> Phones { get; set; }
+		public virtual IList<Phone> Phones { get; set; }
 		public virtual IList<Email> Emails { get; set; }
 
 		public virtual IList<Call> Calls { get; set; }
