@@ -14,6 +14,8 @@ namespace CRMData.Entities
 
         public int Order { get; set; }
 
+        public int GridOrderDirection { get; set; }
+
         public int GridProfileId { get; set; }
         public GridProfile GridProfile { get; set; }
 

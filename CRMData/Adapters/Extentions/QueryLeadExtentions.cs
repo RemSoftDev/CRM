@@ -11,7 +11,7 @@ namespace CRMData.Adapters.Extentions
     {
         private const string name = "Name";
         private const string email = "Email";
-        private const string phone = "Phone";
+        private const string phone = "Phones";
 
         public static IQueryable<Lead> AddWhere(
             this IQueryable<Lead> query,

@@ -21,10 +21,35 @@ namespace CRM.Controllers
     {
         public ActionResult Index()
         {
-            var columns = ReflectionService.GetModelProperties<LeadViewModel>();
-            SearchViewModel model = new SearchViewModel();
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
 
+            return View(GetSearchModel(currentUserEmail));
+        }
+
+        private SearchViewModel GetSearchModel(string userEmail)
+        {
             var leadAdapter = new LeadAdapter();
+            var model = new SearchViewModel();
+            var profiles = Mapper.Map<List<GridProfileViewModel>>(
+                leadAdapter.GetUserProfiles(userEmail)
+            );
+
+            var selectedProfile = profiles.FirstOrDefault(p => p.IsDefault) ?? profiles.First();
+            model = FillModelByProfile(selectedProfile);
+            model.Profiles = profiles;
+
+            return model;
+        }
+
+        private SearchViewModel FillModelByProfile(GridProfileViewModel profile)
+        {
+            var leadAdapter = new LeadAdapter();
+            var model = new SearchViewModel();
+
+            model.Columns = profile.GridFields;
+            model.Field = profile.SearchField;
+            model.SearchValue = profile.SearchValue;
+
             int totalItems;
 
             var result = leadAdapter.GetLeadsByFilter(
@@ -39,32 +64,24 @@ namespace CRM.Controllers
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
             model.Items = items;
             model.ItemsCount = totalItems;
-            foreach (var i in columns)
-            {
-                model.Columns.Add(new GridFieldViewModel(i, true, 0));
-            }
-            return View(model);
-        }
 
-        private IEnumerable<Lead> ListStores(Expression<Func<Lead, string>> sort, bool desc, int page, int pageSize, out int totalRecords)
-        {
-            List<Lead> leads = new List<Lead>();
-            using (var context = new BaseContext())
+            if (!model.Columns.Any())
             {
-                totalRecords = context.Leads.Count();
-                int skipRows = (page - 1) * pageSize;
-                if (desc)
-                    leads = context.Leads.Include(l => l.Phones).Include(l => l.Notes).OrderByDescending(sort).Skip(skipRows).Take(pageSize).ToList();
-                else
-                    leads = context.Leads.Include(l => l.Phones).Include(l => l.Notes).OrderBy(sort).Skip(skipRows).Take(pageSize).ToList();
+                var columns = ReflectionService.GetModelProperties<LeadViewModel>();
+                for (int i = 0; i < columns.Count; i++)
+                {
+                    model.Columns.Add(new GridFieldViewModel(columns[i], true, 0, i));
+                }
             }
-            return leads;
+
+            return model;
         }
 
         [HttpPost]
         public ActionResult Search(SearchViewModel model)
         {
             model.TableName = "Leads";
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
 
             var leadAdapter = new LeadAdapter();
             int totalItems;
@@ -81,7 +98,22 @@ namespace CRM.Controllers
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
             model.Items = items;
             model.ItemsCount = totalItems;
+
             return PartialView("_LeadsPagePartial", model);
+        }
+
+        [HttpPost]
+        public ActionResult LoadProfile(string profileName)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+
+            var leadAdapter = new LeadAdapter();
+
+            var profiles = Mapper.Map<List<GridProfileViewModel>>(
+                leadAdapter.GetUserProfiles(currentUserEmail, profileName)
+            );
+
+            return PartialView("_LeadsPagePartial", FillModelByProfile(profiles.FirstOrDefault()));
         }
 
         public ActionResult Create()
@@ -135,7 +167,7 @@ namespace CRM.Controllers
 
                         for (int i = 0; i < phones.Count; i++)
                         {
-                            var currentPhone = lead.Phones.FirstOrDefault(p=>p.Id == phones[i].Id);
+                            var currentPhone = lead.Phones.FirstOrDefault(p => p.Id == phones[i].Id);
                             if (currentPhone != null)
                             {
                                 phones[i].PhoneNumber = currentPhone.PhoneNumber;
@@ -146,11 +178,11 @@ namespace CRM.Controllers
                         if (newPhones != null)
                         {
                             var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
-                            foreach(var item in newLeadPhones)
+                            foreach (var item in newLeadPhones)
                             {
-                                if(!string.IsNullOrWhiteSpace(item.PhoneNumber))
+                                if (!string.IsNullOrWhiteSpace(item.PhoneNumber))
                                     leadToEdit.Phones.Add(item);
-                            }                           
+                            }
                         }
                     }
 
@@ -182,7 +214,7 @@ namespace CRM.Controllers
         [HttpGet]
         public ActionResult ConvertLead(int id)
         {
-            var customer = new UserViewModel();    
+            var customer = new UserViewModel();
             customer.Addresses.Add(new AddressViewModel());
             customer.Notes.Add(new NoteViewModel());
 
@@ -191,7 +223,7 @@ namespace CRM.Controllers
                 var currentLead = context.Leads
                     .Include(e => e.Phones)
                     .FirstOrDefault(e => e.Id == id);
- 
+
                 customer.Phones = Mapper.Map<List<PhoneViewModel>>(currentLead.Phones);
             }
 
@@ -210,6 +242,132 @@ namespace CRM.Controllers
             LeadConvertService.Convert(model, newAddress, newPhones, userCreads.Email);
 
             return RedirectToAction("Index", "Customer");
+        }
+
+        [HttpPost]
+        public ActionResult EditProfile(SearchViewModel model, bool makeDefault)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+
+            using (var context = new BaseContext())
+            {
+                var userId = context.Users
+                    .Include(u => u.GridProfiles.Select(g => g.DGrid))
+                    .FirstOrDefault(u => u.Email
+                        .Equals(currentUserEmail)).Id;
+
+                var selectedProfile = model.Profiles.FirstOrDefault(p => p.IsDefault);
+
+                var profile = context
+                    .GridProfiles
+                    .Include(f => f.GridFields)
+                    .Where(g =>
+                        g.ProfileName
+                            .Equals(selectedProfile.ProfileName) &&
+                        g.UserId
+                            .Equals(userId) &&
+                        g.DGrid.Type
+                            .Equals("Lead"))
+                    .FirstOrDefault();
+
+                if (profile != null)
+                {
+                    var receivedFields = Mapper.Map<List<GridField>>(model.Columns);
+                    var fields = profile.GridFields;
+
+                    for (int i = 0; i < fields.Count; i++)
+                    {
+                        fields[i].ColumnName = receivedFields[i].ColumnName;
+                        fields[i].GridOrderDirection = receivedFields[i].GridOrderDirection;
+                        fields[i].IsActive = receivedFields[i].IsActive;
+                        fields[i].Order = receivedFields[i].Order;
+                    }
+
+                    if (makeDefault)
+                    {
+                        context
+                            .GridProfiles
+                            .Where(g =>
+                                g.UserId.Equals(userId) &&
+                                g.DGrid.Type.Equals("Lead"))
+                            .ForEachAsync(i => i.IsDefault = false)
+                            .Wait();
+
+                        profile.IsDefault = makeDefault;
+                    }
+
+                    profile.SearchField = model.Field;
+                    profile.SearchValue = model.SearchValue;
+
+                    context.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+            }
+
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public JsonResult CreateProfile(SearchViewModel model, string profileName)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            using (var context = new BaseContext())
+            {
+                var user = context.Users
+                    .Include(u => u.GridProfiles.Select(g => g.DGrid))
+                    .FirstOrDefault(u => u.Email
+                        .Equals(currentUserEmail));
+
+                var profiles = context
+                    .GridProfiles
+                    .Where(g =>
+                        g.ProfileName
+                            .Equals(profileName) &&
+                        g.UserId
+                            .Equals(user.Id) &&
+                        g.DGrid.Type
+                            .Equals("Lead"));
+
+                if (!profiles.Any() && user.Id > 0)
+                {
+                    var receivedFields = Mapper.Map<List<GridField>>(model.Columns);
+                    var profile = new GridProfile
+                    {
+                        GridFields = receivedFields,
+                        IsDefault = true,
+                        SearchField = model.Field,
+                        SearchValue = model.SearchValue,
+                        ProfileName = profileName,
+                        UserId = user.Id
+                    };
+
+                    var leadsGrid = user
+                    .GridProfiles
+                    .FirstOrDefault(g => g.DGrid.Type.Equals("Lead"))
+                    ?.DGrid;
+
+                    if (leadsGrid != null)
+                    {
+                        foreach (var item in leadsGrid.GridProfiles)
+                        {
+                            item.IsDefault = false;
+                        }
+
+                        leadsGrid.GridProfiles.Add(profile);
+                    }
+                    else
+                    {
+                        context.DGrids.Add(new DGrid { Type = "Lead", GridProfiles = new List<GridProfile> { profile } });
+                    }
+
+                    context.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+            }
+
+            return Json(new { success = false });
         }
     }
 }

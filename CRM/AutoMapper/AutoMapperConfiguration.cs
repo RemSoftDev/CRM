@@ -66,6 +66,19 @@ namespace CRM.AutoMapper
                     .ForMember(e => e.From, opt => opt.Ignore())
                     .ForMember(e => e.To, opt => opt.Ignore());
 
+
+                cfg.CreateMap<GridFieldViewModel, GridField>()
+                    .ForMember(e => e.ColumnName, opt => opt.MapFrom(i => i.Field))
+                    .ForMember(e => e.IsActive, opt => opt.MapFrom(i => i.ShowOnGrid))
+                    .ForMember(e => e.GridOrderDirection, opt => opt.MapFrom(i => i.OrderDirection))
+                    .ForMember(e => e.Order, opt => opt.MapFrom(i => i));
+
+                cfg.CreateMap<GridField, GridFieldViewModel>()
+                    .ForMember(e => e.Field, opt => opt.MapFrom(i => i.ColumnName))
+                    .ForMember(e => e.ShowOnGrid, opt => opt.MapFrom(i => i.IsActive))
+                    .ForMember(e => e.OrderDirection, opt => opt.MapFrom(i => i.GridOrderDirection));
+
+                cfg.CreateMap<GridProfile, GridProfileViewModel>();                  
             });
         }
     }

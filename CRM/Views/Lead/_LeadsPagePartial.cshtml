@@ -3,15 +3,32 @@
 @model SearchViewModel
 
 <div>
+    <div class="col-md-1" style="padding-left: 0;">Profile :</div>
+    <div class=" col-md-3">
+        <select class="form-control" id="profiles">
+            @foreach (var profile in Model.Profiles)
+            {
+                <option id="@profile.Id" @(profile.IsDefault ? "selected" : "")>@profile.ProfileName</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-1">
+        <input class="btn btn-default" type="button" id="edit_profile_button" value="Edit" />
+    </div>
+    <div class="col-md-7" style="margin-bottom: 40px;">
+        <input class="btn btn-default" type="button" value="New" id="new_profile_button" />
+    </div>
+</div>
+<div id="search_row">
     <div class="col-md-3 row" style="padding-left:0;">
         <div class="col-md-6">Page size :</div>
         <div class=" col-md-6">
             <select class="form-control" id="items_per_page">
                 <option>1</option>
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-                <option>100</option>
+                @foreach (var i in new int[] { 10, 25, 50, 100 })
+                {
+                    <option @(Model.ItemsPerPage == i ? "selected" : "")>@i</option>
+                }
             </select>
         </div>
     </div>
@@ -43,14 +60,16 @@
                 {
                     if (column.ShowOnGrid)
                     {
-                        <option>@column.Field</option>
+                        <option @(Model.Field == column.Field ? "selected" : "")>@column.Field</option>
                     }
                 }
             </select>
         </div>
-        <div class="col-md-5"><input class="form-control" id="search_value" /></div>
+        <div class="col-md-5">
+            <input class="form-control" id="search_value" value="@Model.SearchValue" />
+        </div>
         <div class="col-md-2">
-            <input type="button" class="btn btn-default" value="search" id="search_button" />
+            <input type="button" class="btn btn-default" value="Apply" id="search_button" />
         </div>
     </div>
 </div>
@@ -92,24 +111,38 @@
     </div>
     <div class="col-md-6">
         <ul class="pagination pull-right" style="margin-top: 0;">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
             @WritePaginationItem()
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
         </ul>
+    </div>
+</div>
+
+<div style="display:none" id="save_dialog" title="Add new profile">
+    <div>
+        <label for="profile_name">Profile Name</label>
+        <input class="form-control" id="profile_name" />
+        <span style="color:red;display:none;">Profile with this name already exists!</span>
+    </div>
+</div>
+
+<div style="display:none" id="edit_dialog" title="Edit profile">
+    <div>Edit selected profile?</div>
+    <div>
+        <label for="profile_default">Make default</label>
+        <input type="checkbox" id="profile_default" />
     </div>
 </div>
 
 @helper ShowItemsLabel()
     {
         var showFrom = Model.Page * Model.ItemsPerPage - Model.ItemsPerPage;
+        if(showFrom > Model.ItemsCount)
+        {
+            showFrom = 0;
+        }
         var showTo = (showFrom + Model.ItemsPerPage) < Model.ItemsCount ? (showFrom + Model.ItemsPerPage) : Model.ItemsCount;
 
         <span>Showing @(showFrom + (Model.Items.Any() ? 1 : 0)) to @showTo of @Model.ItemsCount items</span>
-}
+    }
 
 @helper WritePaginationItem()
     {

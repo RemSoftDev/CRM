@@ -133,6 +133,7 @@ namespace CRM.Services
                         email.UserId = user.Id;
                     }
                 }
+
                 context.Emails.AddRange(emails);
                 context.SaveChanges();
             }
@@ -154,6 +155,7 @@ namespace CRM.Services
                 {
                     item.UserId = user.Id;
                 }
+
                 context.Emails.Add(item);
                 context.SaveChanges();
             }

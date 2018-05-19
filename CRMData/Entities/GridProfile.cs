@@ -16,6 +16,9 @@ namespace CRMData.Entities
 
         public bool IsDefault { get; set; }
 
+        public string SearchValue { get; set; }
+        public string SearchField { get; set; }
+
         public IList<GridField> GridFields { get; set; }
     }
 }

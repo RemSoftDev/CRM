@@ -27,6 +27,7 @@ namespace CRMData.Entities
             this.Phones = new List<Phone>();
             this.Notes = new List<Note>();
             this.Emails = new List<Email>();
+            this.GridProfiles = new List<GridProfile>();
         }
     }
 }

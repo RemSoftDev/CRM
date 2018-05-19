@@ -11,12 +11,14 @@ namespace CRM.Models
         public string Field { get; set; }
         public bool ShowOnGrid { get; set; }
         public int OrderDirection { get; set; }
+        public int Order { get; set; }
 
         public GridFieldViewModel() { }
-        public GridFieldViewModel(string field, bool showOnGrid, int orderDirection)
+        public GridFieldViewModel(string field, bool showOnGrid, int orderDirection, int order)
         {
             this.Field = field;
             this.ShowOnGrid = showOnGrid;
+            this.Order = order;
             this.OrderDirection = orderDirection;
         }
     }
