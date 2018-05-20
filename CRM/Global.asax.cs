@@ -96,8 +96,8 @@ namespace CRM
                 .To<UnitOfWork>()
                 .InThreadScope();
 
-			kernel.Bind<IEmailService>()
-				.To<EmailService>()
+            kernel.Bind<IEmailService>()
+                .To<EmailService>()
                 .InSingletonScope();
 
             kernel.Bind<ILeadConvertService>()
@@ -108,20 +108,17 @@ namespace CRM
                 .To<UserManager>()
                 .InSingletonScope();
 
+            kernel.Bind<ILeadManager>()
+                .To<LeadManager>()
+                .InSingletonScope();
+
             kernel.Bind<IUserConnectionStorage>()
                 .To<UserConnectionStorage>()
                 .InSingletonScope();
 
-
             kernel.Bind<PhoneService>()
                 .ToSelf()
                 .InSingletonScope();
-
-			kernel.Bind<IUserManager>()
-				.ToMethod(e => new UserManager(kernel.Get<IUnitOfWork>(), kernel.Get<IEncryptionService>()));
-
-			kernel.Bind<ILeadManager>()
-				.ToMethod(e => new LeadManager(kernel.Get<IUnitOfWork>()));
-
-	}
+        }
+    }
 }
