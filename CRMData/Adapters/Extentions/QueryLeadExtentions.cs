@@ -9,9 +9,8 @@ namespace CRM.DAL.Adapters.Extentions
 {
     public static class QueryLeadExtentions
     {
-        private const string name = "Name";
-        private const string email = "Email";
         private const string phone = "Phones";
+        private const string note = "Notes";
 
         public static IQueryable<Lead> AddWhere(
             this IQueryable<Lead> query,
@@ -41,8 +40,11 @@ namespace CRM.DAL.Adapters.Extentions
             switch (orderField)
             {
                 case phone:
-                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber) : 
-                        query.OrderByDescending(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber);
+                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault().PhoneNumber) : 
+                        query.OrderByDescending(e => e.Phones.FirstOrDefault().PhoneNumber);
+                case note:
+                    return isAscending ? query.OrderBy(e => e.Notes.FirstOrDefault().Text) :
+                        query.OrderByDescending(e => e.Notes.FirstOrDefault().Text);
                 default:
                     return isAscending ? query.OrderBy(orderField) : query.OrderByDescending(orderField);
             }

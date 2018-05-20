@@ -13,6 +13,7 @@ namespace CRM.DAL.Adapters.Extentions
         private const string lastName = "Last Name";
         private const string email = "Email";
         private const string phone = "Phones";
+        private const string note = "Notes";
 
         public static IQueryable<User> AddWhere(
             this IQueryable<User> query,
@@ -27,7 +28,7 @@ namespace CRM.DAL.Adapters.Extentions
                 case phone:
                     return query.Where(e => e.Phones.Where(p => p.PhoneNumber.Contains(searchValue)).Any());
                 default:
-                    return query.Where(GetWhereExpression<User>(whereField, searchValue)); ;
+                    return query.Where(GetWhereExpression<User>(whereField, searchValue));
             }
         }
 
@@ -46,7 +47,10 @@ namespace CRM.DAL.Adapters.Extentions
                 case lastName:
                     return isAscending ? query.OrderBy(e => e.FirstName) : query.OrderByDescending(e => e.FirstName);
                 case phone:
-                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber) : query.OrderByDescending(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber);
+                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault().PhoneNumber) : query.OrderByDescending(e => e.Phones.FirstOrDefault().PhoneNumber);
+                case note:
+                    return isAscending ? query.OrderBy(e => e.Notes.FirstOrDefault().Text) :
+                        query.OrderByDescending(e => e.Notes.FirstOrDefault().Text);
                 default:
                     return isAscending ? query.OrderBy(orderField) : query.OrderByDescending(orderField);
             }
