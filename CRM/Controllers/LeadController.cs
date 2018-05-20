@@ -1,29 +1,77 @@
 ﻿using AutoMapper;
 using CRM.Attributes;
-using CRM.Enums;
+using CRM.DAL.Adapters;
+using CRM.DAL.Entities;
+using CRM.DAL.Repository;
+using CRM.Extentions;
+using CRM.Managers;
 using CRM.Models;
 using CRM.Services;
-using CRMData.Adapters;
-using CRMData.Contexts;
-using CRMData.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
-using CRM.Extentions;
-using System;
-using System.Linq.Expressions;
+using CRM.DAL.Contexts;
+using Microsoft.AspNet.Identity;
 
 namespace CRM.Controllers
 {
-    [Authenticate]
-    public class LeadController : Controller
-    {
-        public ActionResult Index()
-        {
+	[Authenticate]
+	public class LeadController : Controller
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly ILeadConvertService _leadConvertService;
+		private readonly ILeadManager _leadManager;
+
+		public LeadController(
+			IUnitOfWork unitOfWork,
+			ILeadConvertService leadConvertService,
+			ILeadManager leadManager)
+		{
+			_unitOfWork = unitOfWork;
+			_leadConvertService = leadConvertService;
+			_leadManager = leadManager;
+		}
+		public ActionResult Index()
+		{
             var currentUserEmail = User.GetCurrentUserCreads().Email;
 
             return View(GetSearchModel(currentUserEmail));
+        }
+    private SearchViewModel FillModelByProfile(GridProfileViewModel profile)
+    {
+        var leadAdapter = new LeadAdapter();
+        var model = new SearchViewModel();
+
+        model.Columns = profile?.GridFields ?? new List<GridFieldViewModel>();
+        model.Field = profile?.SearchField;
+        model.SearchValue = profile?.SearchValue;
+
+        int totalItems;
+
+        var result = leadAdapter.GetLeadsByFilter(
+            model.Field,
+            model.SearchValue,
+            model.OrderField,
+            model.Page,
+            model.ItemsPerPage,
+            out totalItems,
+            model.OrderDirection);
+
+        var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
+        model.Items = items.ToList<Interfaces.IUser>();
+        model.ItemsCount = totalItems;
+
+        if (!model.Columns.Any())
+        {
+            var columns = ReflectionService.GetModelProperties<LeadViewModel>();
+            for (int i = 0; i < columns.Count; i++)
+            {
+                model.Columns.Add(new GridFieldViewModel(columns[i], true, 0, i));
+            }
+        }
+
+            return model;
         }
 
         private SearchViewModel GetSearchModel(string userEmail)
@@ -34,48 +82,13 @@ namespace CRM.Controllers
                 leadAdapter.GetUserProfiles(userEmail)
             );
 
-            var selectedProfile = profiles.FirstOrDefault(p => p.IsDefault) ?? profiles.First();
+            var selectedProfile = profiles.FirstOrDefault(p => p.IsDefault);
             model = FillModelByProfile(selectedProfile);
             model.Profiles = profiles;
 
             return model;
         }
 
-        private SearchViewModel FillModelByProfile(GridProfileViewModel profile)
-        {
-            var leadAdapter = new LeadAdapter();
-            var model = new SearchViewModel();
-
-            model.Columns = profile.GridFields;
-            model.Field = profile.SearchField;
-            model.SearchValue = profile.SearchValue;
-
-            int totalItems;
-
-            var result = leadAdapter.GetLeadsByFilter(
-                model.Field,
-                model.SearchValue,
-                model.OrderField,
-                model.Page,
-                model.ItemsPerPage,
-                out totalItems,
-                model.OrderDirection);
-
-            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
-            model.Items = items;
-            model.ItemsCount = totalItems;
-
-            if (!model.Columns.Any())
-            {
-                var columns = ReflectionService.GetModelProperties<LeadViewModel>();
-                for (int i = 0; i < columns.Count; i++)
-                {
-                    model.Columns.Add(new GridFieldViewModel(columns[i], true, 0, i));
-                }
-            }
-
-            return model;
-        }
 
         [HttpPost]
         public ActionResult Search(SearchViewModel model)
@@ -96,10 +109,10 @@ namespace CRM.Controllers
                 model.OrderDirection);
 
             var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
-            model.Items = items;
+            model.Items = items.ToList<Interfaces.IUser>();
             model.ItemsCount = totalItems;
 
-            return PartialView("_LeadsPagePartial", model);
+            return PartialView("_GridPagePartial", model);
         }
 
         [HttpPost]
@@ -113,7 +126,7 @@ namespace CRM.Controllers
                 leadAdapter.GetUserProfiles(currentUserEmail, profileName)
             );
 
-            return PartialView("_LeadsPagePartial", FillModelByProfile(profiles.FirstOrDefault()));
+            return PartialView("_GridPagePartial", FillModelByProfile(profiles.FirstOrDefault()));
         }
 
         public ActionResult Create()
@@ -121,125 +134,162 @@ namespace CRM.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult Edit(int id)
-        {
-            LeadViewModel lead;
-
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
-            {
-                Lead leadDb = context.Leads.Include(e => e.Phones).FirstOrDefault(l => l.Id == id);
-                lead = Mapper.Map<Lead, LeadViewModel>(leadDb);
-
-                List<Note> leadNotes = context.Notes.Where(n => n.LeadId == leadDb.Id).ToList();
-                lead.Notes = Mapper.Map<List<Note>, List<NoteViewModel>>(leadNotes);
-            }
-            if (lead != null)
-            {
-                return View(lead);
-            }
-            return RedirectToAction("Index");
-        }
-
         [HttpPost]
-        public ActionResult Edit(LeadViewModel lead, List<string> note, List<PhoneViewModel> newPhones)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(CreateLeadViewModel model)
         {
             if (ModelState.IsValid)
             {
-                using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
+                model.Phones = new List<PhoneViewModel>
                 {
-                    Lead leadToEdit = context
-                        .Leads
-                        .Include(e => e.Phones)
-                        .FirstOrDefault(l => l.Id == lead.Id);
-
-                    if (leadToEdit != null)
+                    new PhoneViewModel
                     {
-                        leadToEdit.Email = lead.Email;
-                        leadToEdit.Name = lead.Name;
-                        leadToEdit.Discipline = lead.Discipline;
-                        leadToEdit.AgeGroup = lead.AgeGroup;
-                        leadToEdit.Status = lead.Status;
-                        leadToEdit.StatusNotes = lead.StatusNotes;
-                        leadToEdit.IssueRaised = lead.IssueRaised;
-
-                        var phones = leadToEdit.Phones;
-
-                        for (int i = 0; i < phones.Count; i++)
-                        {
-                            var currentPhone = lead.Phones.FirstOrDefault(p => p.Id == phones[i].Id);
-                            if (currentPhone != null)
-                            {
-                                phones[i].PhoneNumber = currentPhone.PhoneNumber;
-                                phones[i].TypeId = (int?)currentPhone.Type;
-                            }
-                        }
-
-                        if (newPhones != null)
-                        {
-                            var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
-                            foreach (var item in newLeadPhones)
-                            {
-                                if (!string.IsNullOrWhiteSpace(item.PhoneNumber))
-                                    leadToEdit.Phones.Add(item);
-                            }
-                        }
+                        PhoneNumber = model.Phone,
+                        Type = Enums.PhoneType.HomePhone
                     }
+                };
 
-                    if (lead.Notes.Any())
-                    {
-                        foreach (NoteViewModel reNewNote in lead.Notes)
-                        {
-                            Note oldNote = context.Notes.FirstOrDefault(e => e.Id == reNewNote.Id);
-                            if (oldNote != null)
-                                oldNote.Text = reNewNote.Text;
-                        }
-                    }
+                var lead = Mapper.Map<CreateLeadViewModel, Lead>(model);               
+                var result = _leadManager.Create(lead);
 
-                    if (note != null && note.Any())
-                    {
-                        var notesToAdd = note
-                            .Where(e => !string.IsNullOrWhiteSpace(e))
-                            .Select(e => new Note() { Text = e, LeadId = lead.Id });
-
-                        context.Notes.AddRange(notesToAdd);
-                    }
-
-                    context.SaveChanges();
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index), "Lead");
                 }
-            }
-            return RedirectToAction("Index");
-        }
 
-        [HttpGet]
-        public ActionResult ConvertLead(int id)
-        {
-            var customer = new UserViewModel();
-            customer.Addresses.Add(new AddressViewModel());
-            customer.Notes.Add(new NoteViewModel());
-
-            using (var context = new BaseContext())
-            {
-                var currentLead = context.Leads
-                    .Include(e => e.Phones)
-                    .FirstOrDefault(e => e.Id == id);
-
-                customer.Phones = Mapper.Map<List<PhoneViewModel>>(currentLead.Phones);
+                AddErrors(result);
             }
 
-            return View(new LeadConvertViewModel()
-            {
-                Id = id,
-                NewCustomer = customer
-            });
+            return View(model);
         }
 
-        [HttpPost]
-        public ActionResult ConvertLead(LeadConvertViewModel model, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
+        private void AddErrors(IdentityResult result)
         {
-            var userCreads = User.GetCurrentUserCreads();
+            //_unitOfWork.Dispose(!disposing);
+            //base.Dispose(disposing);
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
 
-            LeadConvertService.Convert(model, newAddress, newPhones, userCreads.Email);
+
+        public ActionResult Edit(int id)
+		{
+			var leadModel = _unitOfWork.LeadsRepository.FindById(id);
+			var leadNoteModel = _unitOfWork.NotesRepository.Get(n => n.LeadId == leadModel.Id);
+
+			var leadViewModel = Mapper.Map<Lead, LeadViewModel>(leadModel);
+			leadViewModel.Notes = Mapper.Map<IEnumerable<Note>, IEnumerable<NoteViewModel>>(leadNoteModel).ToList();
+
+			if (leadViewModel != null)
+			{
+				return View(leadViewModel);
+			}
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public ActionResult Edit(LeadViewModel lead, List<string> note, List<PhoneViewModel> newPhones)
+		{
+			if (ModelState.IsValid)
+			{
+
+				var leadToEdit = _unitOfWork.LeadsRepository.FindById(lead.Id);
+
+				if (leadToEdit != null)
+				{
+					leadToEdit.Email = lead.Email;
+					leadToEdit.Name = lead.Name;
+					leadToEdit.Discipline = lead.Discipline;
+					leadToEdit.AgeGroup = lead.AgeGroup;
+					leadToEdit.Status = lead.Status;
+					leadToEdit.StatusNotes = lead.StatusNotes;
+					leadToEdit.IssueRaised = lead.IssueRaised;
+
+					var phones = leadToEdit.Phones;
+
+					for (int i = 0; i < phones.Count; i++)
+					{
+						var currentPhone = lead.Phones.FirstOrDefault(p => p.Id == phones[i].Id);
+						if (currentPhone != null)
+						{
+							phones[i].PhoneNumber = currentPhone.PhoneNumber;
+							phones[i].TypeId = (int?)currentPhone.Type;
+						}
+					}
+
+					if (newPhones != null)
+					{
+						var newLeadPhones = Mapper.Map<List<PhoneViewModel>, List<Phone>>(newPhones);
+						foreach (var item in newLeadPhones)
+						{
+							if (!string.IsNullOrWhiteSpace(item.PhoneNumber))
+								leadToEdit.Phones.Add(item);
+						}
+					}
+				}
+
+				if (lead.Notes.Any())
+				{
+					foreach (NoteViewModel reNewNote in lead.Notes)
+					{
+						var oldNote = _unitOfWork.NotesRepository.FindById(reNewNote.Id);
+
+						if (oldNote != null)
+							oldNote.Text = reNewNote.Text;
+					}
+				}
+
+				if (note != null && note.Any())
+				{
+					var notesToAdd = note
+						.Where(e => !string.IsNullOrWhiteSpace(e))
+						.Select(e => new Note() { Text = e, LeadId = lead.Id });
+
+					_unitOfWork.NotesRepository.AddRange(notesToAdd);
+				}
+
+				_unitOfWork.Save();
+			}
+			return RedirectToAction("Index");
+		}
+
+		[HttpGet]
+		public ActionResult ConvertLead(int id)
+		{
+			var customer = new UserViewModel();
+			customer.Addresses.Add(new AddressViewModel());
+			customer.Notes.Add(new NoteViewModel());
+
+			var currentLead = _unitOfWork.LeadsRepository.FindById(id);
+
+			customer.Phones = Mapper.Map<List<PhoneViewModel>>(currentLead.Phones);
+
+			var splitResult = currentLead.Name.Split(' ');
+			if (splitResult.Length > 0)
+			{
+				customer.FirstName = splitResult[0];
+				for (int i = 1; i < splitResult.Length; i++)
+				{
+					customer.LastName += $"{splitResult[i]} ";
+				}
+				customer.LastName = customer.LastName.TrimEnd();
+			}
+
+			return View(new LeadConvertViewModel()
+			{
+				Id = id,
+				NewCustomer = customer
+			});
+		}
+
+		[HttpPost]
+		public ActionResult ConvertLead(LeadConvertViewModel model, List<AddressViewModel> newAddress, List<PhoneViewModel> newPhones)
+		{
+			var userCreads = User.GetCurrentUserCreads();
+
+			_leadConvertService.Convert(model, newAddress, newPhones, userCreads.Email);
 
             return RedirectToAction("Index", "Customer");
         }

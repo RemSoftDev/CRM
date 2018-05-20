@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace CRMData.Entities
+namespace CRM.DAL.Entities
 {
     public class DGrid
     {

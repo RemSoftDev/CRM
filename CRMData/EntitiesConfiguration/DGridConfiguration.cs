@@ -1,8 +1,8 @@
-﻿using CRMData.Entities;
+﻿using CRM.DAL.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace CRMData.EntitiesConfiguration
+namespace CRM.DAL.EntitiesConfiguration
 {
     public class DGridConfiguration : EntityTypeConfiguration<DGrid>
     {

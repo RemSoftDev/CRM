@@ -5,28 +5,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CRM.Models
 {
-    public class LeadViewModel : IUser
+    public class LeadViewModel : CreateLeadViewModel
     {
-        public int Id { get; set; }
-
-        [Required]
-        [Grid(ShowOnGrid = true)]
-        public string Name { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Grid(ShowOnGrid = true)]
-        public string Email { get; set; }
-
-        [Required]
-        [Grid(ShowOnGrid = true)]
-        public List<PhoneViewModel> Phones { get; set; }
-
         [Grid(ShowOnGrid = true)]
         public List<NoteViewModel> Notes { get; set; }
 
-        [Grid(ShowOnGrid = true)]
-        public string Message { get; set; }
         public int? LeadOwner { get; set; }
 
         [Grid(ShowOnGrid = true)]
@@ -37,6 +20,7 @@ namespace CRM.Models
 
         [Grid(ShowOnGrid = true)]
         public string Status { get; set; }
+
         public string StatusNotes { get; set; }
         public string IssueRaised { get; set; }
 

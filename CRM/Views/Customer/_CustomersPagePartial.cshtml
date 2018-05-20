@@ -18,7 +18,7 @@
             <td>@customer.FirstName</td>
             <td>@customer.LastName</td>
             <td>@customer.Email</td>
-            <td>@customer.Phones.FirstOrDefault().PhoneNumber</td>
+            <td>@(customer.Phones.FirstOrDefault()?.PhoneNumber)</td>
             <td>@Html.ActionLink("Edit", "Edit", new { id = customer.Id })</td>
         </tr>
         }

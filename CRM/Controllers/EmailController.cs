@@ -1,139 +1,122 @@
 ﻿using AutoMapper;
 using CRM.Attributes;
+using CRM.DAL.Entities;
+using CRM.DAL.Repository;
 using CRM.Extentions;
 using CRM.Interfaces;
 using CRM.Models;
 using CRM.Services;
-using CRMData.Contexts;
-using CRMData.Entities;
 using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-    [Authenticate]
-    public class EmailController : Controller
-    {
-        [HttpPost]
-        public ActionResult SendMessage(int id, string message)
-        {
-            IUser user = GetUserModel(id);
+	[Authenticate]
+	public class EmailController : Controller
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IEmailService _emailService;
 
-            if (string.IsNullOrEmpty(user.Email))
-            {
-                return Json(new { status = "error" });
-            }
-            if (user is LeadViewModel && user != null)
-            {
-                SetLeadOwner(user);
-            }
+		public EmailController(IUnitOfWork unitOfWork, IEmailService emailService)
+		{
+			_unitOfWork = unitOfWork;
+			_emailService = emailService;
+		}
 
-            EmailService.SendEmail(new EmailViewModel(user.Email, "CRM Message!", message), user);
+		[HttpPost]
+		public ActionResult SendMessage(int id, string message)
+		{
+			IUser user = GetUserModel(id);
 
-            return Json(new { status = "success" });
-        }
+			if (string.IsNullOrEmpty(user.Email))
+			{
+				return Json(new { status = "error" });
+			}
+			if (user is LeadViewModel && user != null)
+			{
+				SetLeadOwner(user);
+			}
 
-        public ActionResult Conversation(int id)
-        {
-            IUser user = GetUserModel(id);
-            var mailings = EmailService.LoadMails(user);
+			_emailService.SendEmail(new EmailViewModel(user.Email, "CRM Message!", message), user);
 
-            ViewBag.Id = id;
-            ViewBag.UserType = (user is LeadViewModel) ? "Lead" : "Customer";
+			return Json(new { status = "success" });
+		}
 
-            return View(mailings);
-        }
+		public ActionResult Conversation(int id)
+		{
+			IUser user = GetUserModel(id);
+			var mailings = _emailService.LoadMails(user);
 
-        [HttpPost]
-        public ActionResult GetEmails(int id, string type)
-        {         
-            IUser user = GetUserModel(id, type);          
+			ViewBag.Id = id;
+			ViewBag.UserType = (user is LeadViewModel) ? "Lead" : "Customer";
 
-            var mailings = EmailService.GetMailings(GetLastReceivedDate(user), user);
+			return View(mailings);
+		}
 
-            return Json(new { mailings });
-        }
+		[HttpPost]
+		public ActionResult GetEmails(int id, string type)
+		{
+			IUser user = GetUserModel(id, type);
 
-        private void SetLeadOwner(IUser model)
-        {
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
-            {
-                Lead lead = context.Leads.FirstOrDefault(l => l.Id == model.Id);
-                if (lead != null)
-                {
-                    if (lead.LeadOwner == 0)
-                    {
-                        var userCreads = User.GetCurrentUserCreads();
-                        var currentUser = context.Users.FirstOrDefault(u => u.Email == userCreads.Email);
-                        lead.LeadOwner = currentUser.Id;
-                        context.SaveChanges();
-                    }
-                }
-            }
-        }
+			var mailings = _emailService.GetMailings(GetLastReceivedDate(user), user);
 
-        private User GetCustomerModel(int id)
-        {
-            User customerModel;
+			return Json(new { mailings });
+		}
 
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
-            {
-                customerModel = context.Users.FirstOrDefault(l => l.Id == id);
-            }
-            return customerModel;
-        }
+		private void SetLeadOwner(IUser model)
+		{
+			Lead lead = _unitOfWork.LeadsRepository.FindById(model.Id);
 
-        private Lead GetLeadModel(int id)
-        {
-            Lead leadModel;
+			if (lead != null)
+			{
+				if (lead.LeadOwner == 0)
+				{
+					var userCreads = User.GetCurrentUserCreads();
 
-            using (BaseContext context = ContextFactory.SingleContextFactory.Get<BaseContext>())
-            {
-                leadModel = context.Leads.FirstOrDefault(l => l.Id == id);
-            }
-            return leadModel;
-        }
+					var currentUser = _unitOfWork.UsersRepository.FindBy(u => u.Email == userCreads.Email);
 
-        private DateTime? GetLastReceivedDate(IUser user)
-        {
-            DateTime? date;
-            if (user is LeadViewModel)
-            {
-                using (BaseContext context = new BaseContext())
-                {
-                    date = context.Emails
-                        .OrderByDescending(e => e.Id)
-                        .FirstOrDefault(e => e.LeadId == user.Id)?
-                        .SentDate;
-                }
-            }
-            else
-            {
-                using (BaseContext context = new BaseContext())
-                {
-                    date = context.Emails.OrderByDescending(e => e.Id)
-                        .FirstOrDefault(e => e.UserId == user.Id)?
-                        .SentDate;
-                }
-            }
-            return date;
-        }
+					lead.LeadOwner = currentUser.Id;
+					_unitOfWork.Save();
+				}
+			}
+		}
 
-        private IUser GetUserModel(int id, string type = "")
-        {
-            IUser user;
-            if (type == "Lead" || HttpContext.Request.UrlReferrer.AbsolutePath.Contains("Lead"))
-            {
-                Lead lead = GetLeadModel(id);
-                user = Mapper.Map<Lead, LeadViewModel>(lead);
-            }
-            else
-            {
-                User customer = GetCustomerModel(id);
-                user = Mapper.Map<User, UserViewModel>(customer);
-            }
-            return user;
-        }
-    }
+		private User GetCustomerModel(int id)
+		{
+			User customerModel = _unitOfWork.UsersRepository.FindById(id);
+
+			return customerModel;
+		}
+
+		private Lead GetLeadModel(int id)
+		{
+			Lead leadModel = _unitOfWork.LeadsRepository.FindById(id);
+
+			return leadModel;
+		}
+
+		private DateTime? GetLastReceivedDate(IUser user)
+		{
+			var predicate = user is LeadViewModel ? (Func<Email, bool>)(e => e.LeadId == user.Id) : e => e.UserId == user.Id;
+			DateTime? date = _unitOfWork.EmailsRepository.FindBy(predicate).SentDate;
+
+			return date;
+		}
+
+		private IUser GetUserModel(int id, string type = "")
+		{
+			IUser user;
+			if (type == "Lead" || HttpContext.Request.UrlReferrer.AbsolutePath.Contains("Lead"))
+			{
+				Lead lead = GetLeadModel(id);
+				user = Mapper.Map<Lead, LeadViewModel>(lead);
+			}
+			else
+			{
+				User customer = GetCustomerModel(id);
+				user = Mapper.Map<User, UserViewModel>(customer);
+			}
+			return user;
+		}
+	}
 }

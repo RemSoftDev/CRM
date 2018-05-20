@@ -1,51 +1,66 @@
-﻿@{
+﻿@model CRM.Models.CreateLeadViewModel
+
+@{
     ViewBag.Title = "CreateLead";
 }
 
 <h2>Create Lead</h2>
 
-<html>
 <body>
-    <div>
-        <form>
-            <hr />
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="name">Name</label>
-                <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="name" name="name" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="name" data-valmsg-replace="true"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="email">Email</label>
-                <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="email" name="email" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="email" data-valmsg-replace="true"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="phone">Phone</label>
-                <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="phone" name="phone" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="phone" data-valmsg-replace="true"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="message">Message</label>
-                <div class="col-md-10 margin-bottom">
-                    <input class="form-control" id="message" name="message" type="text" value="" />
-                    <span class="field-validation-valid text-danger" data-valmsg-for="message" data-valmsg-replace="true"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10 margin-bottom">
-                    <input type="button" id="create_button" value="Create" class="btn btn-default" />
-                </div>
-            </div>
-        </form>
-    </div>
+	<div>
+		@using (Html.BeginForm("Create", "Lead", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary("", new { @class = "text-danger" })
+		<div class="form-group">
+			@Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+			<div class="col-md-10 margin-bottom">
+				@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+			<div class="col-md-10 margin-bottom">
+				@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+			<div class="col-md-10 margin-bottom">
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label" })
+			<div class="col-md-10 margin-bottom">
+				@Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.Message, new { @class = "col-md-2 control-label" })
+			<div class="col-md-10 margin-bottom">
+				@Html.TextBoxFor(m => m.Message, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+		</div>
+}
+	</div>
 </body>
-</html>
+
 
 @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
 @Scripts.Render("~/scripts/Lead/createLead.js")

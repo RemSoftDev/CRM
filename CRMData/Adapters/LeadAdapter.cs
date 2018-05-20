@@ -1,11 +1,11 @@
-﻿using CRMData.Adapters.Extentions;
-using CRMData.Contexts;
-using CRMData.Entities;
+﻿using CRM.DAL.Contexts;
+using CRM.DAL.Entities;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using System.Data.Entity;
+using CRM.DAL.Adapters.Extentions;
 
-namespace CRMData.Adapters
+namespace CRM.DAL.Adapters
 {
     public sealed class LeadAdapter
     {
@@ -23,6 +23,7 @@ namespace CRMData.Adapters
                 bool isAscending = true;
                 totalRecords = context
                     .Leads
+                    .Where(l => !l.IsConverted)
                     .AddWhere(whereField, searchValue)
                     .Count();
 
@@ -45,6 +46,7 @@ namespace CRMData.Adapters
                 return context.Leads
                     .Include(e => e.Phones)
                     .Include(l => l.Notes)
+                    .Where(l => !l.IsConverted)
                     .AddWhere(whereField, searchValue)
                     .AddOrder(ordered.Trim(), isAscending)
                     .Skip(skipItems)

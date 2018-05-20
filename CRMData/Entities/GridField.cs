@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRMData.Entities
+namespace CRM.DAL.Entities
 {
     public class GridField
     {

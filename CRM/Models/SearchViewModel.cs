@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CRM.Interfaces;
+using System.Collections.Generic;
 
 namespace CRM.Models
 {
@@ -13,7 +14,7 @@ namespace CRM.Models
         public string OrderField { get; set; }
         public string OrderDirection { get; set; }
         public List<GridProfileViewModel> Profiles { get; set; }
-        public List<LeadViewModel> Items { get; set; }
+        public List<IUser> Items { get; set; }
         public List<GridFieldViewModel> Columns { get; set; }
 
         public SearchViewModel()
@@ -22,7 +23,7 @@ namespace CRM.Models
             this.ItemsPerPage = 10;
             this.OrderDirection = "ASC";
             this.Profiles = new List<GridProfileViewModel>();
-            this.Items = new List<LeadViewModel>();
+            this.Items = new List<IUser>();
             this.Columns = new List<GridFieldViewModel>();
         }
     }

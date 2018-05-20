@@ -1,11 +1,11 @@
-﻿using CRMData.Entities;
-using System;
-using System.Collections.Generic;
+﻿using CRM.DAL.Entities;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System;
+using System.Collections.Generic;
 
-namespace CRMData.Adapters.Extentions
+namespace CRM.DAL.Adapters.Extentions
 {
     public static class QueryLeadExtentions
     {

@@ -6,7 +6,7 @@
 
     $("#save_dialog").dialog({
         autoOpen: false,
-        open: function (e) {},
+        open: function (e) { },
         modal: true,
         show: "blind",
         hide: "blind",
@@ -22,7 +22,7 @@
                 text: "Save",
                 "class": 'btn btn-default',
                 click: function () {
-                    saveProfile($('#profile_name').val());                   
+                    saveProfile($('#profile_name').val());
                 }
             }
         ]
@@ -82,7 +82,7 @@ function closeEditDialog() {
 
 function saveProfile(profileName) {
     $.ajax({
-        url: "/Lead/CreateProfile",
+        url: getPath() + "/CreateProfile",
         type: 'POST',
         data: {
             model: getSearchModel(),
@@ -90,7 +90,7 @@ function saveProfile(profileName) {
         },
         success: function (response) {
             if (response.success) {
-                closeSaveDialog();    
+                closeSaveDialog();
 
                 $('#profiles').append(
                     '<option selected>' + profileName + '</option>'
@@ -108,7 +108,7 @@ function saveProfile(profileName) {
 
 function editProfile() {
     $.ajax({
-        url: "/Lead/EditProfile",
+        url: getPath() + "/EditProfile",
         type: 'POST',
         data: {
             model: getSearchModel(),
@@ -132,7 +132,7 @@ function editProfile() {
 
 function search(model) {
     $.ajax({
-        url: "/Lead/Search",
+        url: getPath() + "/Search",
         type: 'POST',
         data: model,
         success: function (response) {
@@ -158,7 +158,7 @@ function getSearchModel() {
             field: $(this).find('input').val(),
             showOnGrid: $(this).find('input').is(':checked'),
             orderDirection: getOrderDirection($(this).find('input').val()),
-            order : i
+            order: i
         })
     });
 
@@ -175,7 +175,7 @@ function getSearchModel() {
         orderField: orderField,
         orderDirection: orderDirection,
         columns: columns,
-        profiles : profiles,
+        profiles: profiles,
         field: $('#search_field option:selected').val()
     };
 }
@@ -235,9 +235,9 @@ function LoadPage(page) {
 
 function LoadProfile(profile) {
     $.ajax({
-        url: "/Lead/LoadProfile",
+        url: getPath() + "/LoadProfile",
         type: 'POST',
-        data: { profileName: profile},
+        data: { profileName: profile },
         success: function (response) {
             drawPage(response);
         },
@@ -251,7 +251,7 @@ function drawPage(response) {
     if (response.status != "error") {
         $('table').html($(response).filter('table').html());
         $('#pagination').html($(response).filter('#pagination').html());
-        $('#search_row').html($(response).filter('#search_row').html());       
+        $('#search_row').html($(response).filter('#search_row').html());
 
         applyjQueryFunctions();
     }
@@ -270,4 +270,13 @@ function applyjQueryFunctions() {
             e.stopPropagation()
         }
     );
+}
+
+function getPath() {
+    var path = location.pathname;
+    if (location.pathname == '/') {
+        path += 'Lead'
+    }
+
+    return path;
 }
