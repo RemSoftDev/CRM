@@ -19,8 +19,8 @@ namespace CRM.Controllers
 
 		public EmailController(IUnitOfWork unitOfWork, IEmailService emailService)
 		{
-			_unitOfWork = unitOfWork;
-			_emailService = emailService;
+            _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
+            _emailService = emailService.ValidateNotDefault(nameof(emailService));
 		}
 
 		[HttpPost]

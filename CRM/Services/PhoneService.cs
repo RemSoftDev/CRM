@@ -1,9 +1,7 @@
 ﻿using CRM.DAL.Entities;
 using CRM.DAL.Repository;
-using CRM.Enums;
 using CRM.Extentions;
 using System;
-using System.Linq;
 
 namespace CRM.Services
 {
@@ -16,21 +14,16 @@ namespace CRM.Services
             _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
         }
 
-        public string GetRightPartRedirectUrlByPhoneNum(string phoneNumber)
+        public string GetRightPartRedirectUrl(string phoneNumber)
         {
-            User user = _unitOfWork.UsersRepository
-                .FindBy(e => e.Phones
-                    .Any(p => p.PhoneNumber.Equals(phoneNumber, StringComparison.InvariantCultureIgnoreCase)) && e.UserTypeId == (int)UserType.Customer);
+            Phone phone = _unitOfWork.PhonesRepository
+                .FindBy(e => e.PhoneNumber.Equals(phoneNumber, StringComparison.InvariantCultureIgnoreCase));
 
-            if (user != null)
-                return BuildRightPartUrl("Customer", "Edit", user.Id);
-
-            Lead lead = _unitOfWork.LeadsRepository
-                 .FindBy(e => e.Phones
-                     .Any(p => p.PhoneNumber.Equals(phoneNumber, StringComparison.InvariantCultureIgnoreCase)));
-
-            if (lead != null)
-                return BuildRightPartUrl("Lead", "Edit", lead.Id);
+            if (phone != null && phone.UserId.HasValue)
+                return BuildRightPartUrl("Customer", "Edit", phone.UserId);
+            
+            if (phone != null && phone.LeadId.HasValue)
+                return BuildRightPartUrl("Lead", "Edit", phone.LeadId);
 
             return BuildRightPartUrl("Lead", "Create");
         }

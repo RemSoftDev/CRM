@@ -1,12 +1,16 @@
-﻿@if (Request.IsAuthenticated)
+﻿@using CRM.Extentions
+
+@if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
+        var userCreds = User.GetCurrentUserCreads();
+
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href="">Hello @User.Identity.Name.Split('|')[0] !</a>
+                <a href="">Hello @(userCreds?.UserName ?? string.Empty) !</a>
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log out</a></li>
         </ul>

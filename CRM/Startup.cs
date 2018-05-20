@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CRM.Hubs;
+﻿using CRM.Hubs;
 using CRM.Services.Interfaces;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -10,6 +6,9 @@ using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin;
 using Ninject;
 using Owin;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [assembly: OwinStartup(typeof(CRM.Startup))]
 

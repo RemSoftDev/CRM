@@ -10,22 +10,22 @@ namespace CRM.Services
         /// <summary>
         /// Storage for logged users
         /// </summary>
-        private static ConcurrentDictionary<int, ConcurrentBag<string>> autorzedUsers = new ConcurrentDictionary<int, ConcurrentBag<string>>();
+        private static ConcurrentDictionary<int, IList<string>> autorzedUsers = new ConcurrentDictionary<int, IList<string>>();
 
         public void AddUser(int userId)
         {
-            autorzedUsers.TryAdd(userId, new ConcurrentBag<string>());
+            autorzedUsers.TryAdd(userId, new List<string>());
         }
 
         public void AddConnection(int userId, string connectId)
         {
-            if (autorzedUsers.TryGetValue(userId, out ConcurrentBag<string> value))
+            if (autorzedUsers.TryGetValue(userId, out IList<string> value))
             {
                 value.Add(connectId);
             }
             else
             {
-                autorzedUsers.TryAdd(userId, new ConcurrentBag<string>()
+                autorzedUsers.TryAdd(userId, new List<string>()
                 {
                     connectId
                 });
@@ -34,9 +34,9 @@ namespace CRM.Services
 
         public void RemoveConnectId(int userId, string connctId)
         {
-            if (autorzedUsers.TryGetValue(userId, out ConcurrentBag<string> value) && value.Count > 0)
+            if (autorzedUsers.TryGetValue(userId, out IList<string> value) && value.Count > 0)
             {
-                value.TryTake(out connctId);
+                value.Remove(connctId);
             }
         }
 
@@ -47,14 +47,12 @@ namespace CRM.Services
 
         public List<string> Find(int userId)
         {
-            List<string> result = null;
-
-            if (autorzedUsers.TryGetValue(userId, out ConcurrentBag<string> value))
+            if (autorzedUsers.TryGetValue(userId, out IList<string> value))
             {
-                result = value.ToList();
+                return value.ToList();
             };
 
-            return result?.ToList() ?? new List<string>();
+            return new List<string>();
         }
 
         public List<int> GetCurrentUsers()

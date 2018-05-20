@@ -1,4 +1,6 @@
-﻿using CRM.DAL.Repository;
+﻿using CRM.Attributes;
+using CRM.DAL.Entities;
+using CRM.DAL.Repository;
 using CRM.Extentions;
 using CRM.Services.Interfaces;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
+    [Authenticate]
     public class PhoneController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -19,44 +22,41 @@ namespace CRM.Controllers
         }
 
         // GET: Phone
+        [HttpGet]
         public ActionResult Index()
         {
-            List<int> usersId = _userConnectionStorage.GetCurrentUsersExceptUser(User.GetCurrentUserCreads().Id);
-
-            var users = _unitOfWork.Context.Users
-                .Where(e => usersId.Contains(e.Id))
-                //.Select(e => new SelectListItem()
-                //{
-                //    Text = e.FirstName,
-                //    Value = e.Id.ToString(),
-                //    Selected = false
-                //})
-                .ToList();
+            List<User> users = GetCurrentUsersExceptUser();
 
             return View(new SelectList(users, "Id", "FirstName"));
         }
 
-        
-        public ActionResult GetF()
+        /// <summary>
+        /// Refresh dropdown list
+        /// </summary>
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult RefreshDropDown()
         {
-            List<int> usersId = _userConnectionStorage.GetCurrentUsersExceptUser(User.GetCurrentUserCreads().Id);
+            List<User> users = GetCurrentUsersExceptUser();
 
-            var users = _unitOfWork.Context.Users
-                .Where(e => usersId.Contains(e.Id))
-                //.Select(e => new SelectListItem()
-                //{
-                //    Text = e.FirstName,
-                //    Value = e.Id.ToString(),
-                //    Selected = false
-                //})
-                .ToList();
-
-            return PartialView("Drop", new SelectList(users, "Id", "FirstName"));
+            return PartialView("_Drop", new SelectList(users, "Id", "FirstName"));
         }
 
         public ActionResult PhoneCall()
         {
             return View();
+        }
+
+        /// <summary>
+        /// Get logged users without current
+        /// </summary>
+        private List<User> GetCurrentUsersExceptUser()
+        {
+            List<int> usersId = _userConnectionStorage.GetCurrentUsersExceptUser(User.GetCurrentUserCreads().Id);
+
+            return _unitOfWork.Context.Users
+                .Where(e => usersId.Contains(e.Id))
+                .ToList();
         }
     }
 }

@@ -18,6 +18,11 @@ namespace CRM.Hubs
             _phoneService = phoneService.ValidateNotDefault(nameof(phoneService));
         }
 
+        /// <summary>
+        /// Method to emulate call
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="phoneNumber"></param>
         public void Call(int id, string phoneNumber)
         {
             if (Context.User.Identity.IsAuthenticated)
@@ -30,7 +35,7 @@ namespace CRM.Hubs
                 }
                 else
                 {
-                    string rightPart = _phoneService.GetRightPartRedirectUrlByPhoneNum(phoneNumber);
+                    string rightPart = _phoneService.GetRightPartRedirectUrl(phoneNumber);
                     string redirectUrl = BuildFullRedirectUrl(rightPart);
 
                     Clients.Clients(connId)
@@ -39,7 +44,7 @@ namespace CRM.Hubs
             }
         }
 
-        // Подключение нового пользователя
+        // New connection 
         public override Task OnConnected()
         {
             if (Context.User.Identity.IsAuthenticated)
@@ -55,7 +60,7 @@ namespace CRM.Hubs
         }
 
 
-        // Отключение пользователя
+        // Disconnect
         public override Task OnDisconnected(bool stopCalled)
         {
             if (Context.User.Identity.IsAuthenticated)
@@ -70,6 +75,11 @@ namespace CRM.Hubs
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Build whole redirect url 
+        /// </summary>
+        /// <param name="rightParts">Right part of url</param>
+        /// <returns>Whole url</returns>
         private string BuildFullRedirectUrl(string rightParts)
         {
             return $"{Context.Request.Url.GetLeftPart(UriPartial.Authority)}/{rightParts}";

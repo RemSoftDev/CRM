@@ -1,5 +1,4 @@
 ﻿using CRM.Models.Misc;
-using System.Security.Claims;
 using System.Security.Principal;
 
 namespace CRM.Extentions

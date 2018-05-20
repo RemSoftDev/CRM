@@ -92,9 +92,9 @@ namespace CRM
                 .ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
                 .InSingletonScope();
 
-			kernel.Bind<IUnitOfWork>()
-				.To<UnitOfWork>()
-				.InSingletonScope();
+            kernel.Bind<IUnitOfWork>()
+                .To<UnitOfWork>()
+                .InThreadScope();
 
 			kernel.Bind<IEmailService>()
 				.To<EmailService>()
@@ -106,6 +106,10 @@ namespace CRM
 
             kernel.Bind<IUserManager>()
                 .To<UserManager>()
+                .InSingletonScope();
+
+            kernel.Bind<IUserConnectionStorage>()
+                .To<UserConnectionStorage>()
                 .InSingletonScope();
 
             kernel.Bind<PhoneService>()
