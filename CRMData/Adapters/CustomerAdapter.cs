@@ -9,23 +9,6 @@ namespace CRM.DAL.Adapters
 {
     public sealed class UserAdapter
     {
-        //public List<User> GetUsersByFilter(
-        //    string whereField,
-        //    string searchValue,
-        //    string ordered,
-        //    int userTypeId,
-        //    bool isAscending = true)
-        //{
-        //    using (BaseContext context = new BaseContext())
-        //    {
-        //        return context.Users
-        //            .Include(e => e.Phones)
-        //            .Where(e => e.UserTypeId == userTypeId)
-        //            .AddWhere(whereField.Trim(), searchValue)
-        //            .AddOrder(ordered.Trim(), isAscending)
-        //            .ToList();
-        //    }
-        //}
         public List<User> GetUsersByFilter(
            string whereField,
            string searchValue,
@@ -69,33 +52,6 @@ namespace CRM.DAL.Adapters
                     .Skip(skipItems)
                     .Take(itemsPerPage)
                     .ToList();
-            }
-        }
-
-        public List<GridProfile> GetUserProfiles(string userEmail, string profileName = "")
-        {
-            using (var context = new BaseContext())
-            {
-                var query = context
-                   .GridProfiles
-                   .Include(p => p.GridFields)
-                   .Where(p => p
-                        .DGrid
-                            .Type
-                            .Equals("User") &&
-                        p.User
-                            .Email
-                            .Equals(userEmail));
-
-                if (!string.IsNullOrEmpty(profileName))
-                {
-                    query = query
-                        .Where(p => p
-                            .ProfileName
-                            .Equals(profileName));
-                }
-
-                return query.OrderBy(i => i.Id).ToList();
             }
         }
     }

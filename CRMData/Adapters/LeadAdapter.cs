@@ -54,32 +54,5 @@ namespace CRM.DAL.Adapters
                     .ToList();
             }
         }
-
-        public List<GridProfile> GetUserProfiles(string userEmail, string profileName = "")
-        {
-            using (var context = new BaseContext())
-            {
-                var query = context
-                   .GridProfiles
-                   .Include(p => p.GridFields)
-                   .Where(p => p
-                        .DGrid
-                            .Type
-                            .Equals("Lead") &&
-                        p.User
-                            .Email
-                            .Equals(userEmail));
-
-                if (!string.IsNullOrEmpty(profileName))
-                {
-                    query = query
-                        .Where(p => p
-                            .ProfileName
-                            .Equals(profileName));
-                }
-
-                return query.OrderBy(i => i.Id).ToList();
-            }
-        }
     }
 }

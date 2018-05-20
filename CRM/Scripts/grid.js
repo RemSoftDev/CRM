@@ -6,7 +6,9 @@
 
     $("#save_dialog").dialog({
         autoOpen: false,
-        open: function (e) { },
+        open: function (e) {
+            $('.ui-dialog-titlebar-close').remove();
+        },
         modal: true,
         show: "blind",
         hide: "blind",
@@ -30,7 +32,9 @@
 
     $("#edit_dialog").dialog({
         autoOpen: false,
-        open: function (e) { },
+        open: function (e) {
+            $('.ui-dialog-titlebar-close').remove();
+        },
         modal: true,
         show: "blind",
         hide: "blind",

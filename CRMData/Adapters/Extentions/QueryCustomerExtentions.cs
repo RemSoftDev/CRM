@@ -52,45 +52,6 @@ namespace CRM.DAL.Adapters.Extentions
             }
         }
 
-        //public static IOrderedQueryable<TSource> OrderBy<TSource>(
-        //   this IEnumerable<TSource> query, string propertyName)
-        //{
-        //    return GetOrderQuery(query, propertyName, "OrderBy");
-        //}
-
-        //public static IOrderedQueryable<TSource> OrderByDescending<TSource>(
-        //    this IEnumerable<TSource> query, string propertyName)
-        //{
-        //    return GetOrderQuery(query, propertyName, "OrderByDescending");
-        //}
-
-        //private static IOrderedQueryable<TSource> GetOrderQuery<TSource>(
-        //    IEnumerable<TSource> query, string propertyName, string orderMethod)
-        //{
-        //    var entityType = typeof(TSource);
-
-        //    var propertyInfo = entityType.GetProperty(propertyName);
-        //    ParameterExpression arg = Expression.Parameter(entityType, "x");
-        //    MemberExpression property = Expression.Property(arg, propertyName);
-        //    var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
-
-        //    var enumarableType = typeof(Queryable);
-        //    var method = enumarableType.GetMethods()
-        //         .Where(m => m.Name == orderMethod && m.IsGenericMethodDefinition)
-        //         .Where(m =>
-        //         {
-        //             var parameters = m.GetParameters().ToList();
-        //             return parameters.Count == 2;
-        //         }).Single();
-
-        //    MethodInfo genericMethod = method
-        //         .MakeGenericMethod(entityType, propertyInfo.PropertyType);
-
-        //    var newQuery = (IOrderedQueryable<TSource>)genericMethod
-        //         .Invoke(genericMethod, new object[] { query, selector });
-        //    return newQuery;
-        //}
-
         public static Expression<Func<TSource, bool>> GetWhereExpression<TSource>(
             string propertyName, string searchvalue)
         {

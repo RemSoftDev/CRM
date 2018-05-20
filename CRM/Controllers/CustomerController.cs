@@ -9,8 +9,6 @@ using System.Linq;
 using System.Web.Mvc;
 using CRM.Interfaces;
 using CRM.Services;
-using CRM.DAL.Contexts;
-using System.Data.Entity;
 
 namespace CRM.Controllers
 {
@@ -26,58 +24,9 @@ namespace CRM.Controllers
         public ActionResult Index()
         {
             var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<UserViewModel>();
 
-            return View(GetSearchModel(currentUserEmail));
-        }
-        private SearchViewModel FillModelByProfile(GridProfileViewModel profile)
-        {
-            var userAdapter = new UserAdapter();
-            var model = new SearchViewModel();
-
-            model.Columns = profile?.GridFields ?? new List<GridFieldViewModel>();
-            model.Field = profile?.SearchField;
-            model.SearchValue = profile?.SearchValue;
-
-            int totalItems;
-
-            var result = userAdapter.GetUsersByFilter(
-                model.Field,
-                model.SearchValue,
-                model.OrderField,
-                model.Page,
-                model.ItemsPerPage,
-                out totalItems,
-                model.OrderDirection);
-
-            var items = Mapper.Map<List<User>, List<UserViewModel>>(result);
-            model.Items = items.ToList<IUser>();
-            model.ItemsCount = totalItems;
-
-            if (!model.Columns.Any())
-            {
-                var columns = ReflectionService.GetModelProperties<UserViewModel>();
-                for (int i = 0; i < columns.Count; i++)
-                {
-                    model.Columns.Add(new GridFieldViewModel(columns[i], true, 0, i));
-                }
-            }
-
-            return model;
-        }
-
-        private SearchViewModel GetSearchModel(string userEmail)
-        {
-            var userAdapter = new UserAdapter();
-            var model = new SearchViewModel();
-            var profiles = Mapper.Map<List<GridProfileViewModel>>(
-                userAdapter.GetUserProfiles(userEmail)
-            );
-
-            var selectedProfile = profiles.FirstOrDefault(p => p.IsDefault);
-            model = FillModelByProfile(selectedProfile);
-            model.Profiles = profiles;
-
-            return model;
+            return View(service.GetSearchModel(currentUserEmail));
         }
 
         [HttpPost]
@@ -224,140 +173,34 @@ namespace CRM.Controllers
         public ActionResult LoadProfile(string profileName)
         {
             var currentUserEmail = User.GetCurrentUserCreads().Email;
-
-            var userAdapter = new UserAdapter();
+            var service = new SearchService<UserViewModel>();
 
             var profiles = Mapper.Map<List<GridProfileViewModel>>(
-                userAdapter.GetUserProfiles(currentUserEmail, profileName)
+                service.GetUserProfiles(currentUserEmail, profileName)
             );
 
-            return PartialView("_GridPagePartial", FillModelByProfile(profiles.FirstOrDefault()));
+            return PartialView("_GridPagePartial", service.FillUserModelByProfile(profiles.FirstOrDefault()));
         }
 
         [HttpPost]
         public ActionResult EditProfile(SearchViewModel model, bool makeDefault)
         {
             var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<UserViewModel>();
 
-            using (var context = new BaseContext())
-            {
-                var userId = context.Users
-                    .Include(u => u.GridProfiles.Select(g => g.DGrid))
-                    .FirstOrDefault(u => u.Email
-                        .Equals(currentUserEmail)).Id;
+            var editProfileResult = service.EditProfile(model, makeDefault, currentUserEmail);
 
-                var selectedProfile = model.Profiles.FirstOrDefault(p => p.IsDefault);
-
-                var profile = context
-                    .GridProfiles
-                    .Include(f => f.GridFields)
-                    .Where(g =>
-                        g.ProfileName
-                            .Equals(selectedProfile.ProfileName) &&
-                        g.UserId
-                            .Equals(userId) &&
-                        g.DGrid.Type
-                            .Equals("User"))
-                    .FirstOrDefault();
-
-                if (profile != null)
-                {
-                    var receivedFields = Mapper.Map<List<GridField>>(model.Columns);
-                    var fields = profile.GridFields;
-
-                    for (int i = 0; i < fields.Count; i++)
-                    {
-                        fields[i].ColumnName = receivedFields[i].ColumnName;
-                        fields[i].GridOrderDirection = receivedFields[i].GridOrderDirection;
-                        fields[i].IsActive = receivedFields[i].IsActive;
-                        fields[i].Order = receivedFields[i].Order;
-                    }
-
-                    if (makeDefault)
-                    {
-                        context
-                            .GridProfiles
-                            .Where(g =>
-                                g.UserId.Equals(userId) &&
-                                g.DGrid.Type.Equals("User"))
-                            .ForEachAsync(i => i.IsDefault = false)
-                            .Wait();
-
-                        profile.IsDefault = makeDefault;
-                    }
-
-                    profile.SearchField = model.Field;
-                    profile.SearchValue = model.SearchValue;
-
-                    context.SaveChanges();
-
-                    return Json(new { success = true });
-                }
-            }
-
-            return Json(new { success = false });
+            return Json(new { success = editProfileResult });
         }
 
         [HttpPost]
         public JsonResult CreateProfile(SearchViewModel model, string profileName)
         {
             var currentUserEmail = User.GetCurrentUserCreads().Email;
-            using (var context = new BaseContext())
-            {
-                var user = context.Users
-                    .Include(u => u.GridProfiles.Select(g => g.DGrid))
-                    .FirstOrDefault(u => u.Email
-                        .Equals(currentUserEmail));
+            var service = new SearchService<UserViewModel>();
+            var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
 
-                var profiles = context
-                    .GridProfiles
-                    .Where(g =>
-                        g.ProfileName
-                            .Equals(profileName) &&
-                        g.UserId
-                            .Equals(user.Id) &&
-                        g.DGrid.Type
-                            .Equals("User"));
-
-                if (!profiles.Any() && user.Id > 0)
-                {
-                    var receivedFields = Mapper.Map<List<GridField>>(model.Columns);
-                    var profile = new GridProfile
-                    {
-                        GridFields = receivedFields,
-                        IsDefault = true,
-                        SearchField = model.Field,
-                        SearchValue = model.SearchValue,
-                        ProfileName = profileName,
-                        UserId = user.Id
-                    };
-
-                    var leadsGrid = user
-                    .GridProfiles
-                    .FirstOrDefault(g => g.DGrid.Type.Equals("User"))
-                    ?.DGrid;
-
-                    if (leadsGrid != null)
-                    {
-                        foreach (var item in leadsGrid.GridProfiles)
-                        {
-                            item.IsDefault = false;
-                        }
-
-                        leadsGrid.GridProfiles.Add(profile);
-                    }
-                    else
-                    {
-                        context.DGrids.Add(new DGrid { Type = "User", GridProfiles = new List<GridProfile> { profile } });
-                    }
-
-                    context.SaveChanges();
-
-                    return Json(new { success = true });
-                }
-            }
-
-            return Json(new { success = false });
+            return Json(new { success = createProfileResult });
         }
     }
 }
