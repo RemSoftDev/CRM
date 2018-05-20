@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
+using CRM.DAL.Adapters;
+using CRM.DAL.Entities;
+using CRM.DAL.Repository;
 using CRM.Enums;
 using CRM.Extentions;
 using CRM.Models;
-using CRM.Services;
-using CRM.DAL.Adapters;
-using CRM.DAL.Contexts;
-using CRM.DAL.Entities;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using CRM.DAL.Repository;
 using CRM.Interfaces;
@@ -23,8 +19,9 @@ namespace CRM.Controllers
 
         public CustomerController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
         }
+
         public ActionResult Index()
         {
             var currentUserEmail = User.GetCurrentUserCreads().Email;

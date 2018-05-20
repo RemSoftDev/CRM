@@ -1,5 +1,6 @@
 ﻿using CRM.DAL.Entities;
 using CRM.DAL.Repository;
+using CRM.Extentions;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,12 @@ namespace CRM.Managers
 
 		public LeadManager(IUnitOfWork unitOfWork)
 		{
-			_unitOfWork = unitOfWork;
-		}
+            _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
+        }
 
 		public IdentityResult Create(Lead lead)
 		{
 			var errors = ValidateAndGetError(lead);
-
 
 			// ReSharper disable once PossibleMultipleEnumeration
 			if (!errors.Any())

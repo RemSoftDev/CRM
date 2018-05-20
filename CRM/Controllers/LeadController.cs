@@ -177,11 +177,10 @@ namespace CRM.Controllers
         public ActionResult Edit(int id)
 		{
 			var leadModel = _unitOfWork.LeadsRepository.FindById(id);
-			var leadNoteModel = _unitOfWork.NotesRepository.Get(n => n.LeadId == leadModel.Id);
+			var leadNoteModel = _unitOfWork.NotesRepository.Get(n => n.LeadId == leadModel.Id).ToList();
 
-			var leadViewModel = Mapper.Map<Lead, LeadViewModel>(leadModel);
-			leadViewModel.Notes = Mapper.Map<IEnumerable<Note>, IEnumerable<NoteViewModel>>(leadNoteModel).ToList();
-
+            var leadViewModel = Mapper.Map<Lead, LeadViewModel>(leadModel);
+            leadViewModel.Notes = Mapper.Map<List<Note>, List<NoteViewModel>>(leadNoteModel);
 			if (leadViewModel != null)
 			{
 				return View(leadViewModel);

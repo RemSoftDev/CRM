@@ -16,65 +16,109 @@ using System.Web.Security;
 
 namespace CRM
 {
-	public class MvcApplication : NinjectHttpApplication
-	{
-		protected override void OnApplicationStarted()
-		{
-			AreaRegistration.RegisterAllAreas();
-			GlobalConfiguration.Configure(WebApiConfig.Register);
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
-			BundleConfig.RegisterBundles(BundleTable.Bundles);
+    /// <summary>
+    /// Class get access to IKernel
+    /// </summary>
+    public static class Kernel
+    {
+        public static IKernel GetKernel { get; set; }
+    }
 
-			//GlobalFilters.Filters.Add(new LogHistoryAttribute());
+    public class MvcApplication : NinjectHttpApplication
+    {
+        protected override void OnApplicationStarted()
+        {
+            AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			AutoMapperConfiguration.Configure();
-		}
+            //GlobalFilters.Filters.Add(new LogHistoryAttribute());
 
-		protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
-		{
-			var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
-			if (authCookie != null)
-			{
-				FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-				if (authTicket != null && !authTicket.Expired)
-				{
-					var roles = authTicket.UserData.Split(',');
-					HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
-				}
-			}
-		}
+            AutoMapperConfiguration.Configure();
+        }
 
-		protected override IKernel CreateKernel()
-		{
-			var kernel = new StandardKernel();
+        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+        {
+            var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                if (authTicket != null && !authTicket.Expired)
+                {
+                    #region version autentication using Claim
 
-			Register(kernel);
+                    //var jsonUserInfo = JsonConvert.DeserializeObject<AutenticateUser>(authTicket.UserData, new JsonSerializerSettings()
+                    //{
+                    //    Error = delegate (object jsonSender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                    //    {
+                    //        args.ErrorContext.Handled = true;
+                    //    },
 
-			return kernel;
-		}
+                    //});
 
-		private void Register(IKernel kernel)
-		{
-			kernel.Bind<IEncryptionService>()
-				.ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
-				.InSingletonScope();
+                    //if (jsonUserInfo != null)
+                    //{
 
-			kernel.Bind<IUnitOfWork>()
-				.To<UnitOfWork>()
-				.InSingletonScope();
+                    //    var identity = new FormsIdentity(authTicket);
+                    //    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jsonUserInfo.Id.ToString()));
+                    //    identity.AddClaim(new Claim(ClaimTypes.Email, jsonUserInfo.Email));
 
-			kernel.Bind<IEmailService>()
-				.ToMethod(e => new EmailService(kernel.Get<IUnitOfWork>()));
+                    //    HttpContext.Current.User = new GenericPrincipal(identity, new string[] { ((UserRole)jsonUserInfo.Role).ToString() });
+                    //}
 
-			kernel.Bind<ILeadConvertService>()
-				.ToMethod(e => new LeadConvertService(kernel.Get<IUnitOfWork>()));
+                    #endregion
 
-			kernel.Bind<IUserManager>()
-				.ToMethod(e => new UserManager(kernel.Get<IUnitOfWork>(), kernel.Get<IEncryptionService>()));
+                    var roles = authTicket.UserData.Split(',');
+                    HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
+                }
+            }
+        }
 
-			kernel.Bind<ILeadManager>()
-				.ToMethod(e => new LeadManager(kernel.Get<IUnitOfWork>()));
-		}
-	}
+        protected override IKernel CreateKernel()
+        {
+            var kernel = new StandardKernel();
+            CRM.Kernel.GetKernel = kernel;
+
+            Register(kernel);
+
+            return kernel;
+        }
+
+        private void Register(IKernel kernel)
+        {
+            kernel.Bind<IEncryptionService>()
+                .ToMethod(e => new EncryptionService(ConfigProvider.EncryptionKey))
+                .InSingletonScope();
+
+            kernel.Bind<IUnitOfWork>()
+                .To<UnitOfWork>()
+                .InThreadScope();
+
+            kernel.Bind<IEmailService>()
+                .To<EmailService>()
+                .InSingletonScope();
+
+            kernel.Bind<ILeadConvertService>()
+                .To<LeadConvertService>()
+                .InSingletonScope();
+
+            kernel.Bind<IUserManager>()
+                .To<UserManager>()
+                .InSingletonScope();
+
+            kernel.Bind<ILeadManager>()
+                .To<LeadManager>()
+                .InSingletonScope();
+
+            kernel.Bind<IUserConnectionStorage>()
+                .To<UserConnectionStorage>()
+                .InSingletonScope();
+
+            kernel.Bind<PhoneService>()
+                .ToSelf()
+                .InSingletonScope();
+        }
+    }
 }
