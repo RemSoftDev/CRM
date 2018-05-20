@@ -112,9 +112,16 @@ namespace CRM
                 .To<UserConnectionStorage>()
                 .InSingletonScope();
 
+
             kernel.Bind<PhoneService>()
                 .ToSelf()
                 .InSingletonScope();
-        }
+
+			kernel.Bind<IUserManager>()
+				.ToMethod(e => new UserManager(kernel.Get<IUnitOfWork>(), kernel.Get<IEncryptionService>()));
+
+			kernel.Bind<ILeadManager>()
+				.ToMethod(e => new LeadManager(kernel.Get<IUnitOfWork>()));
+
 	}
 }

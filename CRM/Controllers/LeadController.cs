@@ -4,8 +4,10 @@ using CRM.DAL.Adapters;
 using CRM.DAL.Entities;
 using CRM.DAL.Repository;
 using CRM.Extentions;
+using CRM.Managers;
 using CRM.Models;
 using CRM.Services;
+using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -17,16 +19,21 @@ namespace CRM.Controllers
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ILeadConvertService _leadConvertService;
+		private readonly ILeadManager _leadManager;
 
-		public LeadController(IUnitOfWork unitOfWork, ILeadConvertService leadConvertService)
+		public LeadController(
+			IUnitOfWork unitOfWork,
+			ILeadConvertService leadConvertService,
+			ILeadManager leadManager)
 		{
 			_unitOfWork = unitOfWork;
 			_leadConvertService = leadConvertService;
+			_leadManager = leadManager;
 		}
 		public ActionResult Index()
 		{
 			var leadsNotConverted = _unitOfWork.LeadsRepository.GetWithInclude(l => !l.IsConverted);
-			var leadsView = Mapper.Map<IEnumerable<Lead>, IEnumerable<LeadViewModel>>(leadsNotConverted); 
+			var leadsView = Mapper.Map<IEnumerable<Lead>, IEnumerable<LeadViewModel>>(leadsNotConverted);
 
 			return View(leadsView);
 		}
@@ -58,7 +65,28 @@ namespace CRM.Controllers
 			return View();
 		}
 
-		[HttpGet]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(CreateLeadViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+
+				var lead = Mapper.Map<CreateLeadViewModel, Lead>(model);
+
+				var result = _leadManager.Create(lead);
+
+				if (result.Succeeded)
+				{
+					return RedirectToAction(nameof(Index), "Lead");
+				}
+
+				AddErrors(result);
+			}
+
+			return View(model);
+		}
+
 		public ActionResult Edit(int id)
 		{
 			var leadModel = _unitOfWork.LeadsRepository.FindById(id);
@@ -178,10 +206,12 @@ namespace CRM.Controllers
 			return RedirectToAction("Index", "Customer");
 		}
 
-		protected override void Dispose(bool disposing)
+		private void AddErrors(IdentityResult result)
 		{
-			//_unitOfWork.Dispose(!disposing);
-			base.Dispose(disposing);
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError("", error);
+			}
 		}
 	}
 }

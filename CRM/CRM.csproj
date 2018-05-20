@@ -223,9 +223,12 @@
     </Compile>
     <Compile Include="Hubs\PhoneHub.cs" />
     <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Managers\ILeadManager.cs" />
     <Compile Include="Managers\IUserManager.cs" />
+    <Compile Include="Managers\LeadManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Models\AddressViewModel.cs" />
+    <Compile Include="Models\CreateLeadViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
     <Compile Include="Models\LeadConvertViewModel.cs" />
