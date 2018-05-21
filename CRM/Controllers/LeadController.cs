@@ -32,7 +32,7 @@ namespace CRM.Controllers
 		}
 		public ActionResult Index()
 		{
-            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var currentUserEmail = User.GetCurrentUserCreads()?.Email;
             var service = new SearchService<LeadViewModel>();
 
             return View(service.GetSearchModel(currentUserEmail));
@@ -42,7 +42,7 @@ namespace CRM.Controllers
         public ActionResult Search(SearchViewModel model)
         {
             model.TableName = "Leads";
-            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var currentUserEmail = User.GetCurrentUserCreads()?.Email;
 
             var leadAdapter = new LeadAdapter();
             int totalItems;

@@ -105,6 +105,11 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Migrations\201805211948036_temp.cs" />
+    <Compile Include="Migrations\201805211948036_temp.Designer.cs">
+      <DependentUpon>201805211948036_temp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
     <Compile Include="Repository\IGenericRepository.cs" />
@@ -116,7 +121,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <EmbeddedResource Include="Migrations\201805211948036_temp.resx">
+      <DependentUpon>201805211948036_temp.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
