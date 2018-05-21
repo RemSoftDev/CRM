@@ -32,7 +32,8 @@
 </div>
 <div>
     @Html.Partial("~/Views/Lead/_LeadsPagePartial.cshtml")
-    <a href="/Lead/Create">New Lead</a>
+    <a href="/Lead/Create">New Lead</a><br/>
+    @Html.ActionLink("Emulate phone call", "Index", "Phone")
     <a class="pull-right" href="/Customer">Customers</a>
 </div>
 
