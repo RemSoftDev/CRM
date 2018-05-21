@@ -135,14 +135,14 @@
 @helper ShowItemsLabel()
     {
         var showFrom = Model.Page * Model.ItemsPerPage - Model.ItemsPerPage;
-        if(showFrom > Model.ItemsCount)
+        if (showFrom > Model.ItemsCount)
         {
             showFrom = 0;
         }
         var showTo = (showFrom + Model.ItemsPerPage) < Model.ItemsCount ? (showFrom + Model.ItemsPerPage) : Model.ItemsCount;
 
         <span>Showing @(showFrom + (Model.Items.Any() ? 1 : 0)) to @showTo of @Model.ItemsCount items</span>
-    }
+}
 
 @helper WritePaginationItem()
     {

@@ -1,5 +1,9 @@
 ﻿using CRM.DAL.Entities;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace CRM.DAL.Adapters.Extentions
 {
@@ -8,7 +12,8 @@ namespace CRM.DAL.Adapters.Extentions
         private const string firstName = "First Name";
         private const string lastName = "Last Name";
         private const string email = "Email";
-        private const string phone = "Phone";
+        private const string phone = "Phones";
+        private const string note = "Notes";
 
         public static IQueryable<User> AddWhere(
             this IQueryable<User> query,
@@ -19,17 +24,11 @@ namespace CRM.DAL.Adapters.Extentions
                 return query;
 
             switch(whereField)
-            {
-                case firstName:
-                    return query.Where(e => e.FirstName.Contains(searchValue));
-                case lastName:
-                    return query.Where(e => e.LastName.Contains(searchValue));
-                case email:
-                    return query.Where(e => e.Email.Contains(searchValue));
+            {               
                 case phone:
                     return query.Where(e => e.Phones.Where(p => p.PhoneNumber.Contains(searchValue)).Any());
                 default:
-                    return query;
+                    return query.Where(GetWhereExpression<User>(whereField, searchValue));
             }
         }
 
@@ -47,13 +46,35 @@ namespace CRM.DAL.Adapters.Extentions
                     return isAscending ? query.OrderBy(e => e.FirstName) : query.OrderByDescending(e => e.FirstName);
                 case lastName:
                     return isAscending ? query.OrderBy(e => e.FirstName) : query.OrderByDescending(e => e.FirstName);
-                case email:
-                    return isAscending ? query.OrderBy(e => e.Email) : query.OrderByDescending(e => e.Email);
                 case phone:
-                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber) : query.OrderByDescending(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber);
+                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault().PhoneNumber) : query.OrderByDescending(e => e.Phones.FirstOrDefault().PhoneNumber);
+                case note:
+                    return isAscending ? query.OrderBy(e => e.Notes.FirstOrDefault().Text) :
+                        query.OrderByDescending(e => e.Notes.FirstOrDefault().Text);
                 default:
-                    return isAscending ? query.OrderBy(e => e.FirstName) : query.OrderByDescending(e => e.FirstName);
+                    return isAscending ? query.OrderBy(orderField) : query.OrderByDescending(orderField);
             }
+        }
+
+        public static Expression<Func<TSource, bool>> GetWhereExpression<TSource>(
+            string propertyName, string searchvalue)
+        {
+            var entityType = typeof(TSource);
+
+            var propertyInfo = entityType.GetProperty(propertyName);
+            ParameterExpression arg = Expression.Parameter(entityType, "x");
+            MemberExpression property = Expression.Property(arg, propertyName);
+
+            var searchExp = Expression.Constant(searchvalue);
+
+            var containsExp = Expression.Call(property, typeof(String)
+                .GetMethod("Contains"), searchExp);
+
+            var equal = Expression.Equal(
+                containsExp,
+                Expression.Constant(true));
+
+            return Expression.Lambda<Func<TSource, bool>>(equal, arg);
         }
     }
 }

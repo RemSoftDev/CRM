@@ -206,6 +206,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\AuthenticateAttribute.cs" />
+    <Compile Include="Attributes\GridAttribute.cs" />
     <Compile Include="Attributes\LogHistoryAttribute.cs" />
     <Compile Include="AutoMapper\AutoMapperConfiguration.cs" />
     <Compile Include="ConfigProvider.cs" />
@@ -231,6 +232,8 @@
     <Compile Include="Models\CreateLeadViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\GridFieldViewModel.cs" />
+    <Compile Include="Models\GridProfileViewModel.cs" />
     <Compile Include="Models\LeadConvertViewModel.cs" />
     <Compile Include="Models\LeadViewModel.cs" />
     <Compile Include="Models\LogHistoryModel.cs" />
@@ -261,8 +264,15 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery-ui.theme.min.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\images\sort.png" />
+    <Content Include="fonts\images\sortdown.png" />
+    <Content Include="fonts\images\sortup.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
@@ -274,15 +284,18 @@
     <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Customer\editCustomer.js" />
-    <Content Include="Scripts\Customer\searchCustomer.js" />
     <Content Include="Scripts\Email\email.js" />
+    <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.signalR-2.2.3.js" />
     <Content Include="Scripts\jquery.signalR-2.2.3.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -290,7 +303,6 @@
     <Content Include="Scripts\Lead\convertLead.js" />
     <Content Include="Scripts\Lead\createLead.js" />
     <Content Include="Scripts\Lead\editLead.js" />
-    <Content Include="Scripts\Lead\searchLead.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\phoneCallEmulatingPage.js" />
     <Content Include="Scripts\phones_addresses.js" />
@@ -323,6 +335,7 @@
     <Content Include="Views\Lead\ConvertLead.cshtml" />
     <Content Include="Views\Email\Conversation.cshtml" />
     <Content Include="Views\Phone\_Drop.cshtml" />
+    <Content Include="Views\Shared\_GridPagePartial.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

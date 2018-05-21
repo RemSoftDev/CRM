@@ -4,38 +4,13 @@
 }
 
 <h2>Customers</h2>
-<div class="row form-group">
-    <div class="col-xs-3">
-        <select class="form-control" id="search_field">
-            <option>First Name</option>
-            <option>Last Name</option>
-            <option>Email</option>
-            <option>Phone</option>
-        </select>
-    </div>
-    <div class="col-xs-3">
-        <input class="form-control" type="text" id="search_value" placeholder="Search Value" />
-    </div>
-    <div class="col-xs-3">
-        <select class="form-control" id="order_field">
-            <option>First Name</option>
-            <option>Last Name</option>
-            <option>Email</option>
-            <option>Phone</option>
-        </select>
-    </div>
-    <div class="col-xs-2">
-        <select class="form-control" id="order_direction">
-            <option>ASC</option>
-            <option>DESC</option>
-        </select>
-    </div>
-    <input type="button" class="btn btn-default col-md-1" value="search" id="search_button" />
-</div>
+
 <div>
-    @Html.Partial("~/Views/Customer/_CustomersPagePartial.cshtml")
+    @Html.Partial("~/Views/Shared/_GridPagePartial.cshtml")
 </div>
 
-@Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
-@Scripts.Render("~/scripts/Customer/searchCustomer.js")
+@Styles.Render("~/content/jquery-ui.min.css")
+@Scripts.Render("~/Scripts/jquery-3.3.1.min.js")
+@Scripts.Render("~/Scripts/jquery-ui.min.js")
+@Scripts.Render("~/scripts/grid.js")
 

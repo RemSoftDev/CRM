@@ -20,6 +20,7 @@ namespace CRM.DAL.Entities
         public virtual IList<Note> Notes { get; set; }
         public virtual IList<Email> Emails { get; set; }
         public virtual IList<Call> Calls { get; set; }
+        public virtual IList<GridProfile> GridProfiles { get; set; }
 
         public User()
         {
@@ -27,6 +28,8 @@ namespace CRM.DAL.Entities
             Phones = new List<Phone>();
             Notes = new List<Note>();
             Emails = new List<Email>();
+            this.Calls = new List<Call>();
+            this.GridProfiles = new List<GridProfile>();
         }
     }
 }

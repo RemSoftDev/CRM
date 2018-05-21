@@ -1,13 +1,16 @@
 ﻿using CRM.DAL.Entities;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System;
+using System.Collections.Generic;
 
 namespace CRM.DAL.Adapters.Extentions
 {
     public static class QueryLeadExtentions
     {
-        private const string name = "Name";
-        private const string email = "Email";
-        private const string phone = "Phone";
+        private const string phone = "Phones";
+        private const string note = "Notes";
 
         public static IQueryable<Lead> AddWhere(
             this IQueryable<Lead> query,
@@ -16,17 +19,13 @@ namespace CRM.DAL.Adapters.Extentions
         {
             if (query == null || string.IsNullOrEmpty(whereField) || string.IsNullOrEmpty(searchValue))
                 return query;
-
+          
             switch (whereField)
             {
-                case name:
-                    return query.Where(e => e.Name.Contains(searchValue));
-                case email:
-                    return query.Where(e => e.Email.Contains(searchValue));
                 case phone:
                     return query.Where(e => e.Phones.Where(p => p.PhoneNumber.Contains(searchValue)).Any());
                 default:
-                    return query;
+                    return query.Where(GetWhereExpression<Lead>(whereField, searchValue));
             }
         }
 
@@ -40,16 +39,75 @@ namespace CRM.DAL.Adapters.Extentions
 
             switch (orderField)
             {
-                case name:
-                    return isAscending ? query.OrderBy(e => e.Name) : query.OrderByDescending(e => e.Name);
-                case email:
-                    return isAscending ? query.OrderBy(e => e.Email) : query.OrderByDescending(e => e.Email);
                 case phone:
-                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber) : query.OrderByDescending(e => e.Phones.FirstOrDefault(p => p.TypeId == 0).PhoneNumber);
+                    return isAscending ? query.OrderBy(e => e.Phones.FirstOrDefault().PhoneNumber) : 
+                        query.OrderByDescending(e => e.Phones.FirstOrDefault().PhoneNumber);
+                case note:
+                    return isAscending ? query.OrderBy(e => e.Notes.FirstOrDefault().Text) :
+                        query.OrderByDescending(e => e.Notes.FirstOrDefault().Text);
                 default:
-                    return isAscending ? query.OrderBy(e => e.Name) : query.OrderByDescending(e => e.Name);
+                    return isAscending ? query.OrderBy(orderField) : query.OrderByDescending(orderField);
             }
+        }
 
+        public static IOrderedQueryable<TSource> OrderBy<TSource>(
+            this IEnumerable<TSource> query, string propertyName)
+        {
+            return GetOrderQuery(query, propertyName, "OrderBy");
+        }
+
+        public static IOrderedQueryable<TSource> OrderByDescending<TSource>(
+            this IEnumerable<TSource> query, string propertyName)
+        {
+            return GetOrderQuery(query, propertyName, "OrderByDescending");
+        }
+
+        private static IOrderedQueryable<TSource> GetOrderQuery<TSource>(
+            IEnumerable<TSource> query, string propertyName, string orderMethod)
+        {
+            var entityType = typeof(TSource);
+
+            var propertyInfo = entityType.GetProperty(propertyName);
+            ParameterExpression arg = Expression.Parameter(entityType, "x");
+            MemberExpression property = Expression.Property(arg, propertyName);
+            var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
+
+            var enumarableType = typeof(Queryable);
+            var method = enumarableType.GetMethods()
+                 .Where(m => m.Name == orderMethod && m.IsGenericMethodDefinition)
+                 .Where(m =>
+                 {
+                     var parameters = m.GetParameters().ToList();              
+                     return parameters.Count == 2;
+                 }).Single();
+
+            MethodInfo genericMethod = method
+                 .MakeGenericMethod(entityType, propertyInfo.PropertyType);
+
+            var newQuery = (IOrderedQueryable<TSource>)genericMethod
+                 .Invoke(genericMethod, new object[] { query, selector });
+            return newQuery;
+        }
+
+        public static Expression<Func<TSource, bool>> GetWhereExpression<TSource>(
+            string propertyName, string searchvalue)
+        {
+            var entityType = typeof(TSource);
+
+            var propertyInfo = entityType.GetProperty(propertyName);
+            ParameterExpression arg = Expression.Parameter(entityType, "x");
+            MemberExpression property = Expression.Property(arg, propertyName);
+
+            var searchExp = Expression.Constant(searchvalue);
+
+            var containsExp = Expression.Call(property, typeof(String)
+                .GetMethod("Contains"), searchExp);
+
+            var equal = Expression.Equal(
+                containsExp, 
+                Expression.Constant(true));
+
+            return Expression.Lambda<Func<TSource, bool>>(equal, arg);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CRM.Interfaces;
+﻿using CRM.Attributes;
+using CRM.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,7 +16,8 @@ namespace CRM.Models
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
 
-		public string Name
+        [Grid(ShowOnGrid = true)]
+        public string Name
 		{
 			get => $"{FirstName} {LastName}";
 			set
@@ -37,7 +39,8 @@ namespace CRM.Models
 		[Required]
 		[EmailAddress]
 		[Display(Name = "Email")]
-		public string Email { get; set; }
+        [Grid(ShowOnGrid = true)]
+        public string Email { get; set; }
 
 		[Display(Name = "Phone Number")]
 		public string Phone { get; set; }
@@ -45,12 +48,15 @@ namespace CRM.Models
 		[Display(Name = "Message")]
 		public string Message { get; set; }
 
-		public IEnumerable<string> Phones
-		{
-			get
-			{
-				yield return Phone;
-			}
-		}
-	}
+        [Grid(ShowOnGrid = true)]
+        public List<PhoneViewModel> Phones { get; set; }
+
+        //      public IEnumerable<PhoneViewModel> Phones
+        //{
+        //	get
+        //	{
+        //		yield return new PhoneViewModel { PhoneNumber = Phone };
+        //	}
+        //}
+    }
 }

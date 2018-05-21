@@ -20,13 +20,15 @@ namespace CRM.DAL.Entities
 
 		public virtual IList<Phone> Phones { get; set; }
 		public virtual IList<Email> Emails { get; set; }
-
-		public virtual IList<Call> Calls { get; set; }
+        public virtual IList<Note> Notes { get; set; }
+        public virtual IList<Call> Calls { get; set; }
 
 		public Lead()
 		{
 			this.Phones = new List<Phone>();
 			this.Emails = new List<Email>();
+            this.Notes = new List<Note>();
+            this.Calls = new List<Call>();
 		}
 	}
 }

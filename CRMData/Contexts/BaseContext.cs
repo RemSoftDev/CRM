@@ -21,8 +21,10 @@ namespace CRM.DAL.Contexts
 		public virtual DbSet<Email> Emails { get; set; }
 		public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
 		public virtual DbSet<Call> Calls { get; set; }
-
-		public virtual DbSet<DAddressType> DAddressTypes { get; set; }
+        public virtual DbSet<GridProfile> GridProfiles { get; set; }
+        public virtual DbSet<GridField> GridFields { get; set; }
+        public virtual DbSet<DGrid> DGrids { get; set; }
+        public virtual DbSet<DAddressType> DAddressTypes { get; set; }
 		public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
 		public virtual DbSet<DUserType> DUserTypes { get; set; }
 

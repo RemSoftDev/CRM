@@ -2,12 +2,13 @@
 using CRM.DAL.Adapters;
 using CRM.DAL.Entities;
 using CRM.DAL.Repository;
-using CRM.Enums;
 using CRM.Extentions;
 using CRM.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using CRM.Interfaces;
+using CRM.Services;
 
 namespace CRM.Controllers
 {
@@ -22,33 +23,35 @@ namespace CRM.Controllers
 
         public ActionResult Index()
         {
-            var cusomersModel = _unitOfWork.UsersRepository.Get(c => c.UserTypeId == (int) UserType.Customer);
-            var customersViewModels= Mapper.Map<IEnumerable<User>, IEnumerable<UserViewModel>>(cusomersModel);
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<UserViewModel>();
 
-            return View(customersViewModels);
+            return View(service.GetSearchModel(currentUserEmail));
         }
 
         [HttpPost]
         public ActionResult Search(SearchViewModel model)
         {
-            model.TableName = "Customers";
+            model.TableName = "Users";
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
 
-            if (!ModelState.IsValid)
-            {
-                return Json(new { status = "error", message = "Model is not valid!" });
-            }
+            var userAdapter = new UserAdapter();
+            int totalItems;
 
-            var customerAdapter = new UserAdapter();
-
-            var result = customerAdapter.GetUsersByFilter(
+            var result = userAdapter.GetUsersByFilter(
                 model.Field,
                 model.SearchValue,
                 model.OrderField,
-                (int)UserType.Customer,
-                model.OrderDirection.Equals("ASC"));
+                model.Page,
+                model.ItemsPerPage,
+                out totalItems,
+                model.OrderDirection);
 
             var items = Mapper.Map<List<User>, List<UserViewModel>>(result);
-            return PartialView("_CustomersPagePartial", items);
+            model.Items = items.ToList<IUser>();
+            model.ItemsCount = totalItems;
+
+            return PartialView("_GridPagePartial", model);
         }
 
         [HttpGet]
@@ -164,6 +167,40 @@ namespace CRM.Controllers
 	            _unitOfWork.Save();
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult LoadProfile(string profileName)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<UserViewModel>();
+
+            var profiles = Mapper.Map<List<GridProfileViewModel>>(
+                service.GetUserProfiles(currentUserEmail, profileName)
+            );
+
+            return PartialView("_GridPagePartial", service.FillUserModelByProfile(profiles.FirstOrDefault()));
+        }
+
+        [HttpPost]
+        public ActionResult EditProfile(SearchViewModel model, bool makeDefault)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<UserViewModel>();
+
+            var editProfileResult = service.EditProfile(model, makeDefault, currentUserEmail);
+
+            return Json(new { success = editProfileResult });
+        }
+
+        [HttpPost]
+        public JsonResult CreateProfile(SearchViewModel model, string profileName)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<UserViewModel>();
+            var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
+
+            return Json(new { success = createProfileResult });
         }
     }
 }

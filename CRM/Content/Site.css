@@ -51,3 +51,18 @@ textarea {
     height: 60px;
     max-width: 77%;
 }
+
+.sort-up::after {
+    content: url(../fonts/images/sortup.png);
+    float: right;
+}
+
+.sort-down::after {
+    content: url(../fonts/images/sortdown.png);
+    float: right;
+}
+
+.sort::after {
+    content: url(../fonts/images/sort.png);
+    float : right;
+}

@@ -7,10 +7,10 @@ using CRM.Extentions;
 using CRM.Managers;
 using CRM.Models;
 using CRM.Services;
-using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace CRM.Controllers
 {
@@ -32,62 +32,98 @@ namespace CRM.Controllers
 		}
 		public ActionResult Index()
 		{
-			var leadsNotConverted = _unitOfWork.LeadsRepository.GetWithInclude(l => !l.IsConverted);
-			var leadsView = Mapper.Map<IEnumerable<Lead>, IEnumerable<LeadViewModel>>(leadsNotConverted);
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<LeadViewModel>();
 
-			return View(leadsView);
-		}
+            return View(service.GetSearchModel(currentUserEmail));
+        }
 
-		[HttpPost]
-		public ActionResult Search(SearchViewModel model)
-		{
-			model.TableName = "Leads";
+        [HttpPost]
+        public ActionResult Search(SearchViewModel model)
+        {
+            model.TableName = "Leads";
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
 
-			if (!ModelState.IsValid)
-			{
-				return Json(new { status = "error", message = "Model is not valid!" });
-			}
+            var leadAdapter = new LeadAdapter();
+            int totalItems;
 
-			var leadAdapter = new LeadAdapter();
+            var result = leadAdapter.GetLeadsByFilter(
+                model.Field,
+                model.SearchValue,
+                model.OrderField,
+                model.Page,
+                model.ItemsPerPage,
+                out totalItems,
+                model.OrderDirection);
 
-			var result = leadAdapter.GetLeadsByFilter(
-				model.Field,
-				model.SearchValue,
-				model.OrderField,
-				model.OrderDirection.Equals("ASC"));
+            var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
+            model.Items = items.ToList<Interfaces.IUser>();
+            model.ItemsCount = totalItems;
 
-			var items = Mapper.Map<List<Lead>, List<LeadViewModel>>(result);
-			return PartialView("_LeadsPagePartial", items);
-		}
+            return PartialView("_GridPagePartial", model);
+        }
 
-		public ActionResult Create()
-		{
-			return View();
-		}
+        [HttpPost]
+        public ActionResult LoadProfile(string profileName)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Create(CreateLeadViewModel model)
-		{
-			if (ModelState.IsValid)
-			{
+            var leadAdapter = new LeadAdapter();
+            var service = new SearchService<LeadViewModel>();
 
-				var lead = Mapper.Map<CreateLeadViewModel, Lead>(model);
+            var profiles = Mapper.Map<List<GridProfileViewModel>>(
+                service.GetUserProfiles(currentUserEmail, profileName)
+            );
 
-				var result = _leadManager.Create(lead);
+            return PartialView("_GridPagePartial", service.FillLeadModelByProfile(profiles.FirstOrDefault()));
+        }
 
-				if (result.Succeeded)
-				{
-					return RedirectToAction(nameof(Index), "Lead");
-				}
+        public ActionResult Create()
+        {
+            return View();
+        }
 
-				AddErrors(result);
-			}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(CreateLeadViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Phones = new List<PhoneViewModel>
+                {
+                    new PhoneViewModel
+                    {
+                        PhoneNumber = model.Phone,
+                        Type = Enums.PhoneType.HomePhone
+                    }
+                };
 
-			return View(model);
-		}
+                var lead = Mapper.Map<CreateLeadViewModel, Lead>(model);               
+                var result = _leadManager.Create(lead);
 
-		public ActionResult Edit(int id)
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index), "Lead");
+                }
+
+                AddErrors(result);
+            }
+
+            return View(model);
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            //_unitOfWork.Dispose(!disposing);
+            //base.Dispose(disposing);
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
+
+
+        public ActionResult Edit(int id)
 		{
 			var leadModel = _unitOfWork.LeadsRepository.FindById(id);
 			var leadNoteModel = _unitOfWork.NotesRepository.Get(n => n.LeadId == leadModel.Id).ToList();
@@ -203,15 +239,28 @@ namespace CRM.Controllers
 
 			_leadConvertService.Convert(model, newAddress, newPhones, userCreads.Email);
 
-			return RedirectToAction("Index", "Customer");
-		}
+            return RedirectToAction("Index", "Customer");
+        }
 
-		private void AddErrors(IdentityResult result)
-		{
-			foreach (var error in result.Errors)
-			{
-				ModelState.AddModelError("", error);
-			}
-		}
-	}
+        [HttpPost]
+        public ActionResult EditProfile(SearchViewModel model, bool makeDefault)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<LeadViewModel>();
+
+            var editProfileResult = service.EditProfile(model, makeDefault, currentUserEmail);
+
+            return Json(new { success = editProfileResult });
+        }
+
+        [HttpPost]
+        public JsonResult CreateProfile(SearchViewModel model, string profileName)
+        {
+            var currentUserEmail = User.GetCurrentUserCreads().Email;
+            var service = new SearchService<LeadViewModel>();
+            var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
+
+            return Json(new { success = createProfileResult });
+        }
+    }
 }

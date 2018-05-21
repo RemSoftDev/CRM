@@ -10,17 +10,47 @@ namespace CRM.DAL.Adapters
     public sealed class LeadAdapter
     {
         public List<Lead> GetLeadsByFilter(
-            string whereField, 
+            string whereField,
             string searchValue,
             string ordered,
-            bool isAscending = true)
+            int page,
+            int itemsPerPage,
+            out int totalRecords,
+            string orderDirection)
         {
             using (BaseContext context = new BaseContext())
             {
+                bool isAscending = true;
+                totalRecords = context
+                    .Leads
+                    .Where(l => !l.IsConverted)
+                    .AddWhere(whereField, searchValue)
+                    .Count();
+
+                if (string.IsNullOrWhiteSpace(ordered))
+                {
+                    ordered = "Id";
+                }
+
+                if (!string.IsNullOrWhiteSpace(orderDirection))
+                {
+                    isAscending = orderDirection.Equals("ASC");
+                }
+
+                var skipItems = (page - 1) * itemsPerPage;
+                if(skipItems > totalRecords)
+                {
+                    skipItems = totalRecords / itemsPerPage;
+                }
+
                 return context.Leads
                     .Include(e => e.Phones)
+                    .Include(l => l.Notes)
+                    .Where(l => !l.IsConverted)
                     .AddWhere(whereField, searchValue)
                     .AddOrder(ordered.Trim(), isAscending)
+                    .Skip(skipItems)
+                    .Take(itemsPerPage)
                     .ToList();
             }
         }
