@@ -105,23 +105,6 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201805082022139_InitialCreate.cs" />
-    <Compile Include="Migrations\201805082022139_InitialCreate.Designer.cs">
-      <DependentUpon>201805082022139_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805101921166_ForeignKeysForLeads.cs" />
-    <Compile Include="Migrations\201805101921166_ForeignKeysForLeads.Designer.cs">
-      <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.cs" />
-    <Compile Include="Migrations\201805131947426_addLazyLoadingToUser.Designer.cs">
-      <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805141853318_tempMigration.cs" />
-    <Compile Include="Migrations\201805141853318_tempMigration.Designer.cs">
-      <DependentUpon>201805141853318_tempMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
     <Compile Include="Repository\IGenericRepository.cs" />
@@ -133,18 +116,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805082022139_InitialCreate.resx">
-      <DependentUpon>201805082022139_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805101921166_ForeignKeysForLeads.resx">
-      <DependentUpon>201805101921166_ForeignKeysForLeads.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805131947426_addLazyLoadingToUser.resx">
-      <DependentUpon>201805131947426_addLazyLoadingToUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805141853318_tempMigration.resx">
-      <DependentUpon>201805141853318_tempMigration.cs</DependentUpon>
-    </EmbeddedResource>
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
