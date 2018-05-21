@@ -265,5 +265,39 @@ namespace CRM.Services
 
             return false;
         }
+
+        public List<string> GetLeadNotes(int leadId)
+        {
+            var notes = new List<string>();
+            using (var context = new BaseContext())
+            {
+                notes = context
+                    .Notes
+                    .Where(n => n
+                        .LeadId
+                        .Value
+                        .Equals(leadId))
+                    .Select(n => n.Text).ToList();
+            }
+
+            return notes;
+        }
+
+        public List<string> GetUserNotes(int leadId)
+        {
+            var notes = new List<string>();
+            using (var context = new BaseContext())
+            {
+                notes = context
+                    .Notes
+                    .Where(n => n
+                        .UserId
+                        .Value
+                        .Equals(leadId))
+                    .Select(n => n.Text).ToList();
+            }
+
+            return notes;
+        }
     }
 }

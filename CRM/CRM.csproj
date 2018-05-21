@@ -335,7 +335,8 @@
     <Content Include="Views\Lead\ConvertLead.cshtml" />
     <Content Include="Views\Email\Conversation.cshtml" />
     <Content Include="Views\Phone\_Drop.cshtml" />
-    <Content Include="Views\Shared\_GridPagePartial.cshtml" />
+    <Content Include="Views\Grid\_GridPagePartial.cshtml" />
+    <Content Include="Views\Grid\_Notes.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

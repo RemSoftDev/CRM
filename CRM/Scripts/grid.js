@@ -30,6 +30,23 @@
         ]
     });
 
+    $('<div id="note_dialog"></div>').css('overflow-y','auto').dialog({
+        modal: true,
+        autoOpen: false,
+        maxHeight: 500,
+        title: "Notes",
+        open: function () {
+            $('.ui-dialog-titlebar-close').remove();
+            var markup = $("#note_dialog").data('html');
+            $(this).html(markup);
+        },
+        buttons: {
+            Ok: function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
     $("#edit_dialog").dialog({
         autoOpen: false,
         open: function (e) {
@@ -101,7 +118,7 @@ function saveProfile(profileName) {
                 );
             }
             else {
-                $('#save_dialog span').show();
+                $('#save_dialog span').html(response.message).show();
             }
         },
         error: function (error) {
@@ -283,4 +300,21 @@ function getPath() {
     }
 
     return path;
+}
+
+function getNotes(id) {
+    $.ajax({
+        url: getPath() + "/Notes",
+        type: 'POST',
+        data: { id : id },
+        success: function (response) {
+            $("#note_dialog").data('html', response).dialog("open");
+            var target = $(this);
+            $("#note_dialog").dialog("widget");
+            return false;
+        },
+        error: function (error) {
+            alert(error);
+        }
+    });
 }

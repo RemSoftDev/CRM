@@ -51,7 +51,7 @@ namespace CRM.Controllers
             model.Items = items.ToList<IUser>();
             model.ItemsCount = totalItems;
 
-            return PartialView("_GridPagePartial", model);
+            return PartialView("~/Views/Grid/_GridPagePartial.cshtml", model);
         }
 
         [HttpGet]
@@ -179,7 +179,7 @@ namespace CRM.Controllers
                 service.GetUserProfiles(currentUserEmail, profileName)
             );
 
-            return PartialView("_GridPagePartial", service.FillUserModelByProfile(profiles.FirstOrDefault()));
+            return PartialView("~/Views/Grid/_GridPagePartial.cshtml", service.FillUserModelByProfile(profiles.FirstOrDefault()));
         }
 
         [HttpPost]
@@ -196,11 +196,25 @@ namespace CRM.Controllers
         [HttpPost]
         public JsonResult CreateProfile(SearchViewModel model, string profileName)
         {
-            var currentUserEmail = User.GetCurrentUserCreads().Email;
-            var service = new SearchService<UserViewModel>();
-            var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
+            if (!string.IsNullOrWhiteSpace(profileName))
+            {
+                var currentUserEmail = User.GetCurrentUserCreads().Email;
+                var service = new SearchService<UserViewModel>();
+                var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
 
-            return Json(new { success = createProfileResult });
+                return Json(new { success = createProfileResult, message = "Profile with this name already exists!" });
+            }
+
+            return Json(new { success = false, message = "Name can't be empty!" });
+        }
+
+        [HttpPost]
+        public ActionResult Notes(int id)
+        {
+            var service = new SearchService<UserViewModel>();
+            var notes = service.GetUserNotes(id);
+
+            return PartialView("~/Views/Grid/_Notes.cshtml", notes);
         }
     }
 }

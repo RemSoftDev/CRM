@@ -90,17 +90,24 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var lead in Model.Items)
+        @foreach (var item in Model.Items)
         {
             <tr>
                 @foreach (var column in Model.Columns)
                 {
                     if (column.ShowOnGrid)
                     {
-                        <td>@(ReflectionService.GetPropValue(lead, column.Field))</td>
+                        if (column.Field.Equals("Notes"))
+                        {
+                            <td><a onclick="getNotes(@item.Id)" style="cursor:pointer;">@(ReflectionService.GetPropValue(item, column.Field))</a></td>
+                        }
+                        else
+                        {
+                            <td>@(ReflectionService.GetPropValue(item, column.Field))</td>
+                        }                      
                     }
                 }
-                <td><a href="/Lead/Edit?id=@lead.Id" style="padding-right: 13px;">Edit</a><a href="/Lead/ConvertLead?id=@lead.Id">Convert</a></td>
+                <td><a href="/Lead/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a><a href="/Lead/ConvertLead?id=@item.Id">Convert</a></td>
             </tr>
         }
     </tbody>
@@ -120,7 +127,7 @@
     <div>
         <label for="profile_name">Profile Name</label>
         <input class="form-control" id="profile_name" />
-        <span style="color:red;display:none;">Profile with this name already exists!</span>
+        <span style="color:red;display:none;"></span>
     </div>
 </div>
 

@@ -60,7 +60,7 @@ namespace CRM.Controllers
             model.Items = items.ToList<Interfaces.IUser>();
             model.ItemsCount = totalItems;
 
-            return PartialView("_GridPagePartial", model);
+            return PartialView("~/Views/Grid/_GridPagePartial.cshtml", model);
         }
 
         [HttpPost]
@@ -75,7 +75,7 @@ namespace CRM.Controllers
                 service.GetUserProfiles(currentUserEmail, profileName)
             );
 
-            return PartialView("_GridPagePartial", service.FillLeadModelByProfile(profiles.FirstOrDefault()));
+            return PartialView("~/Views/Grid/_GridPagePartial.cshtml", service.FillLeadModelByProfile(profiles.FirstOrDefault()));
         }
 
         public ActionResult Create()
@@ -256,11 +256,25 @@ namespace CRM.Controllers
         [HttpPost]
         public JsonResult CreateProfile(SearchViewModel model, string profileName)
         {
-            var currentUserEmail = User.GetCurrentUserCreads().Email;
-            var service = new SearchService<LeadViewModel>();
-            var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
+            if (!string.IsNullOrWhiteSpace(profileName))
+            {
+                var currentUserEmail = User.GetCurrentUserCreads().Email;
+                var service = new SearchService<LeadViewModel>();
+                var createProfileResult = service.CreateProfile(model, profileName, currentUserEmail);
 
-            return Json(new { success = createProfileResult });
+                return Json(new { success = createProfileResult, message = "Profile with this name already exists!" });
+            }
+            
+            return Json(new { success = false, message = "Name can't be empty!" });
+        }
+
+        [HttpPost]
+        public ActionResult Notes(int id)
+        {
+            var service = new SearchService<LeadViewModel>();
+            var notes = service.GetLeadNotes(id);
+
+            return PartialView("~/Views/Grid/_Notes.cshtml", notes);
         }
     }
 }
