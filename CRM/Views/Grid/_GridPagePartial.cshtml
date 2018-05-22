@@ -24,11 +24,10 @@
         <div class="col-md-6">Page size :</div>
         <div class=" col-md-6">
             <select class="form-control" id="items_per_page">
-                <option>1</option>
-                @foreach (var i in new int[] { 10, 25, 50, 100 })
-                {
-                    <option @(Model.ItemsPerPage == i ? "selected" : "")>@i</option>
-                }
+                @foreach (var i in new int[] {10, 25, 50, 100 })
+    {
+            <option @(Model.ItemsPerPage == i ? "selected" : "")>@i</option>
+}
             </select>
         </div>
     </div>
@@ -154,6 +153,10 @@
 @helper WritePaginationItem()
     {
         var totalPages = Model.ItemsCount / Model.ItemsPerPage;
+        var itemsLeft = Model.ItemsCount % Model.ItemsPerPage;
+        if(itemsLeft > 0){
+            ++ totalPages;
+        }
         if (Model.ItemsCount > 0 && totalPages == 0)
         {
             totalPages = 1;
