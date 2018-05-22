@@ -108,7 +108,6 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Log4net\Log.cs" />
     <Compile Include="Migrations\201805211948036_temp.cs" />
     <Compile Include="Migrations\201805211948036_temp.Designer.cs">
       <DependentUpon>201805211948036_temp.cs</DependentUpon>
@@ -132,6 +131,12 @@
     <EmbeddedResource Include="Migrations\201805211948036_temp.resx">
       <DependentUpon>201805211948036_temp.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CRM.Log\CRM.Log.csproj">
+      <Project>{1ae02fcb-0b82-4e37-8a64-05c4c2efbd6a}</Project>
+      <Name>CRM.Log</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
