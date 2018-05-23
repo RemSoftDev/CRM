@@ -24,10 +24,10 @@
         <div class="col-md-6">Page size :</div>
         <div class=" col-md-6">
             <select class="form-control" id="items_per_page">
-                @foreach (var i in new int[] {10, 25, 50, 100 })
-    {
-            <option @(Model.ItemsPerPage == i ? "selected" : "")>@i</option>
-}
+                @foreach (var i in new int[] { 10, 25, 50, 100 })
+                {
+                    <option @(Model.ItemsPerPage == i ? "selected" : "")>@i</option>
+                }
             </select>
         </div>
     </div>
@@ -103,10 +103,20 @@
                         else
                         {
                             <td>@(ReflectionService.GetPropValue(item, column.Field))</td>
-                        }                      
+                        }
                     }
                 }
-                <td><a href="/Lead/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a><a href="/Lead/ConvertLead?id=@item.Id">Convert</a></td>
+                <td style="text-align: center;">
+                    @if (item is LeadViewModel)
+                    {
+                        <a href="/Lead/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
+                        <a href="/Lead/ConvertLead?id=@item.Id">Convert</a>
+                    }
+                    @if (item is UserViewModel)
+                    {
+                        <a href="/Customer/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
+                    }
+                </td>
             </tr>
         }
     </tbody>
@@ -154,8 +164,9 @@
     {
         var totalPages = Model.ItemsCount / Model.ItemsPerPage;
         var itemsLeft = Model.ItemsCount % Model.ItemsPerPage;
-        if(itemsLeft > 0){
-            ++ totalPages;
+        if (itemsLeft > 0)
+        {
+            ++totalPages;
         }
         if (Model.ItemsCount > 0 && totalPages == 0)
         {

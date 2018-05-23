@@ -150,7 +150,7 @@ namespace CRM.Services
             {
                 var item = Mapper.Map<EmailViewModel, Email>(model);
 
-                if (user is LeadViewModel)
+                if (user is LeadViewModel || user is CreateLeadViewModel)
                 {
                     item.LeadId = user.Id;
                 }

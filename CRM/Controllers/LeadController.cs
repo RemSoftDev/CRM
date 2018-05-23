@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace CRM.Controllers
 {
@@ -20,15 +21,19 @@ namespace CRM.Controllers
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ILeadConvertService _leadConvertService;
 		private readonly ILeadManager _leadManager;
+        private readonly IEmailService _emailService;
 
-		public LeadController(
+
+        public LeadController(
 			IUnitOfWork unitOfWork,
 			ILeadConvertService leadConvertService,
-			ILeadManager leadManager)
+			ILeadManager leadManager,
+            IEmailService emailService)
 		{
 			_unitOfWork = unitOfWork;
 			_leadConvertService = leadConvertService;
 			_leadManager = leadManager;
+            _emailService = emailService;
 		}
 		public ActionResult Index()
 		{
@@ -100,6 +105,20 @@ namespace CRM.Controllers
 
                 var lead = Mapper.Map<CreateLeadViewModel, Lead>(model);               
                 var result = _leadManager.Create(lead);
+
+                if (!string.IsNullOrEmpty(model.Message))
+                {
+                    EmailViewModel email = new EmailViewModel
+                    {
+                        To = "csharpcrm@gmail.com",
+                        Subject = "Lead Registered",
+                        Body = model.Message,
+                        WasReceived = true
+                    };
+
+                    model.Id = _leadManager.GetLead(model.Email).Id;
+                    new Task(() => { _emailService.SendEmail(email, model); }).Start();
+                }
 
                 if (result.Succeeded)
                 {

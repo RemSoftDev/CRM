@@ -112,19 +112,19 @@ namespace CRM.Services
 
 			// проставляем что лида перевели в кастомера
 			lead.IsConverted = true;
+            _unitOfWork.LeadsRepository.Update(lead);
 
-			// логирование процесса конвертации
+            // логирование процесса конвертации
 
-			_unitOfWork.LeadsConvertedLogsRepository.Create(new LeadConvertedLog
+            _unitOfWork.LeadsConvertedLogsRepository.Create(new LeadConvertedLog
 			{
 				Lead = lead,
 				User = newCustomer,
 				ConvertDateTime = DateTime.Now,
 				ConvertedByUserId = _unitOfWork.UsersRepository.FindBy(e => e.Email == currentUserEmail).Id
-			});
-
-			_unitOfWork.Save();
-
+			});           
+            
+            _unitOfWork.Save();
 		}
 	}
 }

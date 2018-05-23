@@ -17,7 +17,6 @@ namespace CRM.Models
         [Grid(ShowOnGrid = true)]
         public string FirstName { get; set; }
 
-        [Required]
         [Grid(ShowOnGrid = true)]
         public string LastName { get; set; }
 
