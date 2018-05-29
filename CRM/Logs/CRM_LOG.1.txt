@@ -1,0 +1,4 @@
+INFO - 0 Create instance of CRM.Log.Logger
+DEBUG - 0 5/29/2018 8:41:36 PM CRM.Log.Logger Create instance of CRM.Log.Logger
+INFO - 1 UnitOfWork created1
+DEBUG - 1 5/29/2018 8:41:36 PM CRM.Log.Logger UnitOfWork created1
