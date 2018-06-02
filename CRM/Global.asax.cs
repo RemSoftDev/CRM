@@ -8,6 +8,7 @@ using Ninject;
 using Ninject.Web.Common.WebHost;
 using System;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -33,13 +34,20 @@ namespace CRM
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+	        HostingEnvironment.RegisterObject(new HostingEnvironmentRegisteredObject());
 
-            //GlobalFilters.Filters.Add(new LogHistoryAttribute());
+			//GlobalFilters.Filters.Add(new LogHistoryAttribute());
 
-            AutoMapperConfiguration.Configure();
-        }
+			AutoMapperConfiguration.Configure();
+		}
 
-        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+	    protected override void OnApplicationStopped()
+	    {
+		    Log.Logger.Error("Web App was stopped or down from ", new Exception());
+	    }
+
+
+		protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {
             var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
@@ -120,5 +128,7 @@ namespace CRM
                 .ToSelf()
                 .InSingletonScope();
         }
+
+
     }
 }

@@ -209,6 +209,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\HostingEnvironmentRegisteredObject.cs" />
     <Compile Include="App_Start\NinjectSignalRDependencyResolver.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\PhoneController.cs" />
+    <Compile Include="Controllers\TaskShedulerController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extentions\ObjectExtention.cs" />
     <Compile Include="Extentions\PrincipalExtention.cs" />
@@ -251,6 +253,7 @@
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Modules\EmailSchedulerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\EncryptionService.cs" />
@@ -343,6 +346,7 @@
     <Content Include="Views\Email\Conversation.cshtml" />
     <Content Include="Views\Phone\_Drop.cshtml" />
     <Content Include="Views\Shared\_GridPagePartial.cshtml" />
+    <Content Include="Views\TaskSheduler\Index.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

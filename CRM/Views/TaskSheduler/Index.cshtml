@@ -1,0 +1,34 @@
+﻿
+@{
+	ViewBag.Title = "Task Sheduler";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<div class="checkbox">
+					<input type="button"
+					       class="btn btn-danger"
+					       value="Stop LogTask" 
+					       onclick="location.href='@Url.Action("StopLogTask", "TaskSheduler")'" />
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<div class="checkbox">
+					<input type="button"
+						   class="btn btn-success"
+						   value="Start\Restart LogTask"
+						   onclick="location.href='@Url.Action("StartLogTask", "TaskSheduler")'" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+

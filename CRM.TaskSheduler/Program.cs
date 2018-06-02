@@ -11,16 +11,15 @@ namespace CRM.TaskSheduler
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello, wolrd!");
-
 			var path = GetLogFilePath();
 			var logs = GetAllLogsInFile(path);
+
 
 			var email = new EmailViewModel
 			{
 				To = "Yurii.Moroziuk@hotmail.com",
 				Subject = $"CRM log {DateTime.Now}",
-				Body = string.Join(Environment.NewLine, logs)
+				Body = logs
 			};
 
 			using (var uow = new UnitOfWork())
@@ -28,16 +27,23 @@ namespace CRM.TaskSheduler
 				var emailService = new EmailService(uow);
 				emailService.SendEmail(email, new UserViewModel());
 			}
+
 		}
 
-		private static string[] GetAllLogsInFile(string path)
+		private static string GetAllLogsInFile(string path)
 		{
-			if (File.Exists(path))
+			//if (File.Exists(path))
+			//{
+			//	return File.ReadAllLines(path);
+			//}
+			string logs;
+
+			using (StreamReader sr = new StreamReader(path))
 			{
-				return File.ReadAllLines(path);
+				logs = sr.ReadToEnd();
 			}
 
-			return null;
+			return logs;
 		}
 
 		private static string GetLogFilePath()
