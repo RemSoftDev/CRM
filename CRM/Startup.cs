@@ -1,10 +1,12 @@
 ﻿using CRM.Hubs;
+using CRM.Log;
 using CRM.Services.Interfaces;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Owin;
 using Owin;
+using System;
 
 [assembly: OwinStartup(typeof(CRM.Startup))]
 
@@ -25,6 +27,16 @@ namespace CRM
 			{
 				Resolver = resolver
 			});
+
+			try
+			{
+				throw new Exception();
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogContex.Error("something wrong",exp);
+			}
+			Logger.InfoLogContext.Info("Web app start");
 
 		}
 
