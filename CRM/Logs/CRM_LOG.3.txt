@@ -1,0 +1,2 @@
+INFO - 0 Create instance of CRM.Log.Logger
+DEBUG - 0 6/3/2018 12:11:48 PM CRdsadas
