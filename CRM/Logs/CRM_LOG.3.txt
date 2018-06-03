@@ -1,18 +1,12 @@
 INFO - 0 Create instance of CRM.Log.Logger
-DEBUG - 0 6/3/2018 12:38:11 AM CRM.Log.Logger Create instance of CRM.Log.Logger
+DEBUG - 0 6/3/2018 12:45:15 AM CRM.Log.Logger Create instance of CRM.Log.Logger
 INFO - 1 UnitOfWork created1
-DEBUG - 1 6/3/2018 12:38:11 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 1 6/3/2018 12:45:15 AM CRM.Log.Logger UnitOfWork created1
 INFO - 2 UnitOfWork created1
-DEBUG - 2 6/3/2018 12:38:11 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 2 6/3/2018 12:45:15 AM CRM.Log.Logger UnitOfWork created1
 INFO - 3 UnitOfWork created1
-DEBUG - 3 6/3/2018 12:38:11 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 3 6/3/2018 12:45:15 AM CRM.Log.Logger UnitOfWork created1
 INFO - 4 UnitOfWork created1
-DEBUG - 4 6/3/2018 12:38:12 AM CRM.Log.Logger UnitOfWork created1
-INFO - 5 Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
-DEBUG - 5 6/3/2018 12:38:12 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
-INFO - 6 [SQL] insert item
-DEBUG - 6 6/3/2018 12:38:12 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] [SQL] insert item
-INFO - 7 Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
-DEBUG - 7 6/3/2018 12:38:13 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
-INFO - 8 [SQL] insert item
-DEBUG - 8 6/3/2018 12:38:13 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] [SQL] insert item
+DEBUG - 4 6/3/2018 12:45:17 AM CRM.Log.Logger UnitOfWork created1
+INFO - 5 UnitOfWork created1
+DEBUG - 5 6/3/2018 12:45:45 AM CRM.Log.Logger UnitOfWork created1

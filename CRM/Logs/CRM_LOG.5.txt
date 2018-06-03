@@ -1,12 +1,18 @@
 INFO - 0 Create instance of CRM.Log.Logger
-DEBUG - 0 6/3/2018 12:33:17 AM CRM.Log.Logger Create instance of CRM.Log.Logger
+DEBUG - 0 6/3/2018 12:35:15 AM CRM.Log.Logger Create instance of CRM.Log.Logger
 INFO - 1 UnitOfWork created1
-DEBUG - 1 6/3/2018 12:33:17 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 1 6/3/2018 12:35:15 AM CRM.Log.Logger UnitOfWork created1
 INFO - 2 UnitOfWork created1
-DEBUG - 2 6/3/2018 12:33:17 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 2 6/3/2018 12:35:15 AM CRM.Log.Logger UnitOfWork created1
 INFO - 3 UnitOfWork created1
-DEBUG - 3 6/3/2018 12:33:17 AM CRM.Log.Logger UnitOfWork created1
-INFO - 4 Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
-DEBUG - 4 6/3/2018 12:33:19 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
-INFO - 5 [SQL] insert item
-DEBUG - 5 6/3/2018 12:33:31 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] [SQL] insert item
+DEBUG - 3 6/3/2018 12:35:15 AM CRM.Log.Logger UnitOfWork created1
+INFO - 4 UnitOfWork created1
+DEBUG - 4 6/3/2018 12:35:17 AM CRM.Log.Logger UnitOfWork created1
+INFO - 5 Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
+DEBUG - 5 6/3/2018 12:35:17 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
+INFO - 6 [SQL] insert item
+DEBUG - 6 6/3/2018 12:35:17 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] [SQL] insert item
+INFO - 7 Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
+DEBUG - 7 6/3/2018 12:35:18 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]
+INFO - 8 [SQL] insert item
+DEBUG - 8 6/3/2018 12:35:18 AM CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email] [SQL] insert item

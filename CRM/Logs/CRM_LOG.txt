@@ -1,10 +1,12 @@
 INFO - 0 Create instance of CRM.Log.Logger
-DEBUG - 0 6/3/2018 1:09:27 AM CRM.Log.Logger Create instance of CRM.Log.Logger
+DEBUG - 0 03/06/2018 10:38:32 CRM.Log.Logger Create instance of CRM.Log.Logger
 INFO - 1 UnitOfWork created1
-DEBUG - 1 6/3/2018 1:09:27 AM CRM.Log.Logger UnitOfWork created1
-INFO - 2 UnitOfWork created1
-DEBUG - 2 6/3/2018 1:09:27 AM CRM.Log.Logger UnitOfWork created1
-INFO - 3 UnitOfWork created1
-DEBUG - 3 6/3/2018 1:20:46 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 1 03/06/2018 10:38:32 CRM.Log.Logger UnitOfWork created1
+INFO - 2 Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]
+DEBUG - 2 03/06/2018 10:39:08 CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User] Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]
+INFO - 3 [SQL] get data in table by predicate
+DEBUG - 3 03/06/2018 10:39:08 CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User] [SQL] get data in table by predicate
 INFO - 4 UnitOfWork created1
-DEBUG - 4 6/3/2018 1:20:51 AM CRM.Log.Logger UnitOfWork created1
+DEBUG - 4 03/06/2018 10:39:11 CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User] UnitOfWork created1
+INFO - 5 UnitOfWork created1
+DEBUG - 5 03/06/2018 10:39:19 CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User] UnitOfWork created1
