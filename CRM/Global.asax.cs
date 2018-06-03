@@ -34,7 +34,6 @@ namespace CRM
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-	        HostingEnvironment.RegisterObject(new HostingEnvironmentRegisteredObject());
 
 			//GlobalFilters.Filters.Add(new LogHistoryAttribute());
 

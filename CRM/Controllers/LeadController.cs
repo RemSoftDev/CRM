@@ -32,7 +32,6 @@ namespace CRM.Controllers
 		}
 		public ActionResult Index()
 		{
-			Log.Logger.Info("dsadsdsa");
             var currentUserEmail = User.GetCurrentUserCreads()?.Email;
             var service = new SearchService<LeadViewModel>();
 
