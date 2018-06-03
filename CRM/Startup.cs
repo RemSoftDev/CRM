@@ -26,14 +26,6 @@ namespace CRM
 				Resolver = resolver
 			});
 
-
-			//var builder = new WindowTaskSchedulerBuilder();
-			//builder.SetAppDomainPath(HttpRuntime.AppDomainAppPath)
-			//	.SetBatFileWithPath($"{HttpRuntime.AppDomainAppPath}EmailSanderTask.bat")
-			//	.SetTaskDuration(new TimeSpan(23, 0, 0))
-			//	.SetStartTime(new TimeSpan(0, 10, 0))
-			//	.Build();
-
 		}
 
 
