@@ -58,7 +58,31 @@ namespace CRM.Services
             new Task(() => { SaveEmail(model, user); }).Start();
         }
 
-        public List<EmailViewModel> GetMailings<T>(DateTime? lastReceivedDate, T user) where T : IUser
+		public void SendEmail(EmailViewModel model) 
+		{
+			var fromAddress = new MailAddress(Email, "CRM");
+			var toAddress = new MailAddress(model.To);
+
+			var smtp = new SmtpClient
+			{
+				Host = "smtp.gmail.com",
+				Port = 587,
+				EnableSsl = true,
+				DeliveryMethod = SmtpDeliveryMethod.Network,
+				UseDefaultCredentials = false,
+				Credentials = new NetworkCredential(Email, Password)
+			};
+			using (var message = new MailMessage(fromAddress, toAddress)
+			{
+				Subject = model.Subject,
+				Body = model.Body
+			})
+			{
+				smtp.Send(message);
+			}
+		}
+
+		public List<EmailViewModel> GetMailings<T>(DateTime? lastReceivedDate, T user) where T : IUser
         {
             if (string.IsNullOrEmpty(user.Email))
             {
@@ -162,6 +186,8 @@ namespace CRM.Services
 				_unitOfWork.Save();
             }
         }
+
+
         public List<EmailViewModel> LoadMails<T>(T user) where T : IUser
         {
             List<EmailViewModel> emails = new List<EmailViewModel>();

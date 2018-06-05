@@ -1,4 +1,5 @@
 ﻿using CRM.DAL.Contexts;
+using CRM.Log;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -16,20 +17,49 @@ namespace CRM.DAL.Repository
 		{
 			_context = context;
 			_dbSet = context.Set<TEntity>();
+
+			Logger.InitLog(typeof(EfGenericRepository<TEntity>));
 		}
 
-		public TEntity FindBy(Func<TEntity, bool> predicate) => _dbSet.FirstOrDefault(predicate);
+		public TEntity FindBy(Func<TEntity, bool> predicate)
+		{
+			Logger.SqlInfo("get item by predicate");
+			return _dbSet.FirstOrDefault(predicate);
+		}
 
-		public IEnumerable<TEntity> Get() => _dbSet.AsNoTracking().ToList();
+		public IEnumerable<TEntity> Get()
+		{
+			Logger.SqlInfo("get all data in table");
+			return _dbSet.AsNoTracking().ToList();
+		}
 
-		public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate) => _dbSet.AsNoTracking().Where(predicate).ToList();
-		public TEntity FindById(int id) => _dbSet.Find(id);
+		public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
+		{
+			Logger.SqlInfo("get data in table by predicate");
+			return _dbSet.AsNoTracking().Where(predicate).ToList();
+		}
 
-		public void Create(TEntity item) => _dbSet.Add(item);
+		public TEntity FindById(int id)
+		{
+			Logger.SqlInfo($"get item by id = {id}");
+			return _dbSet.Find(id);
+		}
 
-		public void Update(TEntity item) => _context.Entry(item).State = EntityState.Modified;
+		public void Create(TEntity item)
+		{
+			Logger.SqlInfo($"insert item");
+			_dbSet.Add(item);
+		}
+
+		public void Update(TEntity item)
+		{
+			Logger.SqlInfo($"update item");
+			_context.Entry(item).State = EntityState.Modified;
+		}
+
 		public bool Any(Func<TEntity, bool> predicate)
 		{
+			Logger.SqlInfo($"is exist item(s) by predicate");
 			return _dbSet.Any(predicate);
 		}
 
@@ -41,20 +71,30 @@ namespace CRM.DAL.Repository
 			}
 		}
 
-		public void Remove(TEntity item) => _dbSet.Remove(item);
+		public void Remove(TEntity item)
+		{
+			Logger.SqlInfo($"remove item");
+			_dbSet.Remove(item);
+		}
 
-		public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties) => Include(includeProperties).ToList();
+		public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
+		{
+			Logger.SqlInfo($"get with include");
+			return Include(includeProperties).ToList();
+		}
 
 		public IEnumerable<TEntity> GetWithInclude(
 			Func<TEntity, bool> predicate,
 			params Expression<Func<TEntity, object>>[] includeProperties)
 		{
+			Logger.SqlInfo($"get with include");
 			var query = Include(includeProperties);
 			return query.Where(predicate).ToList();
 		}
 
 		public void AddRange(IEnumerable<TEntity> entities)
 		{
+			Logger.SqlInfo($"Sql inset {entities.Count()} items");
 			_dbSet.AddRange(entities);
 		}
 

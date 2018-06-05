@@ -1,5 +1,6 @@
 ﻿using CRM.DAL.Contexts;
 using CRM.DAL.Entities;
+using CRM.Log;
 using System;
 
 namespace CRM.DAL.Repository
@@ -24,6 +25,7 @@ namespace CRM.DAL.Repository
 		public UnitOfWork()
 		{
 			_dbContext = new BaseContext();
+			Logger.InfoLogContext.Info("UnitOfWork created");
 		}
 
 		public BaseContext Context => _dbContext;

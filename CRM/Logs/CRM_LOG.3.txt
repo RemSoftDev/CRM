@@ -1,0 +1,20 @@
+==== BEGIN LOG ====
+
+ [INFO] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [0 Create instance of CRM.Log.Logger]
+
+ [DEBUG] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [0 6/3/2018 5:47:41 PM CRM.Log.Logger Create instance of CRM.Log.Logger]
+
+ [ERROR] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Error] [1 6/3/2018 5:47:41 PM CRM.Log.Logger something wrong 
+]
+
+ [INFO] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [2 Web app start]
+
+ [DEBUG] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [2 6/3/2018 5:47:41 PM CRM.Log.Logger Web app start]
+
+ [INFO] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [3 UnitOfWork created1]
+
+ [DEBUG] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [3 6/3/2018 5:47:42 PM CRM.Log.Logger UnitOfWork created1]
+
+ [INFO] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [4 UnitOfWork created1]
+
+ [DEBUG] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [4 6/3/2018 5:47:42 PM CRM.Log.Logger UnitOfWork created1]

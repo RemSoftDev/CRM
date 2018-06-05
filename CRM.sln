@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM", "CRM\CRM.csproj", "{2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.DAL", "CRMData\CRM.DAL.csproj", "{B28269B4-88BC-4330-8336-CC63F5312E89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.Log", "CRM.Log\CRM.Log.csproj", "{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,16 @@ Global
 		{B28269B4-88BC-4330-8336-CC63F5312E89}.Dev3|Any CPU.Build.0 = Dev3|Any CPU
 		{B28269B4-88BC-4330-8336-CC63F5312E89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B28269B4-88BC-4330-8336-CC63F5312E89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev1|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev1|Any CPU.Build.0 = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev2|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev2|Any CPU.Build.0 = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev3|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev3|Any CPU.Build.0 = Debug|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

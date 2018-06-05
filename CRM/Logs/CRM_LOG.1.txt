@@ -1,0 +1,11 @@
+==== BEGIN LOG ====
+
+ [INFO] [11:43:18] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
+
+ [ERROR] [11:43:18] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
+
+ [INFO] [11:43:18] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
+
+ [INFO] [11:43:18] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [11:43:18] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
