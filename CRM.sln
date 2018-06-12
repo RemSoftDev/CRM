@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.DAL", "CRMData\CRM.DAL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.Log", "CRM.Log\CRM.Log.csproj", "{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.Report", "CRM.Report\CRM.Report.csproj", "{B7F02F05-3A1A-475E-927A-17C88E094A90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,16 @@ Global
 		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Dev3|Any CPU.Build.0 = Debug|Any CPU
 		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AE02FCB-0B82-4E37-8A64-05C4C2EFBD6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Dev1|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Dev1|Any CPU.Build.0 = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Dev2|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Dev2|Any CPU.Build.0 = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Dev3|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Dev3|Any CPU.Build.0 = Debug|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F02F05-3A1A-475E-927A-17C88E094A90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
