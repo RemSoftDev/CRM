@@ -1,6 +1,6 @@
 ﻿using log4net;
 using System;
-//tmpfesfsd
+
 namespace CRM.Log
 {
 	public static class Logger
