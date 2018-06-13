@@ -1,11 +1,20 @@
-====+ BEGIN LOG %d{yyyy-MM-dd} +====
-%newline29 [INFO] 05:43:46 [0 Create instance of CRM.Log.Logger]
-32 [DEBUG] 05:43:46 [0 6/3/2018 5:43:46 PM CRM.Log.Logger Create instance of CRM.Log.Logger]
-41 [ERROR] 05:43:46 [1 6/3/2018 5:43:46 PM CRM.Log.Logger something wrong 
+==== BEGIN LOG ====
+
+ [INFO] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [0 Create instance of CRM.Log.Logger]
+
+ [DEBUG] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [0 6/3/2018 5:47:41 PM CRM.Log.Logger Create instance of CRM.Log.Logger]
+
+ [ERROR] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Error] [1 6/3/2018 5:47:41 PM CRM.Log.Logger something wrong 
 ]
-29 [INFO] 05:43:46 [2 Web app start]
-32 [DEBUG] 05:43:46 [2 6/3/2018 5:43:46 PM CRM.Log.Logger Web app start]
-29 [INFO] 05:43:46 [3 UnitOfWork created1]
-32 [DEBUG] 05:43:46 [3 6/3/2018 5:43:46 PM CRM.Log.Logger UnitOfWork created1]
-29 [INFO] 05:43:47 [4 UnitOfWork created1]
-32 [DEBUG] 05:43:47 [4 6/3/2018 5:43:47 PM CRM.Log.Logger UnitOfWork created1]
+
+ [INFO] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [2 Web app start]
+
+ [DEBUG] [05:47:41] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [2 6/3/2018 5:47:41 PM CRM.Log.Logger Web app start]
+
+ [INFO] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [3 UnitOfWork created1]
+
+ [DEBUG] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [3 6/3/2018 5:47:42 PM CRM.Log.Logger UnitOfWork created1]
+
+ [INFO] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [4 UnitOfWork created1]
+
+ [DEBUG] [05:47:42] [D:\Work\CRM\Project\CRM.Log\Logger.cs Info] [4 6/3/2018 5:47:42 PM CRM.Log.Logger UnitOfWork created1]
