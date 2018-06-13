@@ -5,15 +5,7 @@
     var lockHub = $.connection.lockHub;
 
     // Open connection
-    $.connection.hub.start().done(function () {
-
-        var id = $('#leadId').val();
-        lockHub.server.lock(id);
-
-    }).fail(function () {
-        alert("Could not Connect!");
-    });
-
+    $.connection.hub.start();
     //$('#send_message').on('click', function () {
 
     //    var id = $('#leadId').val();
