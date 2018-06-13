@@ -31,7 +31,7 @@ namespace CRM.Hubs
 
                 if (connId == null)
                 {
-                    Clients.Caller.onCall("User close browser");
+                    Clients.Caller.onCall("User closed browser.");
                 }
                 else
                 {
@@ -45,7 +45,7 @@ namespace CRM.Hubs
         }
 
         // New connection 
-        public override Task OnConnected()
+        public async override Task OnConnected()
         {
             if (Context.User.Identity.IsAuthenticated)
             {
@@ -53,15 +53,13 @@ namespace CRM.Hubs
 
                 _userConnectionStorage.AddConnection(Context.User.GetCurrentUserCreads().Id, connectid);
 
-                return base.OnConnected();
+                await base.OnConnected();
             }
-
-            return Task.CompletedTask;
         }
 
 
         // Disconnect
-        public override Task OnDisconnected(bool stopCalled)
+        public async override Task OnDisconnected(bool stopCalled)
         {
             if (Context.User.Identity.IsAuthenticated)
             {
@@ -69,10 +67,8 @@ namespace CRM.Hubs
 
                 _userConnectionStorage.RemoveConnectId(Context.User.GetCurrentUserCreads().Id, connectid);
 
-                return base.OnDisconnected(stopCalled);
-            }
-
-            return Task.CompletedTask;
+                await base.OnDisconnected(stopCalled);
+            }           
         }
 
         /// <summary>

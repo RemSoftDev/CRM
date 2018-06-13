@@ -8,7 +8,7 @@
 
 @using (Html.BeginForm())
 {
-    @Html.HiddenFor(e => e.Id)
+    @Html.HiddenFor(e => e.Id, new { leadId = Model.Id })
     <div class="form-group">
         @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
         <div class="col-md-10 margin-bottom">
@@ -107,3 +107,13 @@
 @Scripts.Render("~/scripts/Lead/editLead.js")
 @Scripts.Render("~/scripts/phones_addresses.js")
 
+@*Open connection just for Authenticated Users*@
+@if (Request.IsAuthenticated)
+{
+    <!--Ссылка на библиотеку SignalR -->
+    <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
+    <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+    <script src="~/signalr/hubs"></script>
+    @*<script src="~/Scripts/signalrConnection.js"></script>*@
+}
+<script src="~/Scripts/Lead/leadLockHub.js"></script>

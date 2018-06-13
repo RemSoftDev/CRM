@@ -1,12 +1,129 @@
 ==== BEGIN LOG ====
 
- [INFO] [11:40:08] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
+ [INFO] [12:08:27] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
 
- [ERROR] [11:40:08] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
-System.Exception: Exception of type 'System.Exception' was thrown.
+ [INFO] [12:08:27] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
 
- [INFO] [11:40:08] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
+ [ERROR] [12:08:36] [F:\RemouteWork\CRM\Startup.cs Configuration] [something wrong]
+System.Exception: Выдано исключение типа "System.Exception".
+   в CRM.Startup.Configuration(IAppBuilder app) в F:\RemouteWork\CRM\Startup.cs:строка 38
 
- [INFO] [11:40:08] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+ [INFO] [12:08:36] [F:\RemouteWork\CRM\Startup.cs Configuration] [Web app start]
 
- [INFO] [11:40:09] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+ [INFO] [12:08:36] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:08:41] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:08:45] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:08:45] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:08:45] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:08:45] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:09:06] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:09:07] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:09:07] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:09:07] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:09:07] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Address]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Call]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.DAddressType]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.DPhoneType]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.DUserType]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Email]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.LeadConvertedLog]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Phone]]
+
+ [INFO] [12:09:11] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
+
+ [INFO] [12:10:04] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:10:05] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:10:05] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:10:05] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:10:05] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:11:07] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:11:07] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:11:12] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:11:14] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:11:14] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:11:14] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:11:14] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:11:41] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:11:41] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:13:11] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:13:11] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:13:55] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:13:56] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:13:56] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:13:56] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:13:56] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:14:05] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:14:09] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:14:09] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:14:09] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:16:23] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:16:23] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:16:23] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:16:23] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:16:23] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:16:37] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:16:37] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:16:37] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:16:37] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:18:39] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:18:40] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [12:18:40] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [12:18:40] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [12:18:40] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]

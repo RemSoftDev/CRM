@@ -127,7 +127,5 @@ namespace CRM
 				.ToSelf()
 				.InSingletonScope();
 		}
-
-
 	}
 }

@@ -1,11 +1,27 @@
-====+ BEGIN LOG %d{yyyy-MM-dd} +====
-%newline29 [INFO] 05:43:46 [0 Create instance of CRM.Log.Logger]
-32 [DEBUG] 05:43:46 [0 6/3/2018 5:43:46 PM CRM.Log.Logger Create instance of CRM.Log.Logger]
-41 [ERROR] 05:43:46 [1 6/3/2018 5:43:46 PM CRM.Log.Logger something wrong 
-]
-29 [INFO] 05:43:46 [2 Web app start]
-32 [DEBUG] 05:43:46 [2 6/3/2018 5:43:46 PM CRM.Log.Logger Web app start]
-29 [INFO] 05:43:46 [3 UnitOfWork created1]
-32 [DEBUG] 05:43:46 [3 6/3/2018 5:43:46 PM CRM.Log.Logger UnitOfWork created1]
-29 [INFO] 05:43:47 [4 UnitOfWork created1]
-32 [DEBUG] 05:43:47 [4 6/3/2018 5:43:47 PM CRM.Log.Logger UnitOfWork created1]
+==== BEGIN LOG ====
+
+ [INFO] [11:43:34] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
+
+ [INFO] [11:43:34] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [ERROR] [11:43:37] [F:\RemouteWork\CRM\Startup.cs Configuration] [something wrong]
+System.Exception: Выдано исключение типа "System.Exception".
+   в CRM.Startup.Configuration(IAppBuilder app) в F:\RemouteWork\CRM\Startup.cs:строка 38
+
+ [INFO] [11:43:37] [F:\RemouteWork\CRM\Startup.cs Configuration] [Web app start]
+
+ [INFO] [11:43:37] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [11:43:39] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [11:43:44] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [11:43:48] [F:\RemouteWork\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [11:43:50] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [11:43:50] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by id = 2]
+
+ [INFO] [11:43:50] [F:\RemouteWork\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Note]]
+
+ [INFO] [11:43:50] [F:\RemouteWork\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]

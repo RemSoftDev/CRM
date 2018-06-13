@@ -33,15 +33,5 @@
     </div>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-
-    @*Open connection just for Authenticated Users*@
-    @if (Request.IsAuthenticated)
-    {
-        <!--Ссылка на библиотеку SignalR -->
-        <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
-        <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
-        <script src="~/signalr/hubs"></script>
-        <script src="~/Scripts/signalrConnection.js"></script>
-    }
 </body>
 </html>

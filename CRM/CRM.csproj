@@ -226,6 +226,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\LockHub.cs" />
     <Compile Include="Hubs\PhoneHub.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Managers\ILeadManager.cs" />
@@ -308,6 +309,7 @@
     <Content Include="Scripts\Lead\convertLead.js" />
     <Content Include="Scripts\Lead\createLead.js" />
     <Content Include="Scripts\Lead\editLead.js" />
+    <Content Include="Scripts\Lead\leadLockHub.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\phoneCallEmulatingPage.js" />
     <Content Include="Scripts\phones_addresses.js" />
