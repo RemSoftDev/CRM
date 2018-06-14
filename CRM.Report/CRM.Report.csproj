@@ -43,6 +43,8 @@
     <Reference Include="Telerik.Reporting, Version=12.1.18.516, Culture=neutral, PublicKeyToken=a9d7983dfcc261be" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProviders\DataProvider.cs" />
+    <Compile Include="LeadsSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -57,11 +59,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Report1.resx">
-      <DependentUpon>Report1.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -73,6 +70,12 @@
       <Project>{b28269b4-88bc-4330-8336-cc63f5312e89}</Project>
       <Name>CRM.DAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Report1.resx">
+      <DependentUpon>Report1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

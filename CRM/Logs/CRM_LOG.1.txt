@@ -1,13 +1,19 @@
 ==== BEGIN LOG ====
 
- [INFO] [11:51:06] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
+ [INFO] [12:13:34] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
 
- [ERROR] [11:51:06] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
+ [ERROR] [12:13:34] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
 System.Exception: Exception of type 'System.Exception' was thrown.
    at CRM.Startup.Configuration(IAppBuilder app) in D:\Work\CRM\Project\CRM\Startup.cs:line 33
 
- [INFO] [11:51:06] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
+ [INFO] [12:13:34] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
 
- [INFO] [11:51:07] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+ [INFO] [12:13:39] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
 
- [INFO] [11:51:07] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+ [ERROR] [12:14:01] [D:\Work\CRM\Project\CRM\Global.asax.cs OnApplicationStopped] [Web App was stopped or down from ]
+System.Exception: Exception of type 'System.Exception' was thrown.
+====- END LOG [%date] -====
+
+ [ERROR] [12:16:29] [D:\Work\CRM\Project\CRM\Global.asax.cs OnApplicationStopped] [Web App was stopped or down from ]
+System.Exception: Exception of type 'System.Exception' was thrown.
+====- END LOG [%date] -====

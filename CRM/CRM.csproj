@@ -58,6 +58,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Faker.NET4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Faker.Net.1.0.3\lib\net40\Faker.NET4.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -244,6 +247,7 @@
     <Compile Include="Models\LeadViewModel.cs" />
     <Compile Include="Models\LogHistoryModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\ItemToCreateViewModel.cs" />
     <Compile Include="Models\Misc\UserCreads.cs" />
     <Compile Include="Models\NoteViewModel.cs" />
     <Compile Include="Models\PhoneViewModel.cs" />
@@ -347,6 +351,7 @@
     <Content Include="Views\Grid\_GridPagePartial.cshtml" />
     <Content Include="Views\Grid\_Notes.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\GenerateData.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

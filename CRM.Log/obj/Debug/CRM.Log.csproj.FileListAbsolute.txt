@@ -6,4 +6,3 @@ D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.csproj.CoreCompileInputs.cache
 D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.dll
 D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.pdb
 D:\Work\CRM\Project\CRM.Log\bin\Debug\ASquare.WindowsTaskScheduler.dll
-D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.csprojResolveAssemblyReference.cache
