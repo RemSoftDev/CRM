@@ -22,7 +22,6 @@ namespace CRM.Managers
 		{
 			var errors = ValidateAndGetError(user);
 
-
 			// ReSharper disable once PossibleMultipleEnumeration
 			if (!errors.Any())
 			{
@@ -64,6 +63,7 @@ namespace CRM.Managers
 		{
 			return _unitOfWork.UsersRepository.Any(u => u.Email == email);
 		}
+
 		private bool IsUserNameExist(string userFirstName, string userLastName)
 		{
 			return _unitOfWork.UsersRepository.Any(u => u.FirstName.Equals(userFirstName) && u.LastName.Equals(userLastName));

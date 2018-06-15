@@ -12,18 +12,18 @@ using System;
 
 namespace CRM
 {
-	public class Startup
+    public class Startup
 	{
 		public void Configuration(IAppBuilder app)
 		{
 			var resolver = new NinjectSignalRDependencyResolver(Kernel.GetKernel);
 
-			// Add binding for SignalR
-			Kernel.GetKernel.Bind(typeof(IHubConnectionContext<dynamic>)).ToMethod(context =>
-					resolver.Resolve<IConnectionManager>().GetHubContext<PhoneHub>().Clients
-						).WhenInjectedInto<IUserConnectionStorage>();
+            // Add binding for SignalR
+            Kernel.GetKernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(context =>
+                    resolver.Resolve<IConnectionManager>().GetHubContext<MainHub>().Clients
+                        ).WhenInjectedInto<IUserConnectionStorage>();
 
-			app.MapSignalR(new HubConfiguration()
+            app.MapSignalR(new HubConfiguration()
 			{
 				Resolver = resolver
 			});
@@ -37,11 +37,6 @@ namespace CRM
 				Logger.ErrorLogContex.Error("something wrong",exp);
 			}
 			Logger.InfoLogContext.Info("Web app start");
-
 		}
-
-
-
 	}
-
 }

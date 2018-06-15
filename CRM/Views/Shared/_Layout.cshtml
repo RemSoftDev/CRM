@@ -34,6 +34,10 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
+    @{
+        var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    }
+
     @*Open connection just for Authenticated Users*@
     @if (Request.IsAuthenticated)
     {
@@ -41,7 +45,19 @@
         <script src="~/Scripts/jquery.signalR-2.2.3.min.js"></script>
         <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
         <script src="~/signalr/hubs"></script>
-        <script src="~/Scripts/signalrConnection.js"></script>
+
+        if (controller == "Lead")
+        {
+            <script src="~/Scripts/Lead/leadHub.js"></script>
+        }
+        else if (controller == "Customer")
+        {
+            <script src="~/Scripts/Customer/customerHub.js"></script>
+        }
+        else
+        {
+            <script src="~/Scripts/signalrConnection.js"></script>
+        }
     }
 </body>
 </html>

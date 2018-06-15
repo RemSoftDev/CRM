@@ -7,3 +7,12 @@ D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.dll
 D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.pdb
 D:\Work\CRM\Project\CRM.Log\bin\Debug\ASquare.WindowsTaskScheduler.dll
 D:\Work\CRM\Project\CRM.Log\obj\Debug\CRM.Log.csprojResolveAssemblyReference.cache
+F:\RemouteWork\CRM.Log\bin\Debug\CRM.Log.dll
+F:\RemouteWork\CRM.Log\bin\Debug\CRM.Log.pdb
+F:\RemouteWork\CRM.Log\bin\Debug\ASquare.WindowsTaskScheduler.dll
+F:\RemouteWork\CRM.Log\bin\Debug\log4net.dll
+F:\RemouteWork\CRM.Log\bin\Debug\log4net.xml
+F:\RemouteWork\CRM.Log\obj\Debug\CRM.Log.csproj.CoreCompileInputs.cache
+F:\RemouteWork\CRM.Log\obj\Debug\CRM.Log.csproj.CopyComplete
+F:\RemouteWork\CRM.Log\obj\Debug\CRM.Log.dll
+F:\RemouteWork\CRM.Log\obj\Debug\CRM.Log.pdb
