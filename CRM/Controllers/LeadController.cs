@@ -23,20 +23,17 @@ namespace CRM.Controllers
 		private readonly ILeadConvertService _leadConvertService;
 		private readonly ILeadManager _leadManager;
         private readonly IEmailService _emailService;
-        private readonly PhoneHub _hubConnectionContext;
 
         public LeadController(
 			IUnitOfWork unitOfWork,
 			ILeadConvertService leadConvertService,
 			ILeadManager leadManager,
-            IEmailService emailService,
-            PhoneHub hubConnectionContext)
+            IEmailService emailService)
 		{
 			_unitOfWork = unitOfWork;
 			_leadConvertService = leadConvertService;
 			_leadManager = leadManager;
             _emailService = emailService;
-            _hubConnectionContext = hubConnectionContext;
 
         }
 		public ActionResult Index()
