@@ -1,5 +1,4 @@
-﻿using CRM.DAL.Repository;
-using CRM.Hubs;
+﻿using CRM.Hubs;
 using CRM.Log;
 using CRM.Services.Interfaces;
 using Microsoft.AspNet.SignalR;
@@ -20,15 +19,9 @@ namespace CRM
 			var resolver = new NinjectSignalRDependencyResolver(Kernel.GetKernel);
 
             // Add binding for SignalR
-
-
             Kernel.GetKernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(context =>
-                    resolver.Resolve<IConnectionManager>().GetHubContext<LockHub>().Clients
-                        ).WhenInjectedInto<IUnitOfWork>();
-
-        //    Kernel.GetKernel.Bind<IHubConnectionContext<dynamic>>().ToMethod(context =>
-        //resolver.Resolve<IConnectionManager>().GetHubContext<PhoneHub>().Clients
-        //    ).WhenInjectedInto<IUserConnectionStorage>();
+                    resolver.Resolve<IConnectionManager>().GetHubContext<MainHub>().Clients
+                        ).WhenInjectedInto<IUserConnectionStorage>();
 
             app.MapSignalR(new HubConfiguration()
 			{
