@@ -6,12 +6,12 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Label("ProductLine", "Product Line:")
+@Html.Label("ProductLine", "Chose the report:")
 
 @Html.DropDownList(
 	"ProductLine",
-	new SelectList(ViewBag.ProductLines, "ProductLineCode", "ProductLineName"), 
-	"Select Product Line...")
+	new SelectList(ViewBag.ProductLines, "ProductLineCode", "ProductLineName"),
+	"Chose the report...")
 
 <iframe id="reportFrame" style="display:none;"></iframe>
 
