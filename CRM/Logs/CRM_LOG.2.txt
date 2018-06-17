@@ -1,11 +1,33 @@
 ==== BEGIN LOG ====
 
- [INFO] [12:13:30] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
+ [INFO] [10:20:51] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
 
- [ERROR] [12:13:30] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
+ [ERROR] [10:20:51] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
 System.Exception: Exception of type 'System.Exception' was thrown.
    at CRM.Startup.Configuration(IAppBuilder app) in D:\Work\CRM\Project\CRM\Startup.cs:line 33
 
- [INFO] [12:13:30] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
+ [INFO] [10:20:51] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
 
- [INFO] [12:13:31] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+ [INFO] [10:20:51] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [10:20:52] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [10:20:59] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
+
+ [INFO] [10:20:59] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [10:21:12] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [10:21:12] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.Lead]]
+
+ [INFO] [10:21:12] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get all data in table]
+
+ [INFO] [10:21:22] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [10:21:22] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.DUserType]]
+
+ [INFO] [10:21:22] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by predicate]
+
+ [INFO] [10:21:22] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
+
+ [INFO] [10:21:22] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]

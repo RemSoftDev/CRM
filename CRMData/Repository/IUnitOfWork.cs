@@ -12,7 +12,7 @@ namespace CRM.DAL.Repository
 		IGenericRepository<Address> AddressRepository { get; }
 		IGenericRepository<DAddressType> DAddressTypesRepository { get; }
 		IGenericRepository<DPhoneType> DPhonesTypesRepository { get; }
-		IGenericRepository<DUserType> DUserTypesRepository { get; }
+		UserTypeRepository DUserTypesRepository { get; }
 		IGenericRepository<Email> EmailsRepository { get; }
 		IGenericRepository<LeadConvertedLog> LeadsConvertedLogsRepository { get; }
 		IGenericRepository<Phone> PhonesRepository { get; }

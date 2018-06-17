@@ -44,6 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataProviders\DataProvider.cs" />
+    <Compile Include="CustomerSource.cs" />
+    <Compile Include="CustomerReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomerReport.Designer.cs">
+      <DependentUpon>CustomerReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="LeadsSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -51,11 +58,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Report1.cs">
+    <Compile Include="LeadReport.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Report1.Designer.cs">
-      <DependentUpon>Report1.cs</DependentUpon>
+    <Compile Include="LeadReport.Designer.cs">
+      <DependentUpon>LeadReport.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +79,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CustomerReport.resx">
+      <DependentUpon>CustomerReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Report1.resx">
-      <DependentUpon>Report1.cs</DependentUpon>
+    <EmbeddedResource Include="LeadReport.resx">
+      <DependentUpon>LeadReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

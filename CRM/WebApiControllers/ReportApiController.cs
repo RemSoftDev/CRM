@@ -1,42 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CRM.Report;
+using System;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using CRM.Report;
 using Telerik.Reporting.Processing;
 
 namespace CRM.WebApiControllers
 {
-    public class ReportApiController : ApiController
-    {
-	    private const string ReportsPath = @"D:\Work\CRM\Project\CRM\Reports";
+	public class ReportApiController : ApiController
+	{
+		private const string ReportsPath = @"D:\Work\CRM\Project\CRM\Reports";
 
-	    //GET: api/Reports/M
-	    public string Get(string id)
-	    {
-		    string reportFileName = String.Format("Products-{0}.pdf", id);
-		    string reportWebPath = String.Format("/Reports/{0}", reportFileName);
+		//GET: api/Reports/M
+		public string Get(string id)
+		{
+			Telerik.Reporting.Report report = null;
 
-		    if (File.Exists(Path.Combine(ReportsPath, reportFileName)))
-		    {
-			    return reportWebPath;
-		    }
+			switch (id)
+			{
+				case "L":
+					{
+						report = new LeadsReport();
+						break;
+					}
+				case "C":
+					{
+						report = new CustomerReport();
+						break;
+					}
+			}
+			var path = CreatePath(id, report?.Name);
 
-		    var productListReport = new Report1();
-		   // productListReport.ReportParameters["ProductLine"].Value = id;
-		    var processor = new ReportProcessor();
-		    var result = processor.RenderReport("PDF", productListReport, null);
+			if (File.Exists(Path.Combine(ReportsPath, path.Item1)))
+			{
+				return path.Item2;
+			}
 
-		    using (var pdfStream = new MemoryStream(result.DocumentBytes))
-		    using (var reportFile = new FileStream(Path.Combine(ReportsPath, reportFileName), FileMode.Create))
-		    {
-			    pdfStream.CopyTo(reportFile);
-		    }
+			CreatePdfFile(report, path.Item1);
 
-		    return reportWebPath;
-	    }
+			return path.Item2;
+		}
+
+		private static void CreatePdfFile(Telerik.Reporting.Report report, string reportName)
+		{
+			var processor = new ReportProcessor();
+			var result = processor.RenderReport("PDF", report, null);
+
+			using (var pdfStream = new MemoryStream(result.DocumentBytes))
+			using (var reportFile = new FileStream(Path.Combine(ReportsPath, reportName), FileMode.Create))
+			{
+				pdfStream.CopyTo(reportFile);
+			}
+		}
+
+		public Tuple<string, string> CreatePath(string id, string nameReport)
+		{
+			string reportFileName = $"{nameReport}.pdf";
+			string reportWebPath = $"/Reports/{reportFileName}";
+
+			return new Tuple<string, string>(reportFileName, reportWebPath);
+		}
+
+
 	}
 }

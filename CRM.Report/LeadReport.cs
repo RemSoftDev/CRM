@@ -10,9 +10,9 @@ namespace CRM.Report
 	/// <summary>
 	/// Summary description for Report1.
 	/// </summary>
-	public partial class Report1 : Telerik.Reporting.Report
+	public partial class LeadsReport : Telerik.Reporting.Report
 	{
-		public Report1()
+		public LeadsReport()
 		{
 			//
 			// Required for telerik Reporting designer support

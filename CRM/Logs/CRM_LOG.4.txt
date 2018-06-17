@@ -1,15 +1,45 @@
 ==== BEGIN LOG ====
 
- [INFO] [12:02:06] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
+ [INFO] [02:25:10] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.Log.Logger]
 
- [ERROR] [12:02:06] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
+ [ERROR] [02:25:10] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [something wrong]
 System.Exception: Exception of type 'System.Exception' was thrown.
    at CRM.Startup.Configuration(IAppBuilder app) in D:\Work\CRM\Project\CRM\Startup.cs:line 33
 
- [INFO] [12:02:07] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
+ [INFO] [02:25:10] [D:\Work\CRM\Project\CRM\Startup.cs Configuration] [Web app start]
 
- [INFO] [12:06:53] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+ [INFO] [02:25:10] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
 
- [ERROR] [12:06:59] [D:\Work\CRM\Project\CRM\Global.asax.cs OnApplicationStopped] [Web App was stopped or down from ]
-System.Exception: Exception of type 'System.Exception' was thrown.
-====- END LOG [%date] -====
+ [INFO] [02:25:10] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [02:25:27] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
+
+ [INFO] [02:25:27] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [02:25:37] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [02:25:41] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [02:43:26] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [02:43:42] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [02:43:46] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.DUserType]]
+
+ [INFO] [02:43:46] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by predicate]
+
+ [INFO] [02:43:46] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
+
+ [INFO] [02:43:46] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] Sql inset 10 items]
+
+ [INFO] [02:44:07] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [02:44:12] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.DUserType]]
+
+ [INFO] [02:44:12] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get item by predicate]
+
+ [INFO] [02:44:12] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
+
+ [INFO] [02:44:12] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] Sql inset 20 items]
+
+ [INFO] [02:44:13] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]

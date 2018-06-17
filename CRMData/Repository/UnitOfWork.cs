@@ -15,7 +15,7 @@ namespace CRM.DAL.Repository
 		private IGenericRepository<Address> _addressRepository;
 		private IGenericRepository<DAddressType> _dAddressTypesRepository;
 		private IGenericRepository<DPhoneType> _dPhonesTypesRepository;
-		private IGenericRepository<DUserType> _dUserTypesRepository;
+		private UserTypeRepository _dUserTypesRepository;
 		private IGenericRepository<Email> _emailsRepository;
 		private IGenericRepository<LeadConvertedLog> _leadsConvertedLogsRepositoryRepository;
 		private IGenericRepository<Phone> _phonesRepository;
@@ -45,8 +45,8 @@ namespace CRM.DAL.Repository
 		public IGenericRepository<DPhoneType> DPhonesTypesRepository =>
 			_dPhonesTypesRepository ?? (_dPhonesTypesRepository = new EfGenericRepository<DPhoneType>(_dbContext));
 
-		public IGenericRepository<DUserType> DUserTypesRepository =>
-			_dUserTypesRepository ?? (_dUserTypesRepository = new EfGenericRepository<DUserType>(_dbContext));
+		public UserTypeRepository DUserTypesRepository =>
+			_dUserTypesRepository ?? (_dUserTypesRepository = new UserTypeRepository(_dbContext));
 
 		public IGenericRepository<Email> EmailsRepository =>
 			_emailsRepository ?? (_emailsRepository = new EfGenericRepository<Email>(_dbContext));
