@@ -47,3 +47,7 @@ System.Exception: Exception of type 'System.Exception' was thrown.
  [INFO] [12:08:45] [D:\Work\CRM\Project\CRM.Log\Logger.cs InitLog] [Create instance of CRM.DAL.Repository.EfGenericRepository`1[CRM.DAL.Entities.User]]
 
  [INFO] [12:08:45] [D:\Work\CRM\Project\CRM.Log\Logger.cs SqlInfo] [[SQL] get data in table by predicate]
+
+ [INFO] [12:19:19] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
+
+ [INFO] [12:20:08] [D:\Work\CRM\Project\CRMData\Repository\UnitOfWork.cs .ctor] [UnitOfWork created]
