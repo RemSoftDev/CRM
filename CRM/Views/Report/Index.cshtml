@@ -1,0 +1,35 @@
+﻿
+@{
+	ViewBag.Title = "Report List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Label("ProductLine", "Chose the report:")
+
+@Html.DropDownList(
+	"ProductLine",
+	new SelectList(ViewBag.ProductLines, "ProductLineCode", "ProductLineName"),
+	"Chose the report...")
+
+<iframe id="reportFrame" style="display:none;"></iframe>
+
+@section scripts
+{
+	<script type="text/javascript">
+		$(function () {
+			$("#ProductLine").on("change", function () {
+				var productLine = $("#ProductLine option:selected").val();
+
+				if (productLine) {
+					$("#reportFrame").fadeOut('fast');
+					$.get("api/ReportApi/" + productLine, function (data) {
+						$("#reportFrame").attr('src', data).fadeIn('slow');
+					});
+				}
+			});
+		});
+	</script>
+}
+

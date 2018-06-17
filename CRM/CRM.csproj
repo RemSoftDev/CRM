@@ -58,6 +58,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Faker.NET4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Faker.Net.1.0.3\lib\net40\Faker.NET4.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -168,6 +171,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Reporting, Version=12.1.18.516, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -219,6 +223,7 @@
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\PhoneController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extentions\ObjectExtention.cs" />
     <Compile Include="Extentions\PrincipalExtention.cs" />
@@ -242,10 +247,12 @@
     <Compile Include="Models\LeadViewModel.cs" />
     <Compile Include="Models\LogHistoryModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\ItemToCreateViewModel.cs" />
     <Compile Include="Models\Misc\LockInfo.cs" />
     <Compile Include="Models\Misc\UserCreads.cs" />
     <Compile Include="Models\NoteViewModel.cs" />
     <Compile Include="Models\PhoneViewModel.cs" />
+    <Compile Include="Models\ProductLine.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -265,6 +272,7 @@
     <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\UserConnectionStorage.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="WebApiControllers\ReportApiController.cs" />
     <Compile Include="WebApiControllers\WebFormController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +354,8 @@
     <Content Include="Views\Phone\_Drop.cshtml" />
     <Content Include="Views\Grid\_GridPagePartial.cshtml" />
     <Content Include="Views\Grid\_Notes.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\GenerateData.cshtml" />
     <None Include="Web.Dev1.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -377,6 +387,10 @@
     <ProjectReference Include="..\CRM.Log\CRM.Log.csproj">
       <Project>{1ae02fcb-0b82-4e37-8a64-05c4c2efbd6a}</Project>
       <Name>CRM.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CRM.Report\CRM.Report.csproj">
+      <Project>{b7f02f05-3a1a-475e-927a-17c88e094a90}</Project>
+      <Name>CRM.Report</Name>
     </ProjectReference>
     <ProjectReference Include="..\CRMData\CRM.DAL.csproj">
       <Project>{B28269B4-88BC-4330-8336-CC63F5312E89}</Project>
