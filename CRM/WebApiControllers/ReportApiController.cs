@@ -27,6 +27,11 @@ namespace CRM.WebApiControllers
 						report = new CustomerReport();
 						break;
 					}
+				case "A":
+				{
+					report = new AdminTeamMemberReport();
+					break;
+				}
 			}
 			var path = CreatePath(id, report?.Name);
 

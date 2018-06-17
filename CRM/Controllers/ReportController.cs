@@ -21,8 +21,8 @@ namespace CRM.Controllers
 			ViewBag.ProductLines = new List<ProductLine>
 			{
 				new ProductLine {ProductLineCode = "L", ProductLineName = "LeadReport"},
-				new ProductLine {ProductLineCode = "C", ProductLineName = "CustomerReport"}
-
+				new ProductLine {ProductLineCode = "C", ProductLineName = "CustomerReport"},
+				new ProductLine {ProductLineCode = "A", ProductLineName = "AdminTeamMemberReport"}
 			};
 
 			return View();

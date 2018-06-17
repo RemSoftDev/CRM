@@ -43,6 +43,13 @@
     <Reference Include="Telerik.Reporting, Version=12.1.18.516, Culture=neutral, PublicKeyToken=a9d7983dfcc261be" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminTeamMemberSource.cs" />
+    <Compile Include="AdminTeamMemberReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AdminTeamMemberReport.Designer.cs">
+      <DependentUpon>AdminTeamMemberReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataProviders\DataProvider.cs" />
     <Compile Include="CustomerSource.cs" />
     <Compile Include="CustomerReport.cs">
@@ -79,6 +86,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AdminTeamMemberReport.resx">
+      <DependentUpon>AdminTeamMemberReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomerReport.resx">
       <DependentUpon>CustomerReport.cs</DependentUpon>
     </EmbeddedResource>
