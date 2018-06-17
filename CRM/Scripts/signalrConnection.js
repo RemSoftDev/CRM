@@ -18,5 +18,4 @@
             $.connection.hub.start();
         }, 3000); // Restart connection after 5 seconds.
     });
-
 });

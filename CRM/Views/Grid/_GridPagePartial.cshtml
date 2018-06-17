@@ -109,13 +109,14 @@
                 <td style="text-align: center;">
                     @if (item is LeadViewModel)
                     {
-                        <a href="/Lead/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
-                        <a href="/Lead/ConvertLead?id=@item.Id">Convert</a>
+                        <a id="edit_@item.Id" href="/Lead/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
+                        <a id="convert_@item.Id" href="/Lead/ConvertLead?id=@item.Id">Convert</a>
                     }
                     @if (item is UserViewModel)
                     {
-                        <a href="/Customer/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
+                        <a id="edit_@item.Id" href="/Customer/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
                     }
+                    <img id="img_@item.Id" src="~/fonts/images/33054.jpg" alt="Locked!" title="Locked!" hidden>
                 </td>
             </tr>
         }

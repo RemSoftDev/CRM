@@ -231,7 +231,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\PhoneHub.cs" />
+    <Compile Include="Hubs\MainHub.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Managers\ILeadManager.cs" />
     <Compile Include="Managers\IUserManager.cs" />
@@ -248,6 +248,7 @@
     <Compile Include="Models\LogHistoryModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ItemToCreateViewModel.cs" />
+    <Compile Include="Models\Misc\LockInfo.cs" />
     <Compile Include="Models\Misc\UserCreads.cs" />
     <Compile Include="Models\NoteViewModel.cs" />
     <Compile Include="Models\PhoneViewModel.cs" />
@@ -283,6 +284,7 @@
     <Content Include="Content\images\ui-icons_444444_256x240.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\images\33054.jpg" />
     <Content Include="fonts\images\sort.png" />
     <Content Include="fonts\images\sortdown.png" />
     <Content Include="fonts\images\sortup.png" />
@@ -296,6 +298,7 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Customer\customerHub.js" />
     <Content Include="Scripts\Customer\editCustomer.js" />
     <Content Include="Scripts\Email\email.js" />
     <Content Include="Scripts\grid.js" />
@@ -316,6 +319,7 @@
     <Content Include="Scripts\Lead\convertLead.js" />
     <Content Include="Scripts\Lead\createLead.js" />
     <Content Include="Scripts\Lead\editLead.js" />
+    <Content Include="Scripts\Lead\leadHub.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\phoneCallEmulatingPage.js" />
     <Content Include="Scripts\phones_addresses.js" />

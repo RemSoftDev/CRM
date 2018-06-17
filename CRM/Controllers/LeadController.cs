@@ -4,25 +4,25 @@ using CRM.DAL.Adapters;
 using CRM.DAL.Entities;
 using CRM.DAL.Repository;
 using CRM.Extentions;
+using CRM.Hubs;
 using CRM.Managers;
 using CRM.Models;
 using CRM.Services;
+using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-	[Authenticate]
+    [Authenticate]
 	public class LeadController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ILeadConvertService _leadConvertService;
 		private readonly ILeadManager _leadManager;
         private readonly IEmailService _emailService;
-
 
         public LeadController(
 			IUnitOfWork unitOfWork,
@@ -34,7 +34,8 @@ namespace CRM.Controllers
 			_leadConvertService = leadConvertService;
 			_leadManager = leadManager;
             _emailService = emailService;
-		}
+
+        }
 		public ActionResult Index()
 		{
             var currentUserEmail = User.GetCurrentUserCreads()?.Email;
@@ -143,8 +144,8 @@ namespace CRM.Controllers
 
 
         public ActionResult Edit(int id)
-		{
-			var leadModel = _unitOfWork.LeadsRepository.FindById(id);
+		{            
+            var leadModel = _unitOfWork.LeadsRepository.FindById(id);
 			var leadNoteModel = _unitOfWork.NotesRepository.Get(n => n.LeadId == leadModel.Id).ToList();
 
             var leadViewModel = Mapper.Map<Lead, LeadViewModel>(leadModel);
@@ -161,7 +162,6 @@ namespace CRM.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-
 				var leadToEdit = _unitOfWork.LeadsRepository.FindById(lead.Id);
 
 				if (leadToEdit != null)
