@@ -50,7 +50,6 @@
     <Compile Include="AdminTeamMemberReport.Designer.cs">
       <DependentUpon>AdminTeamMemberReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataProviders\DataProvider.cs" />
     <Compile Include="CustomerSource.cs" />
     <Compile Include="CustomerReport.cs">
       <SubType>Component</SubType>

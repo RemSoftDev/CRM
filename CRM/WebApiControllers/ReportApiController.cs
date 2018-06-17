@@ -1,6 +1,7 @@
 ﻿using CRM.Report;
 using System;
 using System.IO;
+using System.Web;
 using System.Web.Http;
 using Telerik.Reporting.Processing;
 
@@ -8,7 +9,6 @@ namespace CRM.WebApiControllers
 {
 	public class ReportApiController : ApiController
 	{
-		private const string ReportsPath = @"D:\Work\CRM\Project\CRM\Reports";
 
 		//GET: api/Reports/M
 		public string Get(string id)
@@ -28,30 +28,27 @@ namespace CRM.WebApiControllers
 						break;
 					}
 				case "A":
-				{
-					report = new AdminTeamMemberReport();
-					break;
-				}
+					{
+						report = new AdminTeamMemberReport();
+						break;
+					}
 			}
+
 			var path = CreatePath(id, report?.Name);
 
-			if (File.Exists(Path.Combine(ReportsPath, path.Item1)))
-			{
-				return path.Item2;
-			}
 
 			CreatePdfFile(report, path.Item1);
 
 			return path.Item2;
 		}
 
-		private static void CreatePdfFile(Telerik.Reporting.Report report, string reportName)
+		private void CreatePdfFile(Telerik.Reporting.Report report, string reportName)
 		{
 			var processor = new ReportProcessor();
 			var result = processor.RenderReport("PDF", report, null);
 
 			using (var pdfStream = new MemoryStream(result.DocumentBytes))
-			using (var reportFile = new FileStream(Path.Combine(ReportsPath, reportName), FileMode.Create))
+			using (var reportFile = new FileStream(Path.Combine(GetReportFilePath(), reportName), FileMode.Create))
 			{
 				pdfStream.CopyTo(reportFile);
 			}
@@ -65,6 +62,12 @@ namespace CRM.WebApiControllers
 			return new Tuple<string, string>(reportFileName, reportWebPath);
 		}
 
+		private string GetReportFilePath()
+		{
+			string currentDirPath = HttpRuntime.AppDomainAppPath;
+			string relativaPath = @"Reports";
+			return Path.GetFullPath(Path.Combine(currentDirPath, relativaPath));
+		}
 
 	}
 }

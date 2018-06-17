@@ -1,8 +1,7 @@
 ﻿using CRM.DAL.Entities;
-using CRM.Report.DataProviders;
+using CRM.DAL.Repository;
 using System.Collections.Generic;
 using System.ComponentModel;
-using CRM.DAL.Repository;
 
 namespace CRM.Report
 {

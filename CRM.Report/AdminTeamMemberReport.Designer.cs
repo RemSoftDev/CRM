@@ -93,14 +93,14 @@ namespace CRM.Report
 			// 
 			this.textBox3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(2.5999999046325684D), Telerik.Reporting.Drawing.Unit.Inch(0D));
 			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.9999995231628418D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+			this.textBox3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.8000000715255737D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
 			this.textBox3.Value = "= Fields.LastName";
 			// 
 			// textBox6
 			// 
 			this.textBox6.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.6000781059265137D), Telerik.Reporting.Drawing.Unit.Inch(0D));
 			this.textBox6.Name = "textBox6";
-			this.textBox6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
+			this.textBox6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.7999216318130493D), Telerik.Reporting.Drawing.Unit.Inch(0.19999997317790985D));
 			this.textBox6.Value = "= Fields.Email";
 			// 
 			// textBox8
