@@ -4,7 +4,7 @@ using System;
 
 namespace CRM.DAL.Repository
 {
-	public interface IUnitOfWork : IDisposable
+	public interface IUnitOfWork //: IDisposable
 	{
 		BaseContext Context { get; }
 		IGenericRepository<Lead> LeadsRepository { get; }
@@ -19,6 +19,6 @@ namespace CRM.DAL.Repository
 		IGenericRepository<User> UsersRepository { get; }
 		IGenericRepository<Call> CallsRepository { get; }
 		void Save();
-		void Dispose(bool disposing);
+		//void Dispose(bool disposing);
 	}
 }

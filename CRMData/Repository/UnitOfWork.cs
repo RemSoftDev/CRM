@@ -72,24 +72,24 @@ namespace CRM.DAL.Repository
 			_dbContext.SaveChanges();
 		}
 
-		public virtual void Dispose(bool disposing)
-		{
-			if (!_disposed)
-			{
-				if (disposing)
-				{
-					_dbContext.Dispose();
-				}
+		//public virtual void Dispose(bool disposing)
+		//{
+		//	if (!_disposed)
+		//	{
+		//		if (disposing)
+		//		{
+		//			_dbContext.Dispose();
+		//		}
 
-				_disposed = true;
-			}
-		}
+		//		_disposed = true;
+		//	}
+		//}
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+		//public void Dispose()
+		//{
+		//	Dispose(true);
+		//	GC.SuppressFinalize(this);
+		//}
 	}
 
 }
