@@ -21,12 +21,14 @@ namespace CRM.DAL.Contexts
 		public virtual DbSet<Email> Emails { get; set; }
 		public virtual DbSet<LeadConvertedLog> LeadConvertedLogs { get; set; }
 		public virtual DbSet<Call> Calls { get; set; }
-        public virtual DbSet<GridProfile> GridProfiles { get; set; }
-        public virtual DbSet<GridField> GridFields { get; set; }
-        public virtual DbSet<DGrid> DGrids { get; set; }
-        public virtual DbSet<DAddressType> DAddressTypes { get; set; }
+		public virtual DbSet<GridProfile> GridProfiles { get; set; }
+		public virtual DbSet<GridField> GridFields { get; set; }
+		public virtual DbSet<DGrid> DGrids { get; set; }
+		public virtual DbSet<DAddressType> DAddressTypes { get; set; }
 		public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
 		public virtual DbSet<DUserType> DUserTypes { get; set; }
+		public virtual DbSet<IgnoreNotifierConfig> IgnoreNotifierConfigs { get; set; }
+		public virtual DbSet<IgnoreNotifierWorkDayConfig> IgnoreNotifierWorkDayConfigs { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -38,10 +40,11 @@ namespace CRM.DAL.Contexts
 			modelBuilder.Entity<Email>().ToTable("Email");
 			modelBuilder.Entity<LeadConvertedLog>().ToTable("LeadConvertedLog");
 			modelBuilder.Entity<Call>().ToTable("Call");
-
 			modelBuilder.Entity<DAddressType>().ToTable("DAddressType");
 			modelBuilder.Entity<DPhoneType>().ToTable("DPhoneType");
 			modelBuilder.Entity<DUserType>().ToTable("DUserType");
+			modelBuilder.Entity<IgnoreNotifierConfig>().ToTable("IgnoreNotifierConfig");
+			modelBuilder.Entity<IgnoreNotifierWorkDayConfig>().ToTable("IgnoreNotifierWorkDayConfig");
 
 			modelBuilder.Entity<Address>()
 				.Property(e => e.Id)
