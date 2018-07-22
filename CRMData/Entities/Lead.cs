@@ -15,6 +15,7 @@ namespace CRM.DAL.Entities
 		public string IssueRaised { get; set; }
 		public int? LeadOwner { get; set; }
 		public bool IsConverted { get; set; }
+        public bool IsSaved { get; set; }
 
 		public User User { get; set; }
 

@@ -1,6 +1,9 @@
-﻿using CRM.DAL.Entities;
+﻿using AutoMapper;
+using CRM.DAL.Entities;
 using CRM.DAL.Repository;
+using CRM.Enums;
 using CRM.Extentions;
+using CRM.Models;
 using CRM.Models.Misc;
 using CRM.Services;
 using CRM.Services.Interfaces;
@@ -9,6 +12,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CRM.Hubs
@@ -19,6 +23,7 @@ namespace CRM.Hubs
         private const string LEAD_GROUP_NAME = "lead";
         private const string CUSTOMER_GROUP_NAME = "customer";
         private const string GROUP_NAME_KEY = "action";
+        private const string LOCK_BY_POP_UP = "popUpLock";
 
         private readonly IUserConnectionStorage _userConnectionStorage;
         private readonly IUnitOfWork _unitOfWork;
@@ -42,7 +47,7 @@ namespace CRM.Hubs
             if (Context.User.Identity.IsAuthenticated && GetGroupName(groupName, out string validateGroupName))
             {
                 await Groups.Add(Context.ConnectionId, validateGroupName);
-                
+
                 dataToLock.TryGetValue(validateGroupName, out List<LockInfo> value);
                 if (value != null || value.Count > 0)
                     Clients.Group(validateGroupName).LockList(value);
@@ -69,6 +74,8 @@ namespace CRM.Hubs
 
                 Clients.Group(validateGroupName, Context.ConnectionId).LockEdit(lockInfo);
 
+                Clients.Others.onResetPopUp();
+
                 dataToLock.AddOrUpdate(validateGroupName, new List<LockInfo> { lockInfo }, (key, value) =>
                 {
                     value.Add(lockInfo);
@@ -78,7 +85,7 @@ namespace CRM.Hubs
         }
 
         /// <summary>
-        /// Lock some lead/customer on edit/convert
+        /// UnLock some lead/customer on edit/convert
         /// </summary>
         /// <param name="id">Id of lead/customer</param>
         /// <param name="groupName">lead or customer</param>
@@ -90,6 +97,47 @@ namespace CRM.Hubs
 
                 dataToLock.TryGetValue(validateGroupName, out List<LockInfo> value);
                 value.RemoveAll(e => e.Id == id);
+            }
+        }
+
+        /// <summary>
+        /// Get not seved lead for pop-up
+        /// </summary>
+        public void GetUnsavedLead()
+        {
+            if (Context.User.Identity.IsAuthenticated)
+            {
+                var userCreads = Context.User.GetCurrentUserCreads();
+
+                if (_unitOfWork.UsersRepository.FindById(userCreads.Id).UserTypeId == (int)UserType.AdminTeamMember)
+                {
+                    List<Lead> leads = _unitOfWork.LeadsRepository.Get(e => !e.IsSaved).ToList();
+
+                    if (leads != null && leads.Count > 0)
+                    {
+                        foreach (var lead in leads)
+                        {
+                            if (dataToLock.TryGetValue(LEAD_GROUP_NAME, out List<LockInfo> lockList) && lockList.Exists(e => e.Id == lead.Id))
+                            {
+                                if(leads.IndexOf(lead) == leads.Count - 1)
+                                {
+                                    Clients.Caller.onHidePopUp();
+                                }
+                                continue;
+                            }
+                            else
+                            {
+                                var mapResult = Mapper.Map<PopUpViewModel>(lead);
+                                Clients.Caller.onPopUpCall(mapResult);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Clients.Caller.onHidePopUp();
+                    }
+                }
             }
         }
 
@@ -124,9 +172,7 @@ namespace CRM.Hubs
         {
             if (Context.User.Identity.IsAuthenticated)
             {
-                var connectid = Context.ConnectionId;
-
-                _userConnectionStorage.AddConnection(Context.User.GetCurrentUserCreads().Id, connectid);
+                _userConnectionStorage.AddConnection(Context.User.GetCurrentUserCreads().Id, Context.ConnectionId);
 
                 await base.OnConnected();
             }
@@ -137,12 +183,10 @@ namespace CRM.Hubs
         {
             if (Context.User.Identity.IsAuthenticated)
             {
-                var connectid = Context.ConnectionId;
-
-                _userConnectionStorage.RemoveConnectId(Context.User.GetCurrentUserCreads().Id, connectid);
+                _userConnectionStorage.RemoveConnectId(Context.User.GetCurrentUserCreads().Id, Context.ConnectionId);
 
                 await base.OnDisconnected(stopCalled);
-            }           
+            }
         }
 
         /// <summary>
@@ -178,7 +222,7 @@ namespace CRM.Hubs
                 groupName = CUSTOMER_GROUP_NAME;
                 return true;
             }
- 
+
             return false;
         }
     }

@@ -9,7 +9,7 @@
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top" id="baner">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -18,6 +18,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("CRM", "Index", "Lead", new { area = "" }, new { @class = "navbar-brand" })
+
+                @*@Ajax.ActionLink("link", "BanerLink", new AjaxOptions { UpdateTargetId = "baner", HttpMethod = "GET", InsertionMode = InsertionMode.InsertAfter })*@
+
             </div>
             <div class="navbar-collapse collapse">
                 @Html.Partial("_LoginPartial")
@@ -25,6 +28,17 @@
         </div>
     </div>
     <div class="container body-content">
+
+        <div class="ui-widget">
+            <label for="birds">Birds: </label>
+            <input id="birds">
+        </div>
+
+        <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+            Result:
+            <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+        </div>
+
         @RenderBody()
         <hr />
         <footer>
@@ -36,6 +50,7 @@
 
     @{
         var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+        var action = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
     }
 
     @*Open connection just for Authenticated Users*@
@@ -58,6 +73,33 @@
         {
             <script src="~/Scripts/signalrConnection.js"></script>
         }
+
+        if (!(controller == "Lead" && action == "Edit") && !(controller == "Customer" && action == "Edit"))
+        {
+            @Html.Action("PopUp")
+        }
     }
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {            
+            $("#birds").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "BanerLink",
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2
+            });
+        });
+    </script>
 </body>
 </html>

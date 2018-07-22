@@ -10,14 +10,13 @@ using System.Web.Mvc;
 namespace CRM.Controllers
 {
     [Authenticate]
-    public class PhoneController : Controller
+    public class PhoneController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserConnectionStorage _userConnectionStorage;
 
         public PhoneController(IUnitOfWork unitOfWork, IUserConnectionStorage userConnectionStorage)
+            :base(unitOfWork)
         {
-            _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
             _userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
         }
 

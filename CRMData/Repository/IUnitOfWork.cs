@@ -1,10 +1,9 @@
 ﻿using CRM.DAL.Contexts;
 using CRM.DAL.Entities;
-using System;
 
 namespace CRM.DAL.Repository
 {
-	public interface IUnitOfWork //: IDisposable
+    public interface IUnitOfWork //: IDisposable
 	{
 		BaseContext Context { get; }
 		IGenericRepository<Lead> LeadsRepository { get; }
@@ -18,7 +17,8 @@ namespace CRM.DAL.Repository
 		IGenericRepository<Phone> PhonesRepository { get; }
 		IGenericRepository<User> UsersRepository { get; }
 		IGenericRepository<Call> CallsRepository { get; }
-		void Save();
+        IGenericRepository<Condition> ConditionsRepository { get; }
+        void Save();
 		//void Dispose(bool disposing);
 	}
 }

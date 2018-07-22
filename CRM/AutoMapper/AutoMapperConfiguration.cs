@@ -38,6 +38,8 @@ namespace CRM.AutoMapper
                 cfg.CreateMap<Lead, LeadViewModel>();
                 //.ForMember(l => l.Phones, opt => opt
                 //    .MapFrom(i => new List<PhoneViewModel>() { new PhoneViewModel() { PhoneNumber = i.Phones.FirstOrDefault(p => p.TypeId == (int)PhoneType.HomePhone).PhoneNumber } }));
+                cfg.CreateMap<Lead, PopUpViewModel>()
+                .ForMember(l => l.PhoneNumber, opt => opt.MapFrom(p => p.Phones.FirstOrDefault()));
 
                 cfg.CreateMap<LeadViewModel, Lead>();
                 //.ForMember(l => l.Phones, opt => opt

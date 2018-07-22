@@ -96,6 +96,7 @@
     <Compile Include="Contexts\CRMDBInitializer.cs" />
     <Compile Include="Entities\Address.cs" />
     <Compile Include="Entities\Call.cs" />
+    <Compile Include="Entities\Condition.cs" />
     <Compile Include="Entities\DAddressType.cs" />
     <Compile Include="Entities\DGrid.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
@@ -108,9 +109,13 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201805211948036_temp.cs" />
-    <Compile Include="Migrations\201805211948036_temp.Designer.cs">
-      <DependentUpon>201805211948036_temp.cs</DependentUpon>
+    <Compile Include="Migrations\201807211233398_NewLeadColumn.cs" />
+    <Compile Include="Migrations\201807211233398_NewLeadColumn.Designer.cs">
+      <DependentUpon>201807211233398_NewLeadColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807221804559_AddConditionTable.cs" />
+    <Compile Include="Migrations\201807221804559_AddConditionTable.Designer.cs">
+      <DependentUpon>201807221804559_AddConditionTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,15 +134,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805211948036_temp.resx">
-      <DependentUpon>201805211948036_temp.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CRM.Log\CRM.Log.csproj">
       <Project>{1ae02fcb-0b82-4e37-8a64-05c4c2efbd6a}</Project>
       <Name>CRM.Log</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201807211233398_NewLeadColumn.resx">
+      <DependentUpon>201807211233398_NewLeadColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807221804559_AddConditionTable.resx">
+      <DependentUpon>201807221804559_AddConditionTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
