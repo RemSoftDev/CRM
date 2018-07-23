@@ -9,7 +9,7 @@ namespace CRM.DAL.Entities
 		public DayOfWeek DayOfWeek { get; set; }
 		public TimeSpan StartWorkTime { get; set; }
 		public TimeSpan EndWorkTime { get; set; }
-		public IgnoreNotifierConfig IgnoreNotifierConfig { get; set; }
+		public virtual IgnoreNotifierConfig IgnoreNotifierConfig { get; set; }
 
 	}
 

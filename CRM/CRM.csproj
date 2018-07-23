@@ -234,6 +234,7 @@
     <Compile Include="Hubs\MainHub.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Managers\EmailIgnoreNotifierManger.cs" />
+    <Compile Include="Managers\IEmailIgnoreNotifierManger.cs" />
     <Compile Include="Managers\ILeadManager.cs" />
     <Compile Include="Managers\IUserManager.cs" />
     <Compile Include="Managers\LeadManager.cs" />

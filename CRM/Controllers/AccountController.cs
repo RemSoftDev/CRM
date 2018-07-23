@@ -16,6 +16,7 @@ namespace CRM.Controllers
 {
 	public class AccountController : Controller
 	{
+		private readonly IEmailIgnoreNotifierManger _emailIgnoreNotifier;
 		private readonly IUserManager _userManager;
 		private readonly IEncryptionService _encryptionService;
 		private readonly IUserConnectionStorage _userConnectionStorage;
@@ -23,8 +24,10 @@ namespace CRM.Controllers
 		public AccountController(
 			IUserManager userManager,
 			IEncryptionService encryptionService,
-			IUserConnectionStorage userConnectionStorage)
+			IUserConnectionStorage userConnectionStorage,
+			IEmailIgnoreNotifierManger emailIgnoreNotifier)
 		{
+			_emailIgnoreNotifier = emailIgnoreNotifier;
 			_userManager = userManager.ValidateNotDefault(nameof(userManager));
 			_encryptionService = encryptionService.ValidateNotDefault(nameof(encryptionService));
 			_userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
@@ -86,7 +89,7 @@ namespace CRM.Controllers
 		[AllowAnonymous]
 		public ActionResult Test()
 		{
-		//	var a = new EmailIgnoreNotifierManger();
+			_emailIgnoreNotifier.Start();
 			return View(nameof(Login));
 		}
 
