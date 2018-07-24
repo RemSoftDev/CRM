@@ -5,6 +5,7 @@ using CRM.Models;
 using CRM.Services;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNet.SignalR.Client;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -51,6 +52,13 @@ namespace CRM.WebApiControllers
 
                     // havent work yet
                     //_hubContext.Clients.All.onResetPopUp();
+                    //
+                    //var connection = new HubConnection("");
+                    //var mapResult = Mapper.Map<PopUpViewModel>(lead);
+                    //
+                    //IHubProxy myHub = connection.CreateHubProxy("phoneHub");
+                    //connection.Start().Wait();
+                    //myHub.("onResetPopUp", mapResult);
 
                     model.Id = lead.Id;
 

@@ -37,14 +37,21 @@ namespace CRM.Controllers
             return new EmptyResult();
         }
 
-        //[HttpGet]
+        [HttpGet]
         public ActionResult BanerLink(string term)
         {
             var result = _unitOfWork.ConditionsRepository
-                .Get(e => e.Name.Equals(term, StringComparison.InvariantCultureIgnoreCase))
+                .Get(e => e.Name.Contains(term))
                 .ToList();
 
-            return Json(result.Select(e => e.Description).ToArray(), JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                message = result.Select(e => new
+                {
+                    value = e.Name,
+                    lable = e.Description
+                })
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }
