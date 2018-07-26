@@ -121,6 +121,7 @@ namespace CRM.Hubs
                             {
                                 if(leads.IndexOf(lead) == leads.Count - 1)
                                 {
+                                    // hide pop-up if all to show are locked
                                     Clients.Caller.onHidePopUp();
                                 }
                                 continue;
@@ -135,6 +136,7 @@ namespace CRM.Hubs
                     }
                     else
                     {
+                        // hide pop-up if we have not leads to show
                         Clients.Caller.onHidePopUp();
                     }
                 }

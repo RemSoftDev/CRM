@@ -19,7 +19,6 @@ namespace CRM.Controllers
     [Authenticate]
     public class LeadController : BaseController
     {
-        //private readonly IUnitOfWork _unitOfWork;
         private readonly ILeadConvertService _leadConvertService;
         private readonly ILeadManager _leadManager;
         private readonly IEmailService _emailService;
@@ -31,7 +30,6 @@ namespace CRM.Controllers
             IEmailService emailService)
             : base(unitOfWork)
         {
-            //_unitOfWork = unitOfWork;
             _leadConvertService = leadConvertService;
             _leadManager = leadManager;
             _emailService = emailService;

@@ -278,6 +278,11 @@ function drawPage(response) {
     }
 }
 
+// autoSubmit onChange page size
+function autoSearch() {
+    search(getSearchModel());
+}
+
 function applyjQueryFunctions() {
     $('.sortable').sortable();
 
