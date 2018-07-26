@@ -1,6 +1,5 @@
 ﻿using CRM.DAL.Contexts;
 using CRM.DAL.Entities;
-using System;
 
 namespace CRM.DAL.Repository
 {
@@ -18,6 +17,8 @@ namespace CRM.DAL.Repository
 		IGenericRepository<Phone> PhonesRepository { get; }
 		IGenericRepository<User> UsersRepository { get; }
 		IGenericRepository<Call> CallsRepository { get; }
+		IGenericRepository<IgnoreNotifierConfig> IgnoreNotifierConfigRepository { get; }
+		IGenericRepository<IgnoreNotifierWorkDayConfig> IgnoreNotifierWorkDayConfigRepository { get; }
 		void Save();
 		//void Dispose(bool disposing);
 	}
