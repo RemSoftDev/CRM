@@ -104,6 +104,7 @@
     <Compile Include="Entities\Email.cs" />
     <Compile Include="Entities\GridField.cs" />
     <Compile Include="Entities\GridProfile.cs" />
+    <Compile Include="Entities\IgnoreNotifierConfig.cs" />
     <Compile Include="Entities\Lead.cs" />
     <Compile Include="Entities\LeadConvertedLog.cs" />
     <Compile Include="Entities\Note.cs" />
@@ -116,6 +117,10 @@
     <Compile Include="Migrations\201807221804559_AddConditionTable.cs" />
     <Compile Include="Migrations\201807221804559_AddConditionTable.Designer.cs">
       <DependentUpon>201807221804559_AddConditionTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.cs" />
+    <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.Designer.cs">
+      <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,6 +137,14 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201805211948036_temp.resx">
+      <DependentUpon>201805211948036_temp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807221954143_IgnoreNotifierMigration.resx">
+      <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CRM.Log\CRM.Log.csproj">

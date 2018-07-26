@@ -44,7 +44,7 @@ namespace CRM.Modules
 
 				var email = new EmailViewModel
 				{
-					To = "Yurii.Moroziuk@hotmail.com",
+					To = "csharpcrm@gmail.com",
 					Subject = $"CRM log {DateTime.Now}",
 					Body = logs
 				};

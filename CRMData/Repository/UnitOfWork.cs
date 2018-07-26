@@ -1,7 +1,6 @@
 ﻿using CRM.DAL.Contexts;
 using CRM.DAL.Entities;
 using CRM.Log;
-using System;
 
 namespace CRM.DAL.Repository
 {
@@ -22,6 +21,8 @@ namespace CRM.DAL.Repository
         private IGenericRepository<User> _usersRepository;
         private IGenericRepository<Call> _callsRepository;
         private IGenericRepository<Condition> _conditionRepository;
+        private IGenericRepository<IgnoreNotifierConfig> _ignoreNotifierConfigRepository;
+        private IGenericRepository<IgnoreNotifierWorkDayConfig> _ignoreNotifierWorkDayConfigRepository;
 
         public UnitOfWork()
         {
@@ -66,9 +67,14 @@ namespace CRM.DAL.Repository
         public IGenericRepository<Call> CallsRepository =>
             _callsRepository ?? (_callsRepository = new EfGenericRepository<Call>(_dbContext));
 
+		public IGenericRepository<IgnoreNotifierConfig> IgnoreNotifierConfigRepository =>
+			_ignoreNotifierConfigRepository ?? (_ignoreNotifierConfigRepository = new EfGenericRepository<IgnoreNotifierConfig>(_dbContext));
+
+		public IGenericRepository<IgnoreNotifierWorkDayConfig> IgnoreNotifierWorkDayConfigRepository =>
+			_ignoreNotifierWorkDayConfigRepository ?? (_ignoreNotifierWorkDayConfigRepository = new EfGenericRepository<IgnoreNotifierWorkDayConfig>(_dbContext));
+
         public IGenericRepository<Condition> ConditionsRepository =>
             _conditionRepository ?? (_conditionRepository = new EfGenericRepository<Condition>(_dbContext));
-
         #endregion
 
         public void Save()
