@@ -1,11 +1,11 @@
 ﻿using CRM.DAL.Entities;
 using CRM.DAL.Repository;
+using CRM.Log;
 using CRM.Models;
 using CRM.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using CRM.Log;
 using WebGrease.Css.Extensions;
 
 namespace CRM.Managers
@@ -16,20 +16,28 @@ namespace CRM.Managers
 		private readonly long interval = 60000;
 		private Timer _timer;
 		private IgnoreNotifierWorkDayConfig _config;
+		private IgnoreNotifierWorkDayConfig _nextDayConfig;
 
-		private readonly TimeSpan _timeForFirstNotification;
-		private readonly TimeSpan _timeForSacondNotification;
+		private TimeSpan _timeForFirstNotification;
+		private TimeSpan _timeForSacondNotification;
+		private DayOfWeek _dayOfWeek;
 
-		private bool _firstNotifyComplited;
+		public bool IsFirstNotifyComplited { get; set; }
+
+		public bool IsTimeChanged { get; set; }
+
 
 		public EmailIgnoreNotifierManger(IUnitOfWork unitOfWork, IEmailService emailService)
 		{
 			_emailService = emailService;
-			var dayOfWeek = DateTime.Now.DayOfWeek;
+			_dayOfWeek = DateTime.Now.DayOfWeek;
 			var currentTime = DateTime.Now.TimeOfDay;
 
 			_config = unitOfWork.IgnoreNotifierWorkDayConfigRepository
-								 .FindBy(i => i.DayOfWeek == dayOfWeek);
+								 .FindBy(i => i.DayOfWeek == _dayOfWeek);
+
+			_nextDayConfig = unitOfWork.IgnoreNotifierWorkDayConfigRepository
+				.FindBy(i => i.DayOfWeek == _dayOfWeek + 1);
 
 			_timeForFirstNotification = GetTimeForFirstNotification(currentTime);
 			_timeForSacondNotification = GetTimeForSecondNotification(currentTime);
@@ -51,30 +59,42 @@ namespace CRM.Managers
 		}
 
 		private void CheckTime(object state)
+
 		{
 			var time = DateTime.Now.TimeOfDay;
 
-			//if (IsWorkDayEnd(time))
-			//{
+			if (!IsTimeChanged && IsWorkDayEnd(time))
+			{
+				ChangeTimeForNotification();
+			}
 
-			//}
-
-			if (!_firstNotifyComplited && time >= _timeForFirstNotification)
+			if (!IsFirstNotifyComplited && time >= _timeForFirstNotification && _dayOfWeek == DateTime.Now.DayOfWeek)
 			{
 				Logger.InfoLogContext.Debug("First notify");
 				FirstNotify();
 			}
 
-			if (_firstNotifyComplited && time >= _timeForSacondNotification)
+			if (IsFirstNotifyComplited && time >= _timeForSacondNotification && _dayOfWeek == DateTime.Now.DayOfWeek)
 			{
 				Logger.InfoLogContext.Debug("Second notify");
 				SecondNotify();
 			}
 		}
 
+
+		private void ChangeTimeForNotification()
+		{
+			_timeForFirstNotification = _nextDayConfig.StartWorkTime + _config.IgnoreNotifierConfig.FirstDuration;
+			_timeForSacondNotification = _nextDayConfig.StartWorkTime + _config.IgnoreNotifierConfig.SecondDuration;
+			_dayOfWeek++;
+			IsTimeChanged = true;
+
+			Logger.InfoLogContext.Debug("Work day will ended soon, change ");
+		}
+
 		private bool IsWorkDayEnd(TimeSpan currentTime)
 		{
-			var timeToNotify = currentTime + _timeForFirstNotification;
+			var timeToNotify = currentTime + _config.IgnoreNotifierConfig.FirstDuration;
 
 			return _config.EndWorkTime < timeToNotify;
 		}
@@ -82,7 +102,7 @@ namespace CRM.Managers
 		private void FirstNotify()
 		{
 			GenerateAndSendEmails(_config.IgnoreNotifierConfig.FirstRecipients);
-			_firstNotifyComplited = true;
+			IsFirstNotifyComplited = true;
 		}
 
 
@@ -108,8 +128,8 @@ namespace CRM.Managers
 				var email = new EmailViewModel
 				{
 					To = recipient.Email,
-					Subject = "Notification", //TODO 
-					Body = "You ignore"
+					Subject = _config.IgnoreNotifierConfig.EmailSubject, //TODO 
+					Body = _config.IgnoreNotifierConfig.EmailBody
 				};
 
 				emails.Add(email);
