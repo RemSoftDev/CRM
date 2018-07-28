@@ -18,7 +18,10 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("CRM", "Index", "Lead", new { area = "" }, new { @class = "navbar-brand" })
-                <a id="myLink" href="#" class="navbar-brand">Banner Link</a>
+                @if(Request.IsAuthenticated)
+                {
+                    <a id="myLink" href="#" class="navbar-brand">Banner Link</a>
+                }
             </div>
             <div class="navbar-collapse collapse">
                 @Html.Partial("_LoginPartial")

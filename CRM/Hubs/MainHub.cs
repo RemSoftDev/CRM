@@ -3,6 +3,7 @@ using CRM.DAL.Entities;
 using CRM.DAL.Repository;
 using CRM.Enums;
 using CRM.Extentions;
+using CRM.Managers;
 using CRM.Models;
 using CRM.Models.Misc;
 using CRM.Services;
@@ -26,16 +27,18 @@ namespace CRM.Hubs
         private const string LOCK_BY_POP_UP = "popUpLock";
 
         private readonly IUserConnectionStorage _userConnectionStorage;
+        IEmailIgnoreNotifierManger _emailIgnoreNotifierManger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly PhoneService _phoneService;
 
         private static ConcurrentDictionary<string, List<LockInfo>> dataToLock = new ConcurrentDictionary<string, List<LockInfo>>();
 
-        public MainHub(IUserConnectionStorage userConnectionStorage, PhoneService phoneService, IUnitOfWork unitOfWork)
+        public MainHub(IUserConnectionStorage userConnectionStorage, PhoneService phoneService, IUnitOfWork unitOfWork, IEmailIgnoreNotifierManger emailIgnoreNotifierManger)
         {
             _userConnectionStorage = userConnectionStorage.ValidateNotDefault(nameof(userConnectionStorage));
             _phoneService = phoneService.ValidateNotDefault(nameof(phoneService));
             _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
+            _emailIgnoreNotifierManger = emailIgnoreNotifierManger.ValidateNotDefault(nameof(emailIgnoreNotifierManger));
         }
 
         /// <summary>
@@ -123,6 +126,9 @@ namespace CRM.Hubs
                             {
                                 if(leads.IndexOf(lead) == leads.Count - 1)
                                 {
+                                    // notification 
+                                    _emailIgnoreNotifierManger.Start();
+
                                     // hide pop-up if all to show are locked
                                     Clients.Caller.onHidePopUp();
                                 }
