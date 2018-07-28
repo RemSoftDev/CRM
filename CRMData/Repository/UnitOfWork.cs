@@ -7,7 +7,7 @@ namespace CRM.DAL.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly BaseContext _dbContext;
-        private bool _disposed;
+        //private bool _disposed;
 
         private IGenericRepository<Lead> _leadsRepository;
         private IGenericRepository<Note> _notesRepository;

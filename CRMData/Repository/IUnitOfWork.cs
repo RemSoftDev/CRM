@@ -17,10 +17,10 @@ namespace CRM.DAL.Repository
 		IGenericRepository<Phone> PhonesRepository { get; }
 		IGenericRepository<User> UsersRepository { get; }
 		IGenericRepository<Call> CallsRepository { get; }
+        IGenericRepository<Condition> ConditionsRepository { get; }
 		IGenericRepository<IgnoreNotifierConfig> IgnoreNotifierConfigRepository { get; }
 		IGenericRepository<IgnoreNotifierWorkDayConfig> IgnoreNotifierWorkDayConfigRepository { get; }
-        IGenericRepository<Condition> ConditionsRepository { get; }
-        void Save();
+		void Save();
 		//void Dispose(bool disposing);
 	}
 }

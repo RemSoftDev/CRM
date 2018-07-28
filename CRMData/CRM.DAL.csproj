@@ -110,17 +110,13 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201807211233398_NewLeadColumn.cs" />
-    <Compile Include="Migrations\201807211233398_NewLeadColumn.Designer.cs">
-      <DependentUpon>201807211233398_NewLeadColumn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807221804559_AddConditionTable.cs" />
-    <Compile Include="Migrations\201807221804559_AddConditionTable.Designer.cs">
-      <DependentUpon>201807221804559_AddConditionTable.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.cs" />
     <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.Designer.cs">
       <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807262106204_ConditionTable.cs" />
+    <Compile Include="Migrations\201807262106204_ConditionTable.Designer.cs">
+      <DependentUpon>201807262106204_ConditionTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,11 +135,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805211948036_temp.resx">
-      <DependentUpon>201805211948036_temp.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807221954143_IgnoreNotifierMigration.resx">
       <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807262106204_ConditionTable.resx">
+      <DependentUpon>201807262106204_ConditionTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -151,14 +147,6 @@
       <Project>{1ae02fcb-0b82-4e37-8a64-05c4c2efbd6a}</Project>
       <Name>CRM.Log</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807211233398_NewLeadColumn.resx">
-      <DependentUpon>201807211233398_NewLeadColumn.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807221804559_AddConditionTable.resx">
-      <DependentUpon>201807221804559_AddConditionTable.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,13 +1,7 @@
-﻿using AutoMapper;
-using CRM.DAL.Entities;
-using CRM.DAL.Repository;
+﻿using CRM.DAL.Repository;
 using CRM.Enums;
 using CRM.Extentions;
-using CRM.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CRM.Controllers
@@ -37,6 +31,11 @@ namespace CRM.Controllers
             return new EmptyResult();
         }
 
+        /// <summary>
+        /// ATENTION. We allow for all users make request to this method
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult BanerLink(string term)
         {

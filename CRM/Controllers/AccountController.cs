@@ -21,13 +21,13 @@ namespace CRM.Controllers
 		private readonly IEncryptionService _encryptionService;
 		private readonly IUserConnectionStorage _userConnectionStorage;
 
-
 		public AccountController(
 			IUserManager userManager,
 			IEncryptionService encryptionService,
 			IUserConnectionStorage userConnectionStorage,
-			IEmailIgnoreNotifierManger emailIgnoreNotifier)
-            : base(_unitOfWork)
+			IEmailIgnoreNotifierManger emailIgnoreNotifier,
+            IUnitOfWork unitOfWork)
+            : base(unitOfWork)
         {
 			_emailIgnoreNotifier = emailIgnoreNotifier;
 			_userManager = userManager.ValidateNotDefault(nameof(userManager));

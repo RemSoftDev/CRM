@@ -7,13 +7,13 @@ namespace CRM.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddConditionTable : IMigrationMetadata
+    public sealed partial class ConditionTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddConditionTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ConditionTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807221804559_AddConditionTable"; }
+            get { return "201807262106204_ConditionTable"; }
         }
         
         string IMigrationMetadata.Source

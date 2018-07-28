@@ -95,6 +95,8 @@ namespace CRM.Hubs
             {
                 Clients.Group(validateGroupName, Context.ConnectionId).UnLockEdit(id);
 
+                Clients.Others.onResetPopUp();
+
                 dataToLock.TryGetValue(validateGroupName, out List<LockInfo> value);
                 value.RemoveAll(e => e.Id == id);
             }

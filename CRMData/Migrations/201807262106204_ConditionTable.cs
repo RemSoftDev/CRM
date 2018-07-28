@@ -3,7 +3,7 @@ namespace CRM.DAL.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddConditionTable : DbMigration
+    public partial class ConditionTable : DbMigration
     {
         public override void Up()
         {
@@ -17,10 +17,12 @@ namespace CRM.DAL.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
+            AddColumn("dbo.Lead", "IsSaved", c => c.Boolean(nullable: false));
         }
         
         public override void Down()
         {
+            DropColumn("dbo.Lead", "IsSaved");
             DropTable("dbo.Conditions");
         }
     }
