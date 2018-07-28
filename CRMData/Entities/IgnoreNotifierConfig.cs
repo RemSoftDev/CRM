@@ -10,7 +10,6 @@ namespace CRM.DAL.Entities
 		public TimeSpan StartWorkTime { get; set; }
 		public TimeSpan EndWorkTime { get; set; }
 		public virtual IgnoreNotifierConfig IgnoreNotifierConfig { get; set; }
-
 	}
 
 	public class IgnoreNotifierConfig
@@ -18,6 +17,8 @@ namespace CRM.DAL.Entities
 		public int Id { get; set; }
 		public TimeSpan FirstDuration { get; set; }
 		public TimeSpan SecondDuration { get; set; }
+		public string EmailSubject { get; set; }
+		public string EmailBody { get; set; }
 		public virtual ICollection<User> FirstRecipients { get; set; }
 		public virtual ICollection<User> SecondRecipients { get; set; }
 	}
