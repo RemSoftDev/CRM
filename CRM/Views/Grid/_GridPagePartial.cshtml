@@ -1,0 +1,188 @@
+﻿@using CRM.Models
+@using CRM.Services
+@model SearchViewModel
+
+<div>
+    <div class="col-md-1" style="padding-left: 0;">Profile :</div>
+    <div class=" col-md-3">
+        <select class="form-control" id="profiles">
+            @foreach (var profile in Model.Profiles)
+            {
+                <option id="@profile.Id" @(profile.IsDefault ? "selected" : "")>@profile.ProfileName</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-1">
+        <input class="btn btn-default" type="button" id="edit_profile_button" value="Edit" />
+    </div>
+    <div class="col-md-7" style="margin-bottom: 40px;">
+        <input class="btn btn-default" type="button" value="New" id="new_profile_button" />
+    </div>
+</div>
+<div id="search_row">
+    <div class="col-md-3 row" style="padding-left:0;">
+        <div class="col-md-6">Page size :</div>
+        <div class=" col-md-6">
+            <select class="form-control" id="items_per_page" onchange="autoSearch()">
+                @foreach (var i in new int[] { 10, 25, 50, 100 })
+                {
+                    <option @(Model.ItemsPerPage == i ? "selected" : "")>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 row">
+        <div class="col-md-6 pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <span aria-hidden="true">Colunms</span>
+            </button>
+            <ul class="dropdown-menu sortable" role="menu" id="columns">
+                @foreach (var item in Model.Columns)
+                {
+                    <li>
+                        <a>
+                            <label>
+                                <input type="checkbox" value="@item.Field" @(item.ShowOnGrid ? "checked" : "")>
+                                @item.Field
+                            </label>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-7 row pull-right" style="margin-bottom: 20px;">
+        <div class="col-md-2">Search :</div>
+        <div class=" col-md-3">
+            <select class="form-control" id="search_field">
+                @foreach (var column in Model.Columns)
+                {
+                    if (column.ShowOnGrid)
+                    {
+                        <option @(Model.Field == column.Field ? "selected" : "")>@column.Field</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-5">
+            <input class="form-control" id="search_value" value="@Model.SearchValue" />
+        </div>
+        <div class="col-md-2">
+            <input type="button" class="btn btn-default" value="Apply" id="search_button" />
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover" border="1">
+    <thead>
+        <tr>
+            @foreach (var column in Model.Columns)
+            {
+                if (column.ShowOnGrid)
+                {
+                    <td class="@(column.OrderDirection == 0 ? "sort" : (column.OrderDirection == 1) ? "sort-up" : "sort-down")" id="@column.Field" style="cursor : pointer;" onclick="SetOrderByField('@column.Field')">
+                        <span>@column.Field</span>
+                    </td>
+                }
+            }
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                @foreach (var column in Model.Columns)
+                {
+                    if (column.ShowOnGrid)
+                    {
+                        if (column.Field.Equals("Notes"))
+                        {
+                            <td><a onclick="getNotes(@item.Id)" style="cursor:pointer;">@(ReflectionService.GetPropValue(item, column.Field))</a></td>
+                        }
+                        else
+                        {
+                            <td>@(ReflectionService.GetPropValue(item, column.Field))</td>
+                        }
+                    }
+                }
+                <td style="text-align: center;">
+                    @if (item is LeadViewModel)
+                    {
+                        <a id="edit_@item.Id" href="/Lead/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
+                        <a id="convert_@item.Id" href="/Lead/ConvertLead?id=@item.Id">Convert</a>
+                    }
+                    @if (item is UserViewModel)
+                    {
+                        <a id="edit_@item.Id" href="/Customer/Edit?id=@item.Id" style="padding-right: 13px;">Edit</a>
+                    }
+                    <img id="img_@item.Id" src="~/fonts/images/33054.jpg" alt="Locked!" title="Locked!" hidden>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="row" id="pagination">
+    <div class="col-md-6">
+        @ShowItemsLabel()
+    </div>
+    <div class="col-md-6">
+        <ul class="pagination pull-right" style="margin-top: 0;">
+            @WritePaginationItem()
+        </ul>
+    </div>
+</div>
+
+<div style="display:none" id="save_dialog" title="Add new profile">
+    <div>
+        <label for="profile_name">Profile Name</label>
+        <input class="form-control" id="profile_name" />
+        <span style="color:red;display:none;"></span>
+    </div>
+</div>
+
+<div style="display:none" id="edit_dialog" title="Edit profile">
+    <div>Edit selected profile?</div>
+    <div>
+        <label for="profile_default">Make default</label>
+        <input type="checkbox" id="profile_default" />
+    </div>
+</div>
+
+@helper ShowItemsLabel()
+    {
+        var showFrom = Model.Page * Model.ItemsPerPage - Model.ItemsPerPage;
+        if (showFrom > Model.ItemsCount)
+        {
+            showFrom = 0;
+        }
+        var showTo = (showFrom + Model.ItemsPerPage) < Model.ItemsCount ? (showFrom + Model.ItemsPerPage) : Model.ItemsCount;
+
+        <span>Showing @(showFrom + (Model.Items.Any() ? 1 : 0)) to @showTo of @Model.ItemsCount items</span>
+}
+
+@helper WritePaginationItem()
+    {
+        var totalPages = Model.ItemsCount / Model.ItemsPerPage;
+        var itemsLeft = Model.ItemsCount % Model.ItemsPerPage;
+        if (itemsLeft > 0)
+        {
+            ++totalPages;
+        }
+        if (Model.ItemsCount > 0 && totalPages == 0)
+        {
+            totalPages = 1;
+        }
+        for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(Model.Page == i? "active" : "")">
+                <a class="page-link" href="#" onclick="LoadPage(@i)">
+                    @i
+                    @if (Model.Page == 1)
+                    {
+                        <span class="sr-only">(current)</span>
+                    }
+                </a>
+            </li>
+        }
+}

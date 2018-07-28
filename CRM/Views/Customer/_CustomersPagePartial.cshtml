@@ -1,0 +1,27 @@
+﻿@using CRM.Models
+@model List<UserViewModel>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Phone</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+        <tr>
+            <td>@customer.FirstName</td>
+            <td>@customer.LastName</td>
+            <td>@customer.Email</td>
+            <td>@(customer.Phones.FirstOrDefault()?.PhoneNumber)</td>
+            <td>@Html.ActionLink("Edit", "Edit", new { id = customer.Id })</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
