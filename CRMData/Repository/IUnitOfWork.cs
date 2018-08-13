@@ -3,7 +3,7 @@ using CRM.DAL.Entities;
 
 namespace CRM.DAL.Repository
 {
-	public interface IUnitOfWork //: IDisposable
+    public interface IUnitOfWork //: IDisposable
 	{
 		BaseContext Context { get; }
 		IGenericRepository<Lead> LeadsRepository { get; }
@@ -17,6 +17,7 @@ namespace CRM.DAL.Repository
 		IGenericRepository<Phone> PhonesRepository { get; }
 		IGenericRepository<User> UsersRepository { get; }
 		IGenericRepository<Call> CallsRepository { get; }
+        IGenericRepository<Condition> ConditionsRepository { get; }
 		IGenericRepository<IgnoreNotifierConfig> IgnoreNotifierConfigRepository { get; }
 		IGenericRepository<IgnoreNotifierWorkDayConfig> IgnoreNotifierWorkDayConfigRepository { get; }
 		void Save();

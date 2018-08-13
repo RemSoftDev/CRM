@@ -96,6 +96,7 @@
     <Compile Include="Contexts\CRMDBInitializer.cs" />
     <Compile Include="Entities\Address.cs" />
     <Compile Include="Entities\Call.cs" />
+    <Compile Include="Entities\Condition.cs" />
     <Compile Include="Entities\DAddressType.cs" />
     <Compile Include="Entities\DGrid.cs" />
     <Compile Include="Entities\DPhoneType.cs" />
@@ -109,17 +110,13 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201805211948036_temp.cs" />
-    <Compile Include="Migrations\201805211948036_temp.Designer.cs">
-      <DependentUpon>201805211948036_temp.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.cs" />
     <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.Designer.cs">
       <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807270750118_temp1.cs" />
-    <Compile Include="Migrations\201807270750118_temp1.Designer.cs">
-      <DependentUpon>201807270750118_temp1.cs</DependentUpon>
+    <Compile Include="Migrations\201807262106204_ConditionTable.cs" />
+    <Compile Include="Migrations\201807262106204_ConditionTable.Designer.cs">
+      <DependentUpon>201807262106204_ConditionTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201808081947264_newMigration.cs" />
     <Compile Include="Migrations\201808081947264_newMigration.Designer.cs">
@@ -146,14 +143,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805211948036_temp.resx">
-      <DependentUpon>201805211948036_temp.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807221954143_IgnoreNotifierMigration.resx">
       <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807270750118_temp1.resx">
-      <DependentUpon>201807270750118_temp1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807262106204_ConditionTable.resx">
+      <DependentUpon>201807262106204_ConditionTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808081947264_newMigration.resx">
       <DependentUpon>201808081947264_newMigration.cs</DependentUpon>

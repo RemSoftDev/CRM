@@ -27,10 +27,12 @@ namespace CRM.DAL.Contexts
 		public virtual DbSet<DAddressType> DAddressTypes { get; set; }
 		public virtual DbSet<DPhoneType> DPhoneTypes { get; set; }
 		public virtual DbSet<DUserType> DUserTypes { get; set; }
+        public virtual DbSet<Condition> Conditions { get; set; }
 		public virtual DbSet<IgnoreNotifierConfig> IgnoreNotifierConfigs { get; set; }
 		public virtual DbSet<IgnoreNotifierWorkDayConfig> IgnoreNotifierWorkDayConfigs { get; set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<User>().ToTable("User");
 			modelBuilder.Entity<Lead>().ToTable("Lead");
@@ -40,6 +42,8 @@ namespace CRM.DAL.Contexts
 			modelBuilder.Entity<Email>().ToTable("Email");
 			modelBuilder.Entity<LeadConvertedLog>().ToTable("LeadConvertedLog");
 			modelBuilder.Entity<Call>().ToTable("Call");
+            modelBuilder.Entity<Condition>().ToTable("Conditions");
+
 			modelBuilder.Entity<DAddressType>().ToTable("DAddressType");
 			modelBuilder.Entity<DPhoneType>().ToTable("DPhoneType");
 			modelBuilder.Entity<DUserType>().ToTable("DUserType");
@@ -86,7 +90,11 @@ namespace CRM.DAL.Contexts
 				.Property(e => e.Id)
 				.HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-			base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Condition>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            base.OnModelCreating(modelBuilder);
 		}
 	}
 }

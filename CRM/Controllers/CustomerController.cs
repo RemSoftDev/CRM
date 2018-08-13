@@ -12,13 +12,11 @@ using CRM.Services;
 
 namespace CRM.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomerController : BaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-
         public CustomerController(IUnitOfWork unitOfWork)
+            :base(unitOfWork)
         {
-            _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
         }
 
         public ActionResult Index()

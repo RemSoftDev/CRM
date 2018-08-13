@@ -37,3 +37,17 @@
         }
     });
 });
+
+$(window).bind('beforeunload', function () {
+    var phoneHub = $.connection.phoneHub;
+
+    $.connection.hub.start().done(function () {
+        var id = $('#Id').val();
+        if (id != null) {
+            phoneHub.server.Lock(id, 'lead');
+        }
+
+    }).fail(function () {
+        alert("Could not Connect!");
+    });
+});

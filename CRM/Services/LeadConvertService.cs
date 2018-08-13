@@ -112,6 +112,7 @@ namespace CRM.Services
 
 			// проставляем что лида перевели в кастомера
 			lead.IsConverted = true;
+            lead.IsSaved = true;
             _unitOfWork.LeadsRepository.Update(lead);
 
             // логирование процесса конвертации

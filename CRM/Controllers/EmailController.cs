@@ -12,14 +12,13 @@ using System.Web.Mvc;
 namespace CRM.Controllers
 {
 	[Authenticate]
-	public class EmailController : Controller
+	public class EmailController : BaseController
 	{
-		private readonly IUnitOfWork _unitOfWork;
 		private readonly IEmailService _emailService;
 
 		public EmailController(IUnitOfWork unitOfWork, IEmailService emailService)
+            :base(unitOfWork)
 		{
-            _unitOfWork = unitOfWork.ValidateNotDefault(nameof(unitOfWork));
             _emailService = emailService.ValidateNotDefault(nameof(emailService));
 		}
 

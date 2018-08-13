@@ -28,8 +28,11 @@ namespace CRM
 				Resolver = resolver
 			});
 
-			try
-			{
+            Kernel.GetKernel.Bind<IHubContext>()
+                .ToMethod(e => GlobalHost.ConnectionManager.GetHubContext<MainHub>());
+
+            try
+            {
 				throw new Exception();
 			}
 			catch (Exception exp)

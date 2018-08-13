@@ -7,13 +7,12 @@ using System.Web.Mvc;
 
 namespace CRM.Controllers
 {
-	public class ReportController : Controller
+	public class ReportController : BaseController
 	{
-		private readonly IUnitOfWork _unitOfWork;
-
 		public ReportController(IUnitOfWork unitOfWork)
+            :base(unitOfWork)
 		{
-			_unitOfWork = unitOfWork;
+
 		}
 		// GET: Report
 		public ActionResult Index()
