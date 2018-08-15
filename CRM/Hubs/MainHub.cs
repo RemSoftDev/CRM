@@ -127,7 +127,6 @@ namespace CRM.Hubs
                                 if(leads.IndexOf(lead) == leads.Count - 1)
                                 {
                                     // notification 
-                                    _emailIgnoreNotifierManger.Start();
 
                                     // hide pop-up if all to show are locked
                                     Clients.Caller.onHidePopUp();
@@ -136,7 +135,8 @@ namespace CRM.Hubs
                             }
                             else
                             {
-                                var mapResult = Mapper.Map<PopUpViewModel>(lead);
+	                            _emailIgnoreNotifierManger.Start();
+								var mapResult = Mapper.Map<PopUpViewModel>(lead);
                                 Clients.Caller.onPopUpCall(mapResult);
                                 break;
                             }
@@ -146,6 +146,7 @@ namespace CRM.Hubs
                     {
                         // hide pop-up if we have not leads to show
                         Clients.Caller.onHidePopUp();
+						_emailIgnoreNotifierManger.Stop();
                     }
                 }
             }

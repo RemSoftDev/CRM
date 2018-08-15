@@ -12,6 +12,7 @@ namespace CRM.Managers
 {
 	public class EmailIgnoreNotifierManger : IEmailIgnoreNotifierManger
 	{
+		private static object syncRoot = new Object();
 		private readonly IEmailService _emailService;
 		private readonly long interval = 60000;
 		private Timer _timer;
@@ -46,6 +47,10 @@ namespace CRM.Managers
 		public void Start()
 		{
 			_timer = new Timer(CheckTime, null, 0, interval);
+		}
+		public void Stop()
+		{
+			_timer?.Dispose();
 		}
 
 		internal TimeSpan GetTimeForFirstNotification(TimeSpan currentTime)

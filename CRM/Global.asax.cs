@@ -126,7 +126,8 @@ namespace CRM
 				.InSingletonScope();
 
 			kernel.Bind<IEmailIgnoreNotifierManger>()
-				.To<EmailIgnoreNotifierManger>();
+				.To<EmailIgnoreNotifierManger>()
+				.InSingletonScope(); ;
 
 			kernel.Bind<PhoneService>()
 				.ToSelf()

@@ -1,23 +1,24 @@
 ﻿<div id="modal_form">
-    <!-- Our pop-up -->
-    @Html.Hidden("popUpNameId", null, new { Id = "popUpId" })
-    @Html.Label("Name", new { @class = "col-md-2 control-label" })
-    <div class="col-md-10 margin-bottom">
-        @Html.TextBox("popUpNameName", null, new { @class = "form-control", id = "popUpName" })
-    </div>
-    @Html.Label("Phone", new { @class = "col-md-2 control-label" })
-    <div class="col-md-10 margin-bottom">
-        @Html.TextBox("popUpNamePhone", null, new { @class = "form-control", id = "popUpPhone" })
-    </div>
-    @Html.Label("Email", new { @class = "col-md-2 control-label" })
-    <div class="col-md-10 margin-bottom">
-        @Html.TextBox("popUpNameEmail", null, new { @class = "form-control", Id = "popUpEmail" })
-    </div>
-    @Html.Label("Message", new { @class = "col-md-2 control-label" })
-    <div class="col-md-10 margin-bottom">
-        @Html.TextBox("popUpNameMessage", null, new { @class = "form-control", Id = "popUpMessage" })
-    </div>
-    @Html.ActionLink("Edit", "Edit", "Lead", null, new { Id = "popUpLink" })
+	<!-- Our pop-up -->
+	@Html.Hidden("popUpNameId", null, new { Id = "popUpId" })
+	@Html.Label("Name", new { @class = "col-md-2 control-label" })
+	<div class="col-md-10 margin-bottom">
+		@Html.TextBox("popUpNameName", null, new { @class = "form-control", id = "popUpName" })
+	</div>
+	@Html.Label("Phone", new { @class = "col-md-2 control-label" })
+	<div class="col-md-10 margin-bottom">
+		@Html.TextBox("popUpNamePhone", null, new { @class = "form-control", id = "popUpPhone" })
+	</div>
+	@Html.Label("Email", new { @class = "col-md-2 control-label" })
+	<div class="col-md-10 margin-bottom">
+		@Html.TextBox("popUpNameEmail", null, new { @class = "form-control", Id = "popUpEmail" })
+	</div>
+	@Html.Label("Message", new { @class = "col-md-2 control-label" })
+	<div class="col-md-10 margin-bottom">
+		@Html.TextBox("popUpNameMessage", null, new { @class = "form-control", Id = "popUpMessage" })
+	</div>
+
+	@Html.ActionLink("Edit", "Edit", "Lead", new { Id = "popUpLink", isFromPopUp = true })
 </div>
 <div id="overlay"></div><!-- Dark background -->
 
@@ -102,7 +103,7 @@
             $('#popUpPhone').val(popUpModel.PhoneNumber.PhoneNumber);
             $('#popUpEmail').val(popUpModel.Email);
             $('#popUpMessage').val(popUpModel.Message);
-            $('#popUpLink').attr('href', '/Lead/Edit/' + popUpModel.Id);
+			$('#popUpLink').attr('href', '/Lead/Edit/' + popUpModel.Id + "?isFromPopUp=true");
 
             showPopUp();
         }
