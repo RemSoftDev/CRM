@@ -32,8 +32,8 @@ namespace CRM.DAL.Contexts
 			{
 				FirstDuration = new TimeSpan(0, 15, 0),
 				SecondDuration = new TimeSpan(1, 0, 0),
-				//EmailSubject = "Ignore Config",
-				//EmailBody = "Test"
+				EmailSubject = "Ignore Config",
+				EmailBody = "Test"
 			};
 			var ignoreNotifierMondayConfig = new IgnoreNotifierWorkDayConfig
 			{

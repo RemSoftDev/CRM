@@ -110,22 +110,6 @@
     <Compile Include="Entities\Note.cs" />
     <Compile Include="Entities\Phone.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.cs" />
-    <Compile Include="Migrations\201807221954143_IgnoreNotifierMigration.Designer.cs">
-      <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807262106204_ConditionTable.cs" />
-    <Compile Include="Migrations\201807262106204_ConditionTable.Designer.cs">
-      <DependentUpon>201807262106204_ConditionTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808081947264_newMigration.cs" />
-    <Compile Include="Migrations\201808081947264_newMigration.Designer.cs">
-      <DependentUpon>201808081947264_newMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808081951231_newMigration1.cs" />
-    <Compile Include="Migrations\201808081951231_newMigration1.Designer.cs">
-      <DependentUpon>201808081951231_newMigration1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EfGenericRepository.cs" />
@@ -141,20 +125,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807221954143_IgnoreNotifierMigration.resx">
-      <DependentUpon>201807221954143_IgnoreNotifierMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807262106204_ConditionTable.resx">
-      <DependentUpon>201807262106204_ConditionTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808081947264_newMigration.resx">
-      <DependentUpon>201808081947264_newMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808081951231_newMigration1.resx">
-      <DependentUpon>201808081951231_newMigration1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CRM.Log\CRM.Log.csproj">

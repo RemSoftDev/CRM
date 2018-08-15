@@ -8,7 +8,7 @@ namespace CRM.DAL.Migrations
 	{
 		public Configuration()
 		{
-			AutomaticMigrationsEnabled = true;
+			AutomaticMigrationsEnabled = false;
 		}
 
 		protected override void Seed(CRM.DAL.Contexts.BaseContext context)

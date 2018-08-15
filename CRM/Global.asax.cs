@@ -7,7 +7,6 @@ using CRM.Services;
 using CRM.Services.Interfaces;
 using Ninject;
 using Ninject.Web.Common.WebHost;
-using Ninject.Web.Mvc;
 using System;
 using System.Web;
 using System.Web.Http;
@@ -32,9 +31,9 @@ namespace CRM
 		{
 			AreaRegistration.RegisterAllAreas();
 			GlobalConfiguration.Configure(WebApiConfig.Register);
-            GlobalConfiguration.Configuration.DependencyResolver = new Ninject.Web.WebApi.NinjectDependencyResolver(CRM.Kernel.GetKernel);
+			GlobalConfiguration.Configuration.DependencyResolver = new Ninject.Web.WebApi.NinjectDependencyResolver(CRM.Kernel.GetKernel);
 
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
