@@ -35,8 +35,11 @@ namespace CRM.WebApiControllers
 		public HttpResponseMessage CreateLead(
             [FromBody]LeadViewModel model)
 		{
-            var phone = model.Phones.FirstOrDefault();
-			phone.Type = Enums.PhoneType.HomePhone;
+            var phone = model?.Phones?.FirstOrDefault();
+			if (phone != null)
+			{
+				phone.Type = Enums.PhoneType.HomePhone;
+			}
 
 			if (ModelState.IsValid)
 			{
